@@ -30,6 +30,21 @@ Create your super user
 
 ## Run the development server
 
+First check if you're using the virtualenv. If not, run
+
+    source .venv/bin/activate
+
+Then you can run the server with
+
     ./manage.py runserver
 
-You can now reach the project at [http://127.0.0.1:8000](http://127.0.0.1:8000), and the administration interface at [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+* project root - [http://127.0.0.1:8000](http://127.0.0.1:8000)
+* administration interface - [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+
+## Migrate your local databse
+
+When models are edited, you must compute the necessary migrations from your database state, then migrate with
+
+    ./manage.py makemigrations
+    ./manage.py migrate
+
