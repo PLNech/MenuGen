@@ -1,29 +1,35 @@
-# README #
+# README
 
-This README would normally document whatever steps are necessary to get your application up and running.
+## Configure the development environment
 
-### What is this repository for? ###
+### Python
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+Install the following packages : `python3 python3-pip`
 
-### How do I get set up? ###
+Then run from the root of the project
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+    sudo pip install virtualenv
+    virtualenv -p python3 .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
 
-### Contribution guidelines ###
+To disable the python virtual environment, run
 
-* Writing tests
-* Code review
-* Other guidelines
+    deactivate
 
-### Who do I talk to? ###
+### Django
 
-* Repo owner or admin
-* Other community or team contact
+Initialize and configure the development database
+
+    ./manage.py makemigrations
+    ./manage.py migrate
+
+Create your super user
+
+    ./manage.py createsuperuser
+
+## Run the development server
+
+    ./manage.py runserver
+
+You can now reach the project at [http://127.0.0.1:8000](http://127.0.0.1:8000), and the administration interface at [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
