@@ -1,8 +1,6 @@
-# README
+# Configure the development environment
 
-## Configure the development environment
-
-### Python
+## Python
 
 Install the following packages : `python3 python3-pip`
 
@@ -17,7 +15,7 @@ To disable the python virtual environment, run
 
     deactivate
 
-### Django
+## Django
 
 Initialize and configure the development database
 
@@ -28,7 +26,7 @@ Create your super user
 
     ./manage.py createsuperuser
 
-## Run the development server
+# Run the development server
 
 First check if you're using the virtualenv. If not, run
 
@@ -41,10 +39,14 @@ Then you can run the server with
 * project root - [http://127.0.0.1:8000](http://127.0.0.1:8000)
 * administration interface - [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
 
-## Migrate your local databse
+# Migrate your local database
 
 When models are edited, you must compute the necessary migrations from your database state, then migrate with
 
     ./manage.py makemigrations
     ./manage.py migrate
 
+# References
+
+* [Django Documentation](https://docs.djangoproject.com/en/1.7/)
+* [Python Documentation](https://docs.python.org/3.4/)
