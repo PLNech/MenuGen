@@ -2,9 +2,42 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    {% block css %}{% endblock %}
 </head>
 <body>
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'header.html' %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-lg-2">
+            {% include 'sidebar.html' %}
+        </div>
+        <div class="col-md-9 col-lg-10">
+            {% block content %}Coming soon...{% endblock content %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'footer.html' %}
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+{% block js %}{% endblock %}
 </body>
 </html>
