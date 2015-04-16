@@ -42,6 +42,10 @@ class Profile(models.Model):
     activity = models.IntegerField(choices=ACTIVITY)
     picture = StdImageField(upload_to='media/images/profile')
 
+    unlikes = models.ManyToManyField('Ingredient')
+    unlikes_family = models.ManyToManyField('IngredientFamily')
+    diets = models.ManyToManyField('Diet')
+
     def __str__(self):
         return self.name
 
@@ -58,6 +62,8 @@ class Recipe(models.Model):
     detail = models.TextField()
     drink = models.TextField()
     origin_url = models.URLField()
+
+    ingredients = models.ManyToManyField('Ingredient')
     #category = models.CharField()  # TODO : relation
 
     def __str__(self):
@@ -68,6 +74,9 @@ class Diet(models.Model):
     name = models.CharField(max_length=32)
     description = models.TextField()
     picture = StdImageField(upload_to='media/images/diet')
+
+    ingredients = models.ManyToManyField('Ingredient')
+    ingredients_family = models.ManyToManyField('IngredientFamily')
 
     def __str__(self):
         return self.name
@@ -80,6 +89,7 @@ class Ingredient(models.Model):
     # country =  #  FIXME : use it for local menu generation
     # season?
     family = models.ForeignKey('IngredientFamily')
+    nutriments = models.ManyToManyField('Nutriment')
 
     def __str__(self):
         return self.name
@@ -88,6 +98,8 @@ class Ingredient(models.Model):
 class IngredientFamily(models.Model):
     name = models.CharField(max_length=32)
     picture = StdImageField(upload_to='media/images/ingredient_family')
+
+    ingredients = models.ManyToManyField('Ingredient')
 
     # TODO (addition by Kevin) : seems necessary for hierarchy (to discuss)
     father = models.ForeignKey('IngredientFamily', null=True, default=None)
@@ -108,6 +120,9 @@ class Menu(models.Model):
     people_n = models.IntegerField()
     price = models.IntegerField(choices=PRICE)
     difficulty = models.IntegerField(choices=EASE)
+    owner = models.ForeignKey(User)
+    # FIXME : missing order/planning relationship (will do it soon) - kevin
+    recipes = models.ManyToManyField('Recipe')
 
     def __str__(self):
         return self.name
