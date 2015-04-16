@@ -1,65 +1,113 @@
 from django.db import models
 from django.contrib.auth.models import User
+from stdimage.models import StdImageField
+
+# FIXME : exact quantification? -> check marmiton
+EASE = (
+    (0, 'very easy'),
+    (1, 'easy'),
+    (2, 'normal'),
+    (3, 'hard'),
+)
+
+# FIXME : exact quantification? -> check marmiton
+PRICE = (
+    (0, 'very cheap'),
+    (1, 'cheap'),
+    (2, 'normal'),
+    (3, 'expensive'),
+)
+
+SEX = (
+    (0, 'male'),
+    (1, 'female'),
+)
+
+ACTIVITY = (
+    (0, 'never'),
+    (1, 'sometime'),
+    (2, 'often'),
+    (3, 'intensive'),
+)
 
 
 class Profile(models.Model):
-    SEX = (
-        (0, 'male'),
-        (1, 'female'),
-    )
-
-    #user = models.ForeignKey('User')
+    owner = models.ForeignKey(User)
+    is_owner_profile = models.BooleanField(default=False)
     name = models.CharField(max_length=64)
     birthday = models.DateField()
     weight = models.IntegerField()
     height = models.IntegerField()
     sex = models.IntegerField(choices=SEX)
-    activity = models.IntegerField()  # FIXME : quantification? jamais, occasionellemen, régiulierement, intrensiveme,t
-    #picture = models.ImageField()
+    activity = models.IntegerField(choices=ACTIVITY)
+    picture = StdImageField(upload_to='media/images/profile')
+
+    def __str__(self):
+        return self.name
 
 
 class Recipe(models.Model):
     name = models.CharField(max_length=128)
-    #picture = models.ImageField()
+    picture = StdImageField(upload_to='media/images/recipe')
     prep_time = models.IntegerField()
     cook_time = models.IntegerField()
     amount = models.IntegerField()
-    difficulty = models.IntegerField()  # FIXME : quantification? facile, moyen difficile
-    price = models.IntegerField()  # FIXME : quantification? check marmitton
-    #category = models.CharField()  # TODO : relation
+    difficulty = models.IntegerField(choices=EASE)
+    price = models.IntegerField(choices=PRICE)  # FIXME : exact quantification? -> check marmiton
     steps = models.TextField()
     detail = models.TextField()
     drink = models.TextField()
     origin_url = models.URLField()
+    #category = models.CharField()  # TODO : relation
+
+    def __str__(self):
+        return self.name
 
 
 class Diet(models.Model):
     name = models.CharField(max_length=32)
     description = models.TextField()
-    #picture = models.ImageField()
+    picture = StdImageField(upload_to='media/images/diet')
+
+    def __str__(self):
+        return self.name
 
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=32)
-    #picture = models.ImageField()
+    picture = StdImageField(upload_to='media/images/ingredient')
     description = models.TextField()
     # country =  #  FIXME : use it for local menu generation
     # season?
     family = models.ForeignKey('IngredientFamily')
 
+    def __str__(self):
+        return self.name
+
 
 class IngredientFamily(models.Model):
     name = models.CharField(max_length=32)
-    #picture = models.ImageField()
+    picture = StdImageField(upload_to='media/images/ingredient_family')
+
+    # TODO (addition by Kevin) : seems necessary for hierarchy (to discuss)
+    father = models.ForeignKey('IngredientFamily', null=True, default=None)
+
+    def __str__(self):
+        return self.name
 
 
 class Nutriment(models.Model):
     name = models.CharField(max_length=32)
 
+    def __str__(self):
+        return self.name
+
 
 class Menu(models.Model):
     name = models.CharField(max_length=32)
     people_n = models.IntegerField()
-    price = models.IntegerField()  # FIXME : marmitton
-    difficulty = models.IntegerField()  # FIXME : marmitton
+    price = models.IntegerField(choices=PRICE)
+    difficulty = models.IntegerField(choices=EASE)
 
+    def __str__(self):
+        return self.name
