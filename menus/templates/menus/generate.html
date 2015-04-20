@@ -1,5 +1,26 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
-{% block content %}
-    <h2>Generate</h2>
+{% block css %}{% endblock %}
+
+{% block dashboardcontent %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% if not user.is_authenticated %}
+                <nav>
+                <ul class="pager">
+                    <li class="previous"><a href="{% url 'menus.views.tastes' %}" ><span aria-hidden="true">&larr;</span> Précedent</a></li>
+                </ul>
+                </nav>
+            {% endif %}
+            <h2>Générer</h2>
+        </div>
+        <div class="panel-body">
+
+        </div>
+        <div class="panel-footer">
+
+        </div>
+    </div>
 {% endblock %}
+
+{% block js %}{% endblock %}
