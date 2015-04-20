@@ -12,10 +12,92 @@
                 </ul>
                 </nav>
             {% endif %}
-            <h2>Générer</h2>
+            <h2>Générer un nouveau menu</h2>
         </div>
         <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Précisez vos critères</h3>
+                            <hr>
+                            <form class="form-horizontal" name="criteria" action="{% url 'menus.views.preferences' %}" method="POST">
+                                 <div class="form-group">
+                                     <label for="budgetRadioOptions" class="col-sm-3 control-label">Budget</label>
+                                     <div class="col-sm-9">
+                                        <label class="radio-inline">
+                                          <input type="radio" name="budgetRadioOptions" id="inlineRadio1" value="option1"> Bon marché
+                                        </label>
+                                        <label class="radio-inline">
+                                          <input type="radio" name="budgetRadioOptions" id="inlineRadio2" value="option2"> Moyen
+                                        </label>
+                                        <label class="radio-inline">
+                                          <input type="radio" name="budgetRadioOptions" id="inlineRadio3" value="option3"> Assez chère
+                                        </label>
+                                     </div>
+                                </div>
 
+                                <div class="form-group">
+                                     <label for="DifficultyRadioOptions" class="col-sm-3 control-label">Difficulté</label>
+                                     <div class="col-sm-9">
+                                        <label class="radio-inline">
+                                          <input type="radio" name="DifficultyRadioOptions" id="inlineRadio1" value="option1"> Très facile
+                                        </label>
+                                        <label class="radio-inline">
+                                          <input type="radio" name="DifficultyRadioOptions" id="inlineRadio2" value="option2"> Facile
+                                        </label>
+                                        <label class="radio-inline">
+                                          <input type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Moyenne
+                                        </label>
+                                         <label class="radio-inline">
+                                          <input type="radio" name="DifficultyRadioOptions" id="inlineRadio4" value="option4"> Difficile
+                                        </label>
+                                     </div>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label for="nb_days" class="col-sm-3 control-label">Pour</label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+
+                                        <select class="form-control" id="weight" name="nb_days" aria-describedby="day-unit-addon">
+                                            <option>0</option>
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                            <option>6</option>
+                                            <option>7</option>
+                                            <option>8</option>
+                                        </select>
+                                            <span class="input-group-addon" id="day-unit-addon">jours</span>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-5 text-right">
+                                        <a class="btn btn-success" href="#" role="button">Détails &raquo;</a>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label for="profils" class="col-sm-3 control-label">Convives</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                        <input type="text" id="profils" name="profils" class="form-control" value="MOI" disabled>
+                                         <span class="input-group-btn">
+                                            <button class="btn btn-success" type="button">Ajouter &raquo;</button>
+                                        </span>
+                                    </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <h3></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="panel-footer">
 
@@ -23,4 +105,8 @@
     </div>
 {% endblock %}
 
-{% block js %}{% endblock %}
+{% block js %}
+    <script>
+
+    </script>
+{% endblock %}
