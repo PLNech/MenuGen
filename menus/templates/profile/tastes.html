@@ -1,5 +1,212 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
-{% block content %}
-    <h2>Tastes</h2>
+{% block css %}{% endblock %}
+
+{% block dashboardcontent %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% if not user.is_authenticated %}
+                <nav>
+                    <ul class="pager">
+                        <li class="previous"><a href="{% url 'menus.views.regimes' %}" ><span aria-hidden="true">&larr;</span> Mes régimes</a></li>
+                        <li class="next"><a href="{% url 'menus.views.generate' %}">Suivant <span aria-hidden="true">&rarr;</span></a></li>
+                    </ul>
+                </nav>
+            {% endif %}
+            <h2>Mes goûts</h2>
+        </div>
+        <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="input-group">
+                <input type="text" class="form-control" id="search" placeholder="Aliment ou groupe d'aliments">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Rechercher</button>
+                </span>
+                </div>
+
+            <hr>
+                <ul id="aliments" class="list-group">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong class="name">ac</strong>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button type="button" class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> J'aime pas
+                                </button>
+                            </div>
+                        </div>
+
+                    </li>
+                    <li class="list-group-item"><strong class="name">sodales.</strong></li>
+                    <li class="list-group-item"><strong class="name">in,</strong></li>
+                    <li class="list-group-item"><strong class="name">Cum</strong></li>
+                    <li class="list-group-item"><strong class="name">lorem</strong></li>
+                    <li class="list-group-item"><strong class="name">ut,</strong></li>
+                    <li class="list-group-item"><strong class="name">tristique</strong></li>
+                    <li class="list-group-item"><strong class="name">Phasellus</strong></li>
+                    <li class="list-group-item"><strong class="name">hymenaeos.</strong></li>
+                    <li class="list-group-item"><strong class="name">egestas.</strong></li>
+                    <li class="list-group-item"><strong class="name">feugiat</strong></li>
+                    <li class="list-group-item"><strong class="name">aliquet.</strong></li>
+                    <li class="list-group-item"><strong class="name">ante</strong></li>
+                    <li class="list-group-item"><strong class="name">nulla</strong></li>
+                    <li class="list-group-item"><strong class="name">amet,</strong></li>
+                    <li class="list-group-item"><strong class="name">mauris.</strong></li>
+                    <li class="list-group-item"><strong class="name">purus</strong></li>
+                    <li class="list-group-item"><strong class="name">euismod</strong></li>
+                    <li class="list-group-item"><strong class="name">massa.</strong></li>
+                    <li class="list-group-item"><strong class="name">interdum.</strong></li>
+                    <li class="list-group-item"><strong class="name">magna.</strong></li>
+                    <li class="list-group-item"><strong class="name">tristique</strong></li>
+                    <li class="list-group-item"><strong class="name">accumsan</strong></li>
+                    <li class="list-group-item"><strong class="name">est.</strong></li>
+                    <li class="list-group-item"><strong class="name">fringilla.</strong></li>
+                    <li class="list-group-item"><strong class="name">ligula.</strong></li>
+                    <li class="list-group-item"><strong class="name">dolor</strong></li>
+                    <li class="list-group-item"><strong class="name">placerat,</strong></li>
+                    <li class="list-group-item"><strong class="name">at,</strong></li>
+                    <li class="list-group-item"><strong class="name">nonummy</strong></li>
+                    <li class="list-group-item"><strong class="name">in</strong></li>
+                    <li class="list-group-item"><strong class="name">amet,</strong></li>
+                    <li class="list-group-item"><strong class="name">egestas.</strong></li>
+                    <li class="list-group-item"><strong class="name">Curabitur</strong></li>
+                    <li class="list-group-item"><strong class="name">lobortis</strong></li>
+                    <li class="list-group-item"><strong class="name">magna</strong></li>
+                    <li class="list-group-item"><strong class="name">at</strong></li>
+                    <li class="list-group-item"><strong class="name">nibh.</strong></li>
+                    <li class="list-group-item"><strong class="name">vulputate,</strong></li>
+                    <li class="list-group-item"><strong class="name">turpis.</strong></li>
+                    <li class="list-group-item"><strong class="name">non,</strong></li>
+                    <li class="list-group-item"><strong class="name">mauris</strong></li>
+                    <li class="list-group-item"><strong class="name">nunc.</strong></li>
+                    <li class="list-group-item"><strong class="name">mollis.</strong></li>
+                    <li class="list-group-item"><strong class="name">eget</strong></li>
+                    <li class="list-group-item"><strong class="name">at,</strong></li>
+                    <li class="list-group-item"><strong class="name">In</strong></li>
+                    <li class="list-group-item"><strong class="name">mi</strong></li>
+                    <li class="list-group-item"><strong class="name">sodales</strong></li>
+                    <li class="list-group-item"><strong class="name">Donec</strong></li>
+                    <li class="list-group-item"><strong class="name">sed</strong></li>
+                    <li class="list-group-item"><strong class="name">dignissim</strong></li>
+                    <li class="list-group-item"><strong class="name">fringilla</strong></li>
+                    <li class="list-group-item"><strong class="name">purus</strong></li>
+                    <li class="list-group-item"><strong class="name">odio.</strong></li>
+                    <li class="list-group-item"><strong class="name">non,</strong></li>
+                    <li class="list-group-item"><strong class="name">tellus.</strong></li>
+                    <li class="list-group-item"><strong class="name">tincidunt</strong></li>
+                    <li class="list-group-item"><strong class="name">et</strong></li>
+                    <li class="list-group-item"><strong class="name">id,</strong></li>
+                    <li class="list-group-item"><strong class="name">ipsum</strong></li>
+                    <li class="list-group-item"><strong class="name">consequat,</strong></li>
+                    <li class="list-group-item"><strong class="name">ac</strong></li>
+                    <li class="list-group-item"><strong class="name">erat.</strong></li>
+                    <li class="list-group-item"><strong class="name">vitae</strong></li>
+                    <li class="list-group-item"><strong class="name">erat</strong></li>
+                    <li class="list-group-item"><strong class="name">mi</strong></li>
+                    <li class="list-group-item"><strong class="name">Integer</strong></li>
+                    <li class="list-group-item"><strong class="name">magna.</strong></li>
+                    <li class="list-group-item"><strong class="name">eu,</strong></li>
+                    <li class="list-group-item"><strong class="name">at</strong></li>
+                    <li class="list-group-item"><strong class="name">Aenean</strong></li>
+                    <li class="list-group-item"><strong class="name">convallis</strong></li>
+                    <li class="list-group-item"><strong class="name">risus.</strong></li>
+                    <li class="list-group-item"><strong class="name">ligula.</strong></li>
+                    <li class="list-group-item"><strong class="name">morbi</strong></li>
+                    <li class="list-group-item"><strong class="name">ipsum</strong></li>
+                    <li class="list-group-item"><strong class="name">facilisis</strong></li>
+                    <li class="list-group-item"><strong class="name">Pellentesque</strong></li>
+                    <li class="list-group-item"><strong class="name">eget</strong></li>
+                    <li class="list-group-item"><strong class="name">sodales.</strong></li>
+                    <li class="list-group-item"><strong class="name">cursus</strong></li>
+                    <li class="list-group-item"><strong class="name">dictum</strong></li>
+                    <li class="list-group-item"><strong class="name">felis</strong></li>
+                    <li class="list-group-item"><strong class="name">Quisque</strong></li>
+                    <li class="list-group-item"><strong class="name">id</strong></li>
+                    <li class="list-group-item"><strong class="name">Duis</strong></li>
+                    <li class="list-group-item"><strong class="name">mi</strong></li>
+                    <li class="list-group-item"><strong class="name">Pellentesque</strong></li>
+                    <li class="list-group-item"><strong class="name">velit</strong></li>
+                    <li class="list-group-item"><strong class="name">morbi</strong></li>
+                    <li class="list-group-item"><strong class="name">placerat,</strong></li>
+                    <li class="list-group-item"><strong class="name">vel</strong></li>
+                    <li class="list-group-item"><strong class="name">Mauris</strong></li>
+                    <li class="list-group-item"><strong class="name">et,</strong></li>
+                    <li class="list-group-item"><strong class="name">a</strong></li>
+                    <li class="list-group-item"><strong class="name">libero</strong></li>
+                    <li class="list-group-item"><strong class="name">risus</strong></li>
+                    <li class="list-group-item"><strong class="name">nulla</strong></li>
+                    <li class="list-group-item"><strong class="name">amet</strong></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3>Ma liste noir</h3></div>
+                    <div class="panel-body">
+
+                <ul id="unliked-aliments" class="list-group">
+                    <li class="list-group-item"><strong class="name">ac</strong></li>
+                    <li class="list-group-item"><strong class="name">sodales.</strong></li>
+                    <li class="list-group-item"><strong class="name">in,</strong></li>
+                    <li class="list-group-item"><strong class="name">Cum</strong></li>
+                    <li class="list-group-item"><strong class="name">lorem</strong></li>
+                    <li class="list-group-item"><strong class="name">ut,</strong></li>
+                    <li class="list-group-item"><strong class="name">tristique</strong></li>
+                    <li class="list-group-item"><strong class="name">Phasellus</strong></li>
+                    <li class="list-group-item"><strong class="name">hymenaeos.</strong></li>
+                    <li class="list-group-item"><strong class="name">egestas.</strong></li>
+                    <li class="list-group-item"><strong class="name">feugiat</strong></li>
+                    <li class="list-group-item"><strong class="name">aliquet.</strong></li>
+                    <li class="list-group-item"><strong class="name">ante</strong></li>
+                    <li class="list-group-item"><strong class="name">nulla</strong></li>
+                    <li class="list-group-item"><strong class="name">amet,</strong></li>
+                    <li class="list-group-item"><strong class="name">mauris.</strong></li>
+                    <li class="list-group-item"><strong class="name">purus</strong></li>
+                    <li class="list-group-item"><strong class="name">euismod</strong></li>
+                    <li class="list-group-item"><strong class="name">massa.</strong></li>
+                    <li class="list-group-item"><strong class="name">interdum.</strong></li>
+                    <li class="list-group-item"><strong class="name">magna.</strong></li>
+                    <li class="list-group-item"><strong class="name">tristique</strong></li>
+                    <li class="list-group-item"><strong class="name">accumsan</strong></li>
+                </ul>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        </div>
+        <div class="panel-footer">
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+            var $rows = $('#aliments li');
+            $('#search').keyup(function() {
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+                console.log(val);
+
+                $rows.show().filter(function() {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+
+            $("#aliments li button").not('.emptyMessage').click(function() {
+                console.log($(this).parent().parents().html());
+                $("#unliked-aliments").prepend("<li class=\"list-group-item\" value='"+$(this).val()+"'><strong class=\"name\">"+$(this).text()+"</strong></li>");
+
+
+                $(this).parent().detach();
+            });
+
+            $("#unliked-aliments li").not('.emptyMessage').click(function() {
+                $("#aliments").prepend("<li class=\"list-group-item\" value='"+$(this).val()+"'><strong class=\"name\">"+$(this).text()+"</strong></li>");
+
+                $(this).detach();
+            });
+    </script>
+
 {% endblock %}

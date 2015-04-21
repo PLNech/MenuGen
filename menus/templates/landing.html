@@ -1,12 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-landing page (another 'base.html' like)
-{% include 'auth/sign_in.html' %}
-<a href="{% url 'menus.views.sign_up' %}">Sign-up</a></li>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Landing</h2>
+     <div class="jumbotron">
+        <div class="parallax-window" data-parallax="scroll" data-image-src="assets/img/landing.jpg">
+            <div class="container">
+                <h1>Le gestionnaire de menus intelligent</h1>
+                <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod.</p>
+                <p>
+                    <a class="btn btn-primary btn-lg" href="{% url 'menus.views.preferences' %}" role="button">Essayez maintenant &raquo;</a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

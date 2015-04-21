@@ -1,23 +1,38 @@
-<form class="form-horizontal" name="LoginForm" action="{% url 'menus.views.sign_in' %}" method="POST">
-    {% csrf_token %}
-    {% if next %}
-        <input type="hidden" name="next" value="{{ next }}" />
-    {% endif %}
-    <div class="control-group">
-        <label class="control-label" for="username">Username</label>
-        <div class="controls">
-            <input type="text" id="username" name="username"  placeholder="Username">
-        </div>
+<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+        <form class="form-horizontal" name="LoginForm" action="{% url 'menus.views.sign_in' %}" method="POST">
+          <div class="modal-body">
+            {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+            <div class="control-group">
+                <label class="control-label" for="username">Username</label>
+                <div class="controls">
+                    <input type="text" id="username" name="username"  placeholder="Username">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="password">Password</label>
+                <div class="controls">
+                    <input type="password" name="password" id="password" placeholder="Password">
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+              <div class="control-group">
+                  <div class="controls">
+                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                  </div>
+              </div>
+          </div>
+        </form>
     </div>
-    <div class="control-group">
-        <label class="control-label" for="password">Password</label>
-        <div class="controls">
-            <input type="password" name="password" id="password" placeholder="Password">
-        </div>
-    </div>
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn">Login</button>
-        </div>
-    </div>
-</form>
+  </div>
+</div>
+

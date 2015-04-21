@@ -1,13 +1,14 @@
-<ul>
+<ul class="nav nav-pills nav-stacked">
     <li><a href="{% url 'menus.views.home' %}">Home</a></li>
-    <li><a href="{% url 'menus.views.generate' %}">Generate</a></li>
-    <li><a href="{% url 'menus.views.menus' %}">Menus</a></li>
-    <li><a href="{% url 'menus.views.friends' %}">Friends</a></li>
-    <li><a href="{% url 'menus.views.statistics' %}">Statistics</a></li>
-    <li><a href="{% url 'menus.views.account' %}">Account</a></li>
+
+    <li><a href="{% url 'menus.views.friends' %}">Profil(s)</a></li>
     <li><a href="{% url 'menus.views.preferences' %}">Preferences</a></li>
     <li><a href="{% url 'menus.views.regimes' %}">Regimes</a></li>
     <li><a href="{% url 'menus.views.tastes' %}">Tastes</a></li>
+    <li><a href="{% url 'menus.views.generate' %}">Génerer</a></li>
+    <li></li>
+    <li><a href="{% url 'menus.views.menus' %}">Mes menus</a></li>
+    <li><a href="{% url 'menus.views.statistics' %}">Statistics</a></li>
     <li><a href="{% url 'menus.views.account' %}">Account</a></li>
-    <li><a href="{% url 'menus.views.sign_out' %}">Sign-out</a></li>
 </ul>
+

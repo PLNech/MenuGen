@@ -7,12 +7,10 @@ def landing(request):
     return render(request, 'landing.html', {})
 
 
-@login_required
 def home(request):
     return render(request, 'menus/home.html', {})
 
 
-@login_required
 def generate(request):
     return render(request, 'menus/generate.html', {})
 
@@ -32,17 +30,20 @@ def statistics(request):
     return render(request, 'menus/statistics.html', {})
 
 
-@login_required
 def preferences(request):
-    return render(request, 'profile/preferences.html', {})
+    if request.method == 'POST':
+        username = request.POST['username']
+        sex      = request.POST['sex']
+        height   = request.POST['height']
+        weight   = request.POST['weight']
+    else:
+        return render(request, 'profile/preferences.html', {})
 
 
-@login_required
 def regimes(request):
     return render(request, 'profile/regimes.html', {})
 
 
-@login_required
 def tastes(request):
     return render(request, 'profile/tastes.html', {})
 
@@ -60,7 +61,7 @@ def sign_in(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('menus.views.home')
+                return redirect('menus.views.friends')
             else:
                 return redirect('menus.views.sign_in')
         else:

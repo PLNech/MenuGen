@@ -1,5 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
-{% block content %}
-    <h2>Home</h2>
+{% block css %}{% endblock %}
+
+{% block dashboardcontent %}
+    <nav>
+    <ul class="pager">
+        <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Précedent</a></li>
+        <li class="next"><a href="#">Suivant <span aria-hidden="true">&rarr;</span></a></li>
+    </ul>
+
+    </nav>
+        <h2>Home</h2>
 {% endblock %}
+
+{% block js %}{% endblock %}

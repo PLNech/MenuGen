@@ -1,5 +1,76 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
-{% block content %}
-    <h2>Regimes</h2>
+{% block css %}{% endblock %}
+
+{% block dashboardcontent %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% if not user.is_authenticated %}
+            <nav>
+            <ul class="pager">
+                <li class="previous"><a href="{% url 'menus.views.preferences' %}" ><span aria-hidden="true">&larr;</span> Ma physiologie</a></li>
+                <li class="next"><a href="{% url 'menus.views.tastes' %}">Mes goûts <span aria-hidden="true">&rarr;</span></a></li>
+            </ul>
+            </nav>
+            {% endif %}
+            <h2>Mes Regimes</h2>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-6">
+                <h3><small>Santé</small></h3>
+                <hr>
+                {% if health_regimes_list %}
+                    <ul>
+                    {% for regime in health_regimes_list %}
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="">{{ regime.name }}</label>
+                        </div>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Aucun régimes disponible pour le moment</p>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h3><small>Valeurs</small></h3>
+                <hr>
+                {% if value_regimes_list %}
+                    <ul>
+                    {% for regime in value_regimes_list %}
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="">{{ regime.name }}</label>
+                        </div>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Aucun régimes disponible pour le moment</p>
+                {% endif %}
+            </div>
+
+            <div class="col-md-12">
+                <h3><small>Nutriments</small></h3>
+                <hr>
+                {% if nutriments_list %}
+                    <ul>
+                    {% for nutriment in nitriments_list %}
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="">{{ regime.name }}</label>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                                <button type="button" class="btn btn-default">Min</button>
+                                <button type="button" class="btn btn-default">Recomandé</button>
+                                <button type="button" class="btn btn-default">Max</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Aucun régimes disponible pour le moment</p>
+                {% endif %}
+            </div>
+        </div>
+         <div class="panel-footer">
+        </div>
+    </div>
 {% endblock %}
+
+{% block js %}{% endblock %}
