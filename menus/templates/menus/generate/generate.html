@@ -76,7 +76,7 @@
                                             </div>
                                     </div>
                                     <div class="col-md-5 text-right">
-                                        <a id="placements-detail-ajax" href="{% url 'menus.views.generate_placements_detail' %}" class="btn btn-success" type="button">Détails &raquo;</a>
+                                        <a id="placements-detail-ajax" href="{% url 'menus.views.generate_placements_detail'%}" class="btn btn-success" type="button">Détails &raquo;</a>
                                     </div>
                                 </div>
                                 <hr>
@@ -99,7 +99,7 @@
                         <div class="col-md-6">
                             <div class="well">
                                 <div id="contextual-container">
-                                    {% include 'menus/generate/placements_detail.html' %}
+                                    {% include 'menus/generate/placements_detail.html' with days=days %}
                                 </div>
                             </div>
                         </div>

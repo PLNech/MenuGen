@@ -1,5 +1,46 @@
 <h3>Vue détaillée</h3>
 <hr>
 <div class="row">
+    <div class="col-md-6">
+        <h4>Nombre de repas </h4>
+    </div>
+    <div class="col-md-6 text-right">
 
+    </div>
+</div>
+<hr>
+<div class="row">
+    <table class="table">
+        <tr>
+            <th>Matin</th>
+            {% for i in days %}
+                <td><input type="checkbox" aria-label="..."></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Collation</th>
+            {% for i in days %}
+                <td><input type="checkbox" aria-label="..."></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Déjeuner</th>
+            {% for i in days %}
+                <td><input type="checkbox" aria-label="..."></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Collation</th>
+            {% for i in days %}
+                <td><input type="checkbox" aria-label="..."></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Dîner</th>
+            {% for i in days %}
+                <td><input type="checkbox" aria-label="..."></td>
+            {% endfor %}
+        </tr>
+
+    </table>
 </div>

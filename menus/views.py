@@ -12,7 +12,7 @@ def home(request):
 
 
 def generate(request):
-    return render(request, 'menus/generate/generate.html', {})
+    return render(request, 'menus/generate/generate.html', {'days': range(0, 7)})
 
 
 def generate_select_profile(request):
@@ -20,11 +20,11 @@ def generate_select_profile(request):
 
 
 def generate_placements_detail(request):
-    return render(request, 'menus/generate/placements_detail.html', {})
+    return render(request, 'menus/generate/placements_detail.html', {'days': range(0, 7)})
 
 
 def generation(request):
-    return render(request, 'menus/generation.html', {})
+    return render(request, 'menus/generation.html', {'days': range(0, 7)})
 
 
 @login_required

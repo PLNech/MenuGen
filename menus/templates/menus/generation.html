@@ -3,7 +3,53 @@
 {% block css %}{% endblock %}
 
 {% block dashboardcontent %}
+    {% if not user.is_authenticated %}
+                <nav>
+                <ul class="pager">
+                    <li class="previous"><a href="{% url 'menus.views.generate' %}" ><span aria-hidden="true">&larr;</span> Retour aux critères</a></li>
+                </ul>
+                </nav>
+            {% endif %}
     <h1>Votre menu généré</h1>
+    <br>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <tr>
+                    <th>Matin</th>
+                    {% for i in days %}
+                        <td>{% include 'menus/generate/slot.html'%}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Collation</th>
+                    {% for i in days %}
+                        <td>{% include 'menus/generate/slot.html'%}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Déjeuner</th>
+                    {% for i in days %}
+                        <td>{% include 'menus/generate/slot.html'%}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Collation</th>
+                    {% for i in days %}
+                        <td>{% include 'menus/generate/slot.html'%}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th>Dîner</th>
+                    {% for i in days %}
+                        <td>{% include 'menus/generate/slot.html'%}</td>
+                    {% endfor %}
+                </tr>
+
+            </table>
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}{% endblock %}
