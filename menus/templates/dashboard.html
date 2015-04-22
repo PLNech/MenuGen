@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="col-md-3 col-lg-2">
-    {% if user.is_authenticated %}
-        {% include 'sidebar.html' %}
-    {% endif %}
-</div>
-<div class="col-md-9 col-lg-10">
-        {% block dashboardcontent %}Coming soon...{% endblock dashboardcontent %}
-</div>
+    <div class="row">
+        <div class="col-md-3 col-lg-2">
+            {% if user.is_authenticated %}
+                {% include 'sidebar.html' %}
+            {% endif %}
+        </div>
+        <div class="col-md-9 col-lg-10">
+                {% block dashboardcontent %}Coming soon...{% endblock dashboardcontent %}
+        </div>
+    </div>
 {% endblock %}
