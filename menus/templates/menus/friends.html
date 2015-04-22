@@ -8,7 +8,7 @@
             <h2>Profil(s)</h2>
         </div>
         <div class="panel-body">
-             <a class="btn btn-primary btn-lg" href="{% url 'menus.views.preferences' %}" role="button">Créer nouveau profil &raquo;</a>
+             <a class="btn btn-primary btn-lg" href="{% url 'menus.views.physiology' %}" role="button">Créer nouveau profil &raquo;</a>
         </div>
         <div class="panel-footer">
         </div>
@@ -20,12 +20,9 @@
     <script>
         $(function(){
             $(".dropdown-menu li a").click(function(){
-
-            $(".btn:first-child").text($(this).text());
-            $(".btn:first-child").val($(this).text());
-
+                $(".btn:first-child").text($(this).text());
+                $(".btn:first-child").val($(this).text());
             });
         });
-
     </script>
 {% endblock %}
