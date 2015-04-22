@@ -4,6 +4,8 @@ from collections import defaultdict
 
 
 class CsvFood(object):
+    empty_values = [None, '', ' ']
+
     fields_all = {
         'code': 0,
         'product_name': 7,
@@ -116,17 +118,16 @@ class CsvFood(object):
         'carbon_footprint_100g': 151
     }
     # Fields needed for further data manipulation
-    fields_needed = ['product_name',
-                     'generic_name',  # TODO: Decide if we really need it
-                     'quantity',
-                     # 'categories',
-                     'energy_100g',
-                     'fat_100g',
-                     'proteins_100g',
-                     'carbohydrates_100g',
-                     'image_url',
-                     'image_small_url'
-                     ]
+    fields_needed = [
+        'quantity',
+        # 'categories',
+        'energy_100g',
+        'fat_100g',
+        'proteins_100g',
+        'carbohydrates_100g',
+        'image_url',
+        'image_small_url'
+    ]
 
     # Fields where more than 70% of data was empty
     fields_useless = ['origins',
@@ -223,6 +224,14 @@ class CsvFood(object):
             yield attr, value
 
     def __init__(self, fields):
+        product_name_index = CsvFood.fields_all['product_name']
+        generic_name_index = CsvFood.fields_all['generic_name']
+
+        if fields[product_name_index] not in CsvFood.empty_values:
+            self.product_name = fields[product_name_index]
+        elif fields[generic_name_index] not in CsvFood.empty_values:
+            self.product_name = fields[generic_name_index]
+
         for (name, index) in CsvFood.fields_all.items():
             if name in CsvFood.fields_useless:
                 continue
@@ -282,14 +291,44 @@ def print_stats(food_array):
     for pair in sorted(list_fields, key=lambda x: x[1]):
         print("%s was null %.2f%% times." % (pair[0], pair[1]))
 
-    print("Finished analysing %d items." % item_count)
+    print("\nFinished analysing %d items." % item_count)
 
 
 def is_invalid_field_list(fields):
+    """
+    Returns true if the given line is not a valid field list
+
+    :param fields: Fields of the line to test
+    :type fields list
+    :rtype bool
+    """
     return len(fields) != 154
 
 
+def has_no_name(fields):
+    """
+    Returns true if the product has no usable name
+
+    :param fields: Fields of the line to test
+    :type fields list
+    :rtype bool
+    """
+    product_name_index = CsvFood.fields_all['product_name']
+    generic_name_index = CsvFood.fields_all['generic_name']
+
+    return fields[product_name_index] in CsvFood.empty_values \
+        and fields[generic_name_index] in CsvFood.empty_values
+
+
 def invalid_fields(item):
+    """
+    Returns the needed fields that are missing from this product
+
+    :param item: The product to test
+    :type item CsvFood
+    :return The list of missing fields (if any)
+    :rtype list
+    """
     invalids = []
     for field in CsvFood.fields_needed:
         if not hasattr(item, field):
@@ -319,7 +358,7 @@ if __name__ == '__main__':
             fields = line.rstrip("\n").split(separator)
             loc_filled = len([x for x in fields if x is not ' ' and x is not '' and x is not None])
             filled += loc_filled
-            if is_invalid_field_list(fields):
+            if is_invalid_field_list(fields) or has_no_name(fields):
                 skip_count_lines += 1
                 continue
             food = CsvFood(fields)
