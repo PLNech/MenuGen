@@ -49,7 +49,7 @@ def physiology(request):
         height = request.POST['height']
         weight = request.POST['weight']
     else:
-        return render(request, 'profile/physiology.html', {'ages': range(6, 150)})
+        return render(request, 'profile/physiology.html', {'ages': range(5, 151)})
 
 
 def regimes(request):
