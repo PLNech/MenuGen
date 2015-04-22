@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <h4 class="modal-title" id="myModalLabel">Connection</h4>
       </div>
         <form class="form-horizontal" name="LoginForm" action="{% url 'menus.views.sign_in' %}" method="POST">
           <div class="modal-body">
@@ -12,15 +12,15 @@
                 <input type="hidden" name="next" value="{{ next }}" />
             {% endif %}
             <div class="control-group">
-                <label class="control-label" for="username">Username</label>
+                <label class="control-label" for="username">Utilisateur</label>
                 <div class="controls">
-                    <input type="text" id="username" name="username"  placeholder="Username">
+                    <input type="text" id="username" name="username" placeholder="Utilisateur">
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="password">Password</label>
+                <label class="control-label" for="password">Mot de passe</label>
                 <div class="controls">
-                    <input type="password" name="password" id="password" placeholder="Password">
+                    <input type="password" name="password" id="password" placeholder="Mot de passe">
                 </div>
             </div>
           </div>
