@@ -12,7 +12,19 @@ def home(request):
 
 
 def generate(request):
-    return render(request, 'menus/generate.html', {})
+    return render(request, 'menus/generate/generate.html', {})
+
+
+def generate_select_profile(request):
+    return render(request, 'menus/generate/select_profile.html', {})
+
+
+def generate_placements_detail(request):
+    return render(request, 'menus/generate/placements_detail.html', {})
+
+
+def generation(request):
+    return render(request, 'menus/generation.html', {})
 
 
 @login_required
@@ -30,14 +42,14 @@ def statistics(request):
     return render(request, 'menus/statistics.html', {})
 
 
-def preferences(request):
+def physiology(request):
     if request.method == 'POST':
         username = request.POST['username']
-        sex      = request.POST['sex']
-        height   = request.POST['height']
-        weight   = request.POST['weight']
+        sex = request.POST['sex']
+        height = request.POST['height']
+        weight = request.POST['weight']
     else:
-        return render(request, 'profile/preferences.html', {})
+        return render(request, 'profile/physiology.html', {'ages': range(6, 150)})
 
 
 def regimes(request):

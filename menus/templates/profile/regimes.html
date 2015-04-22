@@ -8,7 +8,7 @@
             {% if not user.is_authenticated %}
             <nav>
             <ul class="pager">
-                <li class="previous"><a href="{% url 'menus.views.preferences' %}" ><span aria-hidden="true">&larr;</span> Ma physiologie</a></li>
+                <li class="previous"><a href="{% url 'menus.views.physiology' %}" ><span aria-hidden="true">&larr;</span> Ma physiologie</a></li>
                 <li class="next"><a href="{% url 'menus.views.tastes' %}">Mes goûts <span aria-hidden="true">&rarr;</span></a></li>
             </ul>
             </nav>
@@ -52,7 +52,7 @@
                 <hr>
                 {% if nutriments_list %}
                     <ul>
-                    {% for nutriment in nitriments_list %}
+                    {% for nutriment in nutriments_list %}
                         <div class="checkbox">
                             <label><input type="checkbox" value="">{{ regime.name }}</label>
                             <div class="btn-group btn-group-sm" role="group" aria-label="...">

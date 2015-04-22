@@ -21,7 +21,7 @@
                         <div class="col-md-6">
                             <h3>Précisez vos critères</h3>
                             <hr>
-                            <form class="form-horizontal" name="criteria" action="{% url 'menus.views.preferences' %}" method="POST">
+                            <form class="form-horizontal" name="criteria" action="{% url 'menus.views.physiology' %}" method="POST">
                                  <div class="form-group">
                                      <label for="budgetRadioOptions" class="col-sm-3 control-label">Budget</label>
                                      <div class="col-sm-9">
@@ -75,7 +75,7 @@
                                             </div>
                                     </div>
                                     <div class="col-md-5 text-right">
-                                        <a class="btn btn-success" href="#" role="button">Détails &raquo;</a>
+                                        <a id="placements-detail-ajax" href="{% url 'menus.views.generate_placements_detail' %}" class="btn btn-success" type="button">Détails &raquo;</a>
                                     </div>
                                 </div>
                                 <hr>
@@ -85,28 +85,53 @@
                                         <div class="input-group">
                                         <input type="text" id="profils" name="profils" class="form-control" value="MOI" disabled>
                                          <span class="input-group-btn">
-                                            <button class="btn btn-success" type="button">Ajouter &raquo;</button>
-                                        </span>
+                                            <a id="select-profils-ajax" href="{% url 'menus.views.generate_select_profile' %}" class="btn btn-success" type="button">Ajouter &raquo;</a>
+                                         </span>
                                     </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <div class="col-md-6">
-                            <h3></h3>
+                            <div id="contextual-container">
+                                {% include 'menus/generate/placements_detail.html' %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="panel-footer">
-
+        <div class="panel-footer text-right">
+            <a href="{% url 'menus.views.generation' %}" type="button" class="btn btn-info btn-lg">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Générer &raquo;
+            </a>
         </div>
     </div>
 {% endblock %}
 
 {% block js %}
-    <script>
+    <script type="text/javascript">
+
+        $(document).ready( function() {
+            $("#select-profils-ajax").click(function(e){
+                var lien = $(this).attr('href');
+                $('#contextual-container').fadeOut('fast', function(){
+                    $('#contextual-container').load(lien, function() {
+                        $('#contextual-container').fadeIn('fast');
+                    });
+                });
+                e.preventDefault()
+            });
+            $("#placements-detail-ajax").click(function(e){
+                var lien = $(this).attr('href');
+                $('#contextual-container').fadeOut('fast', function(){
+                    $('#contextual-container').load(lien, function() {
+                        $('#contextual-container').fadeIn('fast');
+                    });
+                });
+                e.preventDefault()
+            });
+        });
 
     </script>
 {% endblock %}
