@@ -19,6 +19,7 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
+                            <div class="well">
                             <h3>Précisez vos critères</h3>
                             <hr>
                             <form class="form-horizontal" name="criteria" action="{% url 'menus.views.physiology' %}" method="POST">
@@ -92,11 +93,17 @@
                                 </div>
                             </form>
                         </div>
+                        </div>
+
+
                         <div class="col-md-6">
-                            <div id="contextual-container">
-                                {% include 'menus/generate/placements_detail.html' %}
+                            <div class="well">
+                                <div id="contextual-container">
+                                    {% include 'menus/generate/placements_detail.html' %}
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
