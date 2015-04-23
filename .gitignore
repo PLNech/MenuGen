@@ -2,5 +2,6 @@
 .idea
 *.pyc
 *.sqlite3
+.DS_Store
 migrations/
 __pycache__/
