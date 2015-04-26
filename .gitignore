@@ -1,5 +1,6 @@
 .venv
 .idea
+*.swp
 *.pyc
 *.sqlite3
 migrations/

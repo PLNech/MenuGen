@@ -2,32 +2,29 @@ from django.db import models
 from django.contrib.auth.models import User
 from stdimage.models import StdImageField
 
-# FIXME : exact quantification? -> check marmiton
 EASE = (
-    (0, 'very easy'),
-    (1, 'easy'),
-    (2, 'normal'),
-    (3, 'hard'),
+    (0, 'Très facile'),
+    (1, 'Facile'),
+    (2, 'Moyenne'),
+    (3, 'Difficile'),
 )
 
-# FIXME : exact quantification? -> check marmiton
 PRICE = (
-    (0, 'very cheap'),
-    (1, 'cheap'),
-    (2, 'normal'),
-    (3, 'expensive'),
+    (0, 'Bon marché'),
+    (1, 'Moyen'),
+    (2, 'Assez cher'),
 )
 
 SEX = (
-    (0, 'male'),
-    (1, 'female'),
+    (0, 'Homme'),
+    (1, 'Femme'),
 )
 
 ACTIVITY = (
-    (0, 'never'),
-    (1, 'sometime'),
-    (2, 'often'),
-    (3, 'intensive'),
+    (0, 'Jamais'),
+    (1, 'De temps en temps'),
+    (2, 'Souvent'),
+    (3, 'Tous le temps'),
 )
 
 
