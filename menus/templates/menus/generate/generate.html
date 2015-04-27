@@ -122,6 +122,7 @@
         $(document).ready( function() {
             $("#select-profils-ajax").click(function(e){
                 var lien = $(this).attr('href');
+                console.log(lien);
                 $('#contextual-container').fadeOut('fast', function(){
                     $('#contextual-container').load(lien, function() {
                         $('#contextual-container').fadeIn('fast');

@@ -6,7 +6,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/"><p>MenuGen</p></a>
+          <a class="navbar-brand" href="/">MenuGen</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -22,15 +22,10 @@
                     </li>
                     {% else %}
 
-                    <li><a href="{% url 'menus.views.sign_up' %}"><button   type="submit" class="btn btn-default">Inscription</button></a></li>
-                    <li><a>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                        Connection
-                        </button>
-                    </a></li>
+                    <li><a href="{% url 'menus.views.sign_up' %}">Inscription</a></li>
+                    <li><a data-toggle="modal" data-target="#signInModal">Connection</a></li>
                 {% endif %}
             </ul>
         </div>
   </div>
 </nav>
-{% include 'auth/sign_in.html' %}

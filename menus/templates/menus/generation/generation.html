@@ -1,0 +1,47 @@
+{% extends 'dashboard.html' %}
+{% load planning_extras %}
+
+{% block css %}{% endblock %}
+
+{% block dashboardcontent %}
+    {% if not user.is_authenticated %}
+        <nav>
+            <ul class="pager">
+                <li class="previous"><a href="{% url 'menus.views.generate' %}" ><span aria-hidden="true">&larr;</span> Retour aux critères</a></li>
+            </ul>
+        </nav>
+    {% endif %}
+    <h1>Votre menu généré</h1>
+    {% include 'menus/generation/modal.html' %}
+    <div class="row">
+        <div class="col-md-12">
+            <br>
+            <table id="planning" class="table">
+                {% for meal_time in planning %}
+                    <tr>
+                        <th>{{ forloop.counter0|meal_slot_name }}</th>
+                        {% for meal in meal_time %}
+                            <td>
+                                <a data-toggle="modal"
+                                   href="{% url 'menus.views.generation_meal_details'%}"
+                                   data-target="#mealDetailsModal">
+                                {% include 'menus/generation/slot.html' with aMeal=meal %}
+                                </a>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready( function() {
+            $(document).on("hidden.bs.modal", function (e) {
+                $(e.target).removeData("bs.modal").find(".modal-content").empty();
+            });
+        });
+    </script>
+{% endblock %}
