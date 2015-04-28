@@ -45,13 +45,53 @@
 {% endblock %}
 
 {% block js %}
-
-{#    <script src="{% static 'dragula/dragula.js' %}"></script>#}
-    <script src="{% static 'dnd/dnd.js' %}"></script>
+    
     <script type="text/javascript">
         $(document).ready( function() {
-            console.log("js loding");
+            function handleDragStart(e) {
+                this.style.opacity = '0.4';  // this / e.target is the source node.
 
+                dragSrcEl = this;
+
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', this.innerHTML);
+            }
+
+            function handleDragOver(e) {
+              if (e.preventDefault) {
+                e.preventDefault(); // Necessary. Allows us to drop.
+              }
+
+              e.dataTransfer.dropEffect = 'move';
+
+              return false;
+            }
+
+            function handleDrop(e) {
+              // this / e.target is current target element.
+                console.log("drop");
+                counter = 0;
+                  if (e.stopPropagation) {
+                    e.stopPropagation(); // stops the browser from redirecting.
+                  }
+
+                // Don't do anything if dropping the same column we're dragging.
+              if (dragSrcEl != this) {
+                // Set the source slot's HTML to the HTML of the slot we dropped on.
+                dragSrcEl.innerHTML = this.innerHTML;
+                this.innerHTML = e.dataTransfer.getData('text/html');
+              }
+
+              return false;
+            }
+
+            function handleDragEnd(e) {
+                // this/e.target is the source node.
+                [].forEach.call(cols, function (col) {
+                    col.classList.remove('over');
+                });
+                this.style.opacity = '1';
+            }
 
             var counter = 0;
 
@@ -74,7 +114,6 @@
                 }
             }
 
-
             var cols = document.querySelectorAll('#planning .slot');
             [].forEach.call(cols, function(col) {
                 col.addEventListener('dragstart', handleDragStart, false);
@@ -84,54 +123,7 @@
                 col.addEventListener('drop', handleDrop, false);
                 col.addEventListener('dragend', handleDragEnd, false);
             });
-        {% comment %}    var slots = jQuery.makeArray($(".slot"));
-            //console.log(slots);
-            var drake = dragula(slots, {
-                direction: 'vertical',
-                revertOnSpill: true,
-                moves: function (el, container, handle) {
-                    return handle.className === 'handle';
-                },
-                accepts: function (el, target, source, sibling) {
-                    //console.log(el);
-                    //console.log(target);
-                    //console.log(source);
-                    //console.log(sibling);
-                    return true;
-                }
-            });
 
-            drake.addContainer
-            var el_src;
-            var cont_src;
-            drake.on("drag", function(el, container) {
-
-                el_src = el;
-                cont_src = container;
-            });
-
-            drake.on('shadow', function(el, container) {
-
-                //console.log(el);
-                //console.log(container);
-            });
-
-            drake.on('dragend', function(el) {
-                console.log(el);
-
-            });
-
-            drake.on('drop', function(el, container, source) {
-                //console.log(el);
-                //console.log();
-                //console.log(source);
-              var elts = $(container).children();
-            //console.log(elts)
-              //  var old_el = elts.index(el) === 0 ? elts[1] : elts[0];
-               // $(old_el).appendTo(source);
-
-            });
-{% endcomment %}
             $(document).on("hidden.bs.modal", function (e) {
                 $(e.target).removeData("bs.modal").find(".modal-content").empty();
             });

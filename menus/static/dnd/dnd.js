@@ -38,9 +38,42 @@ function handleDrop(e) {
 
 function handleDragEnd(e) {
     // this/e.target is the source node.
-    console.log("dragend");
     [].forEach.call(cols, function (col) {
         col.classList.remove('over');
     });
     this.style.opacity = '1';
 }
+
+
+
+var counter = 0;
+
+function handleDragEnter(e) {
+    console.log("enter : " + counter);
+    if (e.preventDefault) {
+    e.preventDefault();
+  }
+    // this / e.target is the current hover target.
+    counter++;
+    this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+    console.log("leave : " + counter);
+    counter--;
+    if (counter === 0) {
+        console.log(counter);
+        this.classList.remove('over');  // this / e.target is previous target element.
+    }
+}
+
+
+var cols = document.querySelectorAll('#planning .slot');
+[].forEach.call(cols, function(col) {
+    col.addEventListener('dragstart', handleDragStart, false);
+    col.addEventListener('dragenter', handleDragEnter, false);
+    col.addEventListener('dragover', handleDragOver, false);
+    col.addEventListener('dragleave', handleDragLeave, false);
+    col.addEventListener('drop', handleDrop, false);
+    col.addEventListener('dragend', handleDragEnd, false);
+});
