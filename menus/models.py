@@ -86,10 +86,16 @@ class Ingredient(models.Model):
     # country =  #  FIXME : use it for local menu generation
     # season?
     family = models.ForeignKey('IngredientFamily')
-    nutriments = models.ManyToManyField('Nutriment')
+    nutriments = models.ManyToManyField('Nutriment', through='IngredientNutriment')
 
     def __str__(self):
         return self.name
+
+
+class IngredientNutriment(models.Model):
+    ingredient = models.ForeignKey('Ingredient')
+    nutriment = models.ForeignKey('Nutriment')
+    quantity = models.IntegerField()
 
 
 class IngredientFamily(models.Model):
