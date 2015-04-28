@@ -1,7 +1,11 @@
 {% extends 'dashboard.html' %}
 {% load planning_extras %}
 
-{% block css %}{% endblock %}
+{% block css %}
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'dragula/dragula.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'dnd/dnd.css' %}" />
+{% endblock %}
 
 {% block dashboardcontent %}
     {% if not user.is_authenticated %}
@@ -22,11 +26,15 @@
                         <th>{{ forloop.counter0|meal_slot_name }}</th>
                         {% for meal in meal_time %}
                             <td>
-                                <a data-toggle="modal"
-                                   href="{% url 'menus.views.generation_meal_details'%}"
-                                   data-target="#mealDetailsModal">
-                                {% include 'menus/generation/slot.html' with aMeal=meal %}
-                                </a>
+                                <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
+                                    <a data-toggle="modal"
+                                        href="{% url 'menus.views.generation_meal_details'%}"
+                                        data-target="#mealDetailsModal">
+                                        DETAILS
+                                    </a>
+                                    <span>{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}</span>
+                                    {% include 'menus/generation/slot.html' with aMeal=meal %}
+                                </div>
                             </td>
                         {% endfor %}
                     </tr>
@@ -37,8 +45,93 @@
 {% endblock %}
 
 {% block js %}
+
+{#    <script src="{% static 'dragula/dragula.js' %}"></script>#}
+    <script src="{% static 'dnd/dnd.js' %}"></script>
     <script type="text/javascript">
         $(document).ready( function() {
+            console.log("js loding");
+
+
+            var counter = 0;
+
+            function handleDragEnter(e) {
+                console.log("enter : " + counter);
+                if (e.preventDefault) {
+                e.preventDefault();
+              }
+                // this / e.target is the current hover target.
+                counter++;
+                this.classList.add('over');
+            }
+
+            function handleDragLeave(e) {
+                console.log("leave : " + counter);
+                counter--;
+                if (counter === 0) {
+                    console.log(counter);
+                    this.classList.remove('over');  // this / e.target is previous target element.
+                }
+            }
+
+
+            var cols = document.querySelectorAll('#planning .slot');
+            [].forEach.call(cols, function(col) {
+                col.addEventListener('dragstart', handleDragStart, false);
+                col.addEventListener('dragenter', handleDragEnter, false);
+                col.addEventListener('dragover', handleDragOver, false);
+                col.addEventListener('dragleave', handleDragLeave, false);
+                col.addEventListener('drop', handleDrop, false);
+                col.addEventListener('dragend', handleDragEnd, false);
+            });
+        {% comment %}    var slots = jQuery.makeArray($(".slot"));
+            //console.log(slots);
+            var drake = dragula(slots, {
+                direction: 'vertical',
+                revertOnSpill: true,
+                moves: function (el, container, handle) {
+                    return handle.className === 'handle';
+                },
+                accepts: function (el, target, source, sibling) {
+                    //console.log(el);
+                    //console.log(target);
+                    //console.log(source);
+                    //console.log(sibling);
+                    return true;
+                }
+            });
+
+            drake.addContainer
+            var el_src;
+            var cont_src;
+            drake.on("drag", function(el, container) {
+
+                el_src = el;
+                cont_src = container;
+            });
+
+            drake.on('shadow', function(el, container) {
+
+                //console.log(el);
+                //console.log(container);
+            });
+
+            drake.on('dragend', function(el) {
+                console.log(el);
+
+            });
+
+            drake.on('drop', function(el, container, source) {
+                //console.log(el);
+                //console.log();
+                //console.log(source);
+              var elts = $(container).children();
+            //console.log(elts)
+              //  var old_el = elts.index(el) === 0 ? elts[1] : elts[0];
+               // $(old_el).appendTo(source);
+
+            });
+{% endcomment %}
             $(document).on("hidden.bs.modal", function (e) {
                 $(e.target).removeData("bs.modal").find(".modal-content").empty();
             });
