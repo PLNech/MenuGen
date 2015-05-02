@@ -53,7 +53,7 @@ def generation(request):
 
     main = Recipe()
     main.id = 1
-    main.name = "Plat principale"
+    main.name = "Plat principal"
     main.prep_time = 5
     main.cook_time = 20
     main.difficulty = 3
@@ -95,7 +95,7 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
 
     main = Recipe()
     main.id = main_course_id
-    main.name = "Un plat principale"
+    main.name = "Un plat principal"
     main.prep_time = 5
     main.cook_time = 20
     main.difficulty = 3

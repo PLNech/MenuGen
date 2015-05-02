@@ -7,9 +7,9 @@
         <div class="panel-heading">
             {% if not user.is_authenticated %}
                 <nav>
-                <div class="pager">
-                    <div class="previous"><a href="{% url 'menus.views.tastes' %}" ><span aria-hidden="true">&larr;</span> Précedent</a></div>
-                </div>
+                <ul class="pager">
+                    <li class="previous"><a href="{% url 'menus.views.tastes' %}" ><span aria-hidden="true">&larr;</span> Précedent</a></li>
+                </ul>
                 <h2>Générer un nouveau menu</h2>
                 </nav>
             {% endif %}
