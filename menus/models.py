@@ -88,6 +88,9 @@ class Ingredient(models.Model):
     family = models.ForeignKey('IngredientFamily')
     nutriments = models.ManyToManyField('Nutriment', through='IngredientNutriment')
 
+    class Meta:
+        ordering = ('name',)
+
     def __str__(self):
         return self.name
 
