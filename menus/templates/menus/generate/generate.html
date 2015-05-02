@@ -7,12 +7,13 @@
         <div class="panel-heading">
             {% if not user.is_authenticated %}
                 <nav>
-                <ul class="pager">
-                    <li class="previous"><a href="{% url 'menus.views.tastes' %}" ><span aria-hidden="true">&larr;</span> Précedent</a></li>
-                </ul>
+                <div class="pager">
+                    <div class="previous"><a href="{% url 'menus.views.tastes' %}" ><span aria-hidden="true">&larr;</span> Précedent</a></div>
+                </div>
+                <h2>Générer un nouveau menu</h2>
                 </nav>
             {% endif %}
-            <h2>Générer un nouveau menu</h2>
+
         </div>
         <div class="panel-body">
             <div class="row">
@@ -110,7 +111,7 @@
             </div>
         </div>
         <div class="panel-footer text-right">
-            <a href="{% url 'menus.views.generation' %}" type="button" class="btn btn-info btn-lg">
+            <a href="{% url 'menus.views.generation' %}" type="button" class="btn btn-theme03 btn-lg btn-block">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Générer &raquo;
             </a>
         </div>

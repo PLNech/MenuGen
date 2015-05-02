@@ -67,11 +67,16 @@ def generation(request):
     dessert.difficulty = 2
     dessert.price = 2
 
+    """ Default days number """
     nb_days = 7
-    """ Here an example of a meal"""
+    """ Use the days number if exists """
+    if 'nb_days' in request.session:
+        nb_days = int(request.session['nb_days'])
+
+    """ Here is an example of meal"""
     meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
 
-    """ Here an example of a matrix containing (nb_days x 5) meals """
+    """ Here is an example of a matrix containing (nb_days x 5) meals """
     planning = [[meal for y in range(nb_days)] for x in range(5)]
 
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
@@ -129,13 +134,13 @@ def update_physio(request):
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    if 'sex' in request.session:
+    if 'sex' in request.POST:
         request.session['sex'] = request.POST.get('sex')
-    if 'age' in request.session:
+    if 'age' in request.POST:
         request.session['age'] = request.POST.get('age')
-    if 'height' in request.session:
+    if 'height' in request.POST:
         request.session['height'] = request.POST.get('height')
-    if 'weight' in request.session:
+    if 'weight' in request.POST:
         request.session['weight'] = request.POST.get('weight')
 
     return HttpResponse('ok')
@@ -148,13 +153,13 @@ def update_gen_criteria(request):
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    if 'budget' in request.session:
+    if 'budget' in request.POST:
         request.session['budget'] = request.POST.get('budget')
-    if 'difficulty' in request.session:
+    if 'difficulty' in request.POST:
         request.session['difficulty'] = request.POST.get('difficulty')
-    if 'nb_days' in request.session:
+    if 'nb_days' in request.POST:
         request.session['nb_days'] = request.POST.get('nb_days')
-
+    print(request.session.items())
     return HttpResponse('ok')
 
 
