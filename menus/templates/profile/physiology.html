@@ -2,7 +2,7 @@
 
 {% block css %}
     {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
 {% endblock %}
 
 {% block dashboardcontent %}
@@ -31,8 +31,8 @@
                     <label for="sex" class="col-sm-2 control-label">Sexe</label>
                     <div class="col-sm-2">
                         <select class="form-control" id="sex" name="sex">
-                          <option>Homme</option>
-                          <option>Femme</option>
+                          <option value="1">Homme</option>
+                          <option value="2">Femme</option>
                         </select>
                     </div>
                 </div>
@@ -40,13 +40,12 @@
                     <label for="age" class="col-sm-2 control-label">Age</label>
                     <div class="col-sm-2">
                         <div class="input-group">
-                            <select class="form-control" id="sex" name="sex">
+                            <select class="form-control" id="age" name="age">
                                 {% for i in ages %}
                                     <option>{{ i }}</option>
                                 {% endfor %}
-
                             </select>
-                            <span class="input-group-addon" id="weight">ans</span>
+                            <span class="input-group-addon" id="age">ans</span>
                         </div>
                     </div>
                 </div>
@@ -92,11 +91,50 @@
     <script>
         $(function(){
             $(".dropdown-menu li a").click(function(){
-
-            $(".btn:first-child").text($(this).text());
-            $(".btn:first-child").val($(this).text());
-
+                $(".btn:first-child").text($(this).text());
+                $(".btn:first-child").val($(this).text());
             });
+        });
+
+
+        // AJAX for posting
+        function update_physio(data_dico) {
+            console.log("sanity check") // sanity check
+            $.ajax({
+                url : '{% url 'menus.views.update_physio' %}', // the endpoint
+                type : "POST", // http method
+                data : data_dico, // data sent with the post request
+
+                // handle a successful response
+                success : function(json) {
+                    console.log(json); // log the returned json to the console
+                    console.log("success"); // another sanity check
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        };
+
+        $('#sex').on('change', function(e) {
+            var data_dico = { sex : $( "#sex option:selected" ).val() };
+            update_physio(data_dico);
+        });
+        $('#age').on('change', function(e) {
+            var data_dico = { age : $( "#age option:selected" ).val() };
+            update_physio(data_dico);
+        });
+        $('#height').on('change', function(e) {
+            var data_dico = { height : $( "#height option:selected" ).val() };
+            update_physio(data_dico);
+        });
+        $('#weight').on('change', function(e) {
+            var data_dico = { weight: $( "#weight option:selected" ).val() };
+            update_physio(data_dico);
         });
 
     </script>

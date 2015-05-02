@@ -11,11 +11,16 @@ urlpatterns = patterns(
     url(r'^generate/placements_detail$', 'generate_placements_detail'),
     url(r'^generation$', 'generation'),
     url(r'^generation/meal_details$', 'generation_meal_details',
-        {'starter_id': 0, 'main_course_id': 1, 'dessert_id': 2}),
+        {'starter_id': 0,
+         'main_course_id': 1,
+         'dessert_id': 2}),
+
     url(r'^menus$', 'menus'),
     url(r'^friends$', 'friends'),
     url(r'^statistics$', 'statistics'),
 
+    url(r'^update_physio$', 'update_physio'),
+    url(r'^update_gen_criteria', 'update_gen_criteria'),
     url(r'^physiology$', 'physiology'),
     url(r'^regimes$', 'regimes'),
     url(r'^tastes$', 'tastes'),

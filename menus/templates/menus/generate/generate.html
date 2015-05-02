@@ -7,12 +7,13 @@
         <div class="panel-heading">
             {% if not user.is_authenticated %}
                 <nav>
-                <ul class="pager">
-                    <li class="previous"><a href="{% url 'menus.views.tastes' %}" ><span aria-hidden="true">&larr;</span> Précedent</a></li>
-                </ul>
+                <div class="pager">
+                    <div class="previous"><a href="{% url 'menus.views.tastes' %}" ><span aria-hidden="true">&larr;</span> Précedent</a></div>
+                </div>
+                <h2>Générer un nouveau menu</h2>
                 </nav>
             {% endif %}
-            <h2>Générer un nouveau menu</h2>
+
         </div>
         <div class="panel-body">
             <div class="row">
@@ -27,13 +28,13 @@
                                      <label for="budgetRadioOptions" class="col-sm-3 control-label">Budget</label>
                                      <div class="col-sm-9">
                                         <label class="radio-inline">
-                                          <input type="radio" name="budgetRadioOptions" id="inlineRadio1" value="option1"> Bon marché
+                                          <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio1" value="0"> Bon marché
                                         </label>
                                         <label class="radio-inline">
-                                          <input type="radio" name="budgetRadioOptions" id="inlineRadio2" value="option2"> Moyen
+                                          <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio2" value="1"> Moyen
                                         </label>
                                         <label class="radio-inline">
-                                          <input type="radio" name="budgetRadioOptions" id="inlineRadio3" value="option3"> Assez cher
+                                          <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio3" value="2"> Assez cher
                                         </label>
                                      </div>
                                 </div>
@@ -42,35 +43,35 @@
                                      <label for="DifficultyRadioOptions" class="col-sm-3 control-label">Difficulté</label>
                                      <div class="col-sm-9">
                                         <label class="radio-inline">
-                                          <input type="radio" name="DifficultyRadioOptions" id="inlineRadio1" value="option1"> Très facile
+                                          <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio1" value="option1"> Très facile
                                         </label>
                                         <label class="radio-inline">
-                                          <input type="radio" name="DifficultyRadioOptions" id="inlineRadio2" value="option2"> Facile
+                                          <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio2" value="option2"> Facile
                                         </label>
                                         <label class="radio-inline">
-                                          <input type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Moyenne
+                                          <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Moyenne
                                         </label>
                                          <label class="radio-inline">
-                                          <input type="radio" name="DifficultyRadioOptions" id="inlineRadio4" value="option4"> Difficile
+                                          <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio4" value="option4"> Difficile
                                         </label>
                                      </div>
                                 </div>
                                 <hr>
+                                <br>
                                 <div class="form-group">
                                     <label for="nb_days" class="col-sm-3 control-label">Pour</label>
                                     <div class="col-sm-4">
                                         <div class="input-group">
 
-                                        <select class="form-control" id="weight" name="nb_days" aria-describedby="day-unit-addon">
-                                            <option>0</option>
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                            <option>6</option>
-                                            <option>7</option>
-                                            <option>8</option>
+                                        <select class="form-control" id="nb_days" name="nb_days" aria-describedby="day-unit-addon">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7" selected>7</option>
+                                            <option value="8">8</option>
                                         </select>
                                             <span class="input-group-addon" id="day-unit-addon">jours</span>
                                             </div>
@@ -79,6 +80,7 @@
                                         <a id="placements-detail-ajax" href="{% url 'menus.views.generate_placements_detail'%}" class="btn btn-success" type="button">Détails &raquo;</a>
                                     </div>
                                 </div>
+                                <br>
                                 <hr>
                                 <div class="form-group">
                                     <label for="profils" class="col-sm-3 control-label">Convives</label>
@@ -99,7 +101,7 @@
                         <div class="col-md-6">
                             <div class="well">
                                 <div id="contextual-container">
-                                    {% include 'menus/generate/placements_detail.html' with days=days %}
+                                    {% include 'menus/generate/placements_detail.html' with days_range=days_range %}
                                 </div>
                             </div>
                         </div>
@@ -109,7 +111,7 @@
             </div>
         </div>
         <div class="panel-footer text-right">
-            <a href="{% url 'menus.views.generation' %}" type="button" class="btn btn-info btn-lg">
+            <a href="{% url 'menus.views.generation' %}" type="button" class="btn btn-theme03 btn-lg btn-block">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Générer &raquo;
             </a>
         </div>
@@ -132,13 +134,59 @@
             });
             $("#placements-detail-ajax").click(function(e){
                 var lien = $(this).attr('href');
+                var data = $( "#nb_days option:selected" ).val();
                 $('#contextual-container').fadeOut('fast', function(){
-                    $('#contextual-container').load(lien, function() {
+                    $('#contextual-container').load(lien, { nb_days: data }, function() {
                         $('#contextual-container').fadeIn('fast');
                     });
                 });
                 e.preventDefault()
             });
+        });
+
+        $(function(){
+            $(".dropdown-menu li a").click(function(){
+                $(".btn:first-child").text($(this).text());
+                $(".btn:first-child").val($(this).text());
+            });
+        });
+
+
+        // AJAX for posting
+        function update_pre_generation(data_dico) {
+            console.log("sanity check") // sanity check
+            $.ajax({
+                url : '{% url 'menus.views.update_gen_criteria' %}', // the endpoint
+                type : "POST", // http method
+                data : data_dico, // data sent with the post request
+
+                // handle a successful response
+                success : function(json) {
+                    console.log(json); // log the returned json to the console
+                    console.log("success"); // another sanity check
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        };
+
+        $('.budget').on('click', function(e) {
+            var data_dico = { budget : $( this ).val() };
+            update_pre_generation(data_dico);
+        });
+        $('.difficulty').on('click', function(e) {
+            var data_dico = { difficulty : $( this ).val() };
+            update_pre_generation(data_dico);
+        });
+          $('#nb_days').on('change', function(e) {
+            var data_dico = { nb_days: $( "#nb_days option:selected" ).val() };
+               $("#placements-detail-ajax").trigger('click');
+              update_pre_generation(data_dico);
         });
 
     </script>

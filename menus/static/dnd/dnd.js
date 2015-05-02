@@ -44,8 +44,6 @@ function handleDragEnd(e) {
     this.style.opacity = '1';
 }
 
-
-
 var counter = 0;
 
 function handleDragEnter(e) {
@@ -55,6 +53,7 @@ function handleDragEnter(e) {
   }
     // this / e.target is the current hover target.
     counter++;
+
     this.classList.add('over');
 }
 

@@ -3,7 +3,7 @@
 
 {% block css %}
     {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'dragula/dragula.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'dnd/dnd.css' %}" />
 {% endblock %}
 
@@ -15,11 +15,15 @@
             </ul>
         </nav>
     {% endif %}
-    <h1>Votre menu généré</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1>Votre menu généré</h1>
+        </div>
     {% include 'menus/generation/modal.html' %}
     <div class="row">
         <div class="col-md-12">
-            <br>
+
             <table id="planning" class="table">
                 {% for meal_time in planning %}
                     <tr>
@@ -32,8 +36,7 @@
                                         data-target="#mealDetailsModal">
                                         DETAILS
                                     </a>
-                                    <span>{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}</span>
-                                    {% include 'menus/generation/slot.html' with aMeal=meal %}
+                                    {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
                                 </div>
                             </td>
                         {% endfor %}
@@ -42,10 +45,10 @@
             </table>
         </div>
     </div>
+    </div>
 {% endblock %}
 
 {% block js %}
-    
     <script type="text/javascript">
         $(document).ready( function() {
             function handleDragStart(e) {
@@ -96,10 +99,13 @@
             var counter = 0;
 
             function handleDragEnter(e) {
-                console.log("enter : " + counter);
                 if (e.preventDefault) {
-                e.preventDefault();
-              }
+                    e.preventDefault();
+                }
+
+                [].forEach.call(cols, function (col) {
+                    col.classList.remove('over');
+                });
                 // this / e.target is the current hover target.
                 counter++;
                 this.classList.add('over');
