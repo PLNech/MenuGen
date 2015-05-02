@@ -1,31 +1,36 @@
+{% load utils_extras %}
 {% block css %}
     {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
 {% endblock %}
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">MenuGen</a>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
-                    <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Mon compte<span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
+<header class="header black-bg">
+    <div class="sidebar-toggle-box">
+        {% url 'menus.views.landing' as landing_url %}
+        {% if landing|is_false_or_none %}
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Menu"></div>
+        {% endif %}
+    </div>
+    <a href="/" class="logo"><b>MenuGen</b></a>
+    <div class="top-menu">
+        <ul class="nav pull-right top-menu">
+            {% if user.is_authenticated %}
+                <li id="header_inbox_bar" class="dropdown">
+                    <a class="logout" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Mon compte<span class="caret"></span></a>
+                    <ul class="dropdown-menu extended inbox" role="menu">
+                        <div class="notify-arrow notify-arrow-green"></div>
+                        <li>
+                            <p class="green">Mon compte MenuGen</p>
+                        </li>
                         <li><a href="#">Identifiant</a></li>
                         <li><a href="#">Changer mot de passe</a></li>
-                        <li class="divider"></li>
                         <li><a href="{% url 'menus.views.sign_out' %}">Déconnection</a></li>
                     </ul>
-                    </li>
-                    {% else %}
-
-                    <li><a href="{% url 'menus.views.sign_up' %}">Inscription</a></li>
-                    <li><a data-toggle="modal" data-target="#signInModal">Connection</a></li>
-                {% endif %}
-            </ul>
-        </div>
-  </div>
-</nav>
+                </li>
+            {% else %}
+                <li><a class="logout" href="{% url 'menus.views.sign_up' %}">Inscription</a></li>
+                <li><a class="logout" data-toggle="modal" data-target="#signInModal">Connection</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</header>

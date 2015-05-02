@@ -9,33 +9,67 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+
+        {% load staticfiles %}
+        <!-- install Bootstrap core CSS from static here ? -->
+
+        <!--external css-->
+        <link rel="stylesheet" href="{% static "Theme/assets/font-awesome/css/font-awesome.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "Theme/assets/lineicons/style.css" %}">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static "Theme/assets/css/style.css" %}" rel="stylesheet">
+        <link href="{% static "Theme/assets/css/style-responsive.css" %}" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
         {% block css %}
         {% endblock %}
     </head>
     <body>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    {% include 'header.html' %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    {% include 'auth/sign_in.html' %}
-                    {% block content %}Coming soon...{% endblock content %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    {% include 'footer.html' %}
-                </div>
-            </div>
-        </div>
+        <section id="container" >
+            {% include 'auth/sign_in.html' %}
+            {% include 'header.html' %}
+            {% block content %}Coming soon...{% endblock content %}
+            {% include 'footer.html' %}
+        </section>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        <script src="{% static "jquery.cookie.js" %}"></script>
+
+        <!-- Should we load from static ?-->
+        <!--<script src="assets/js/bootstrap.min.js"></script>-->
+        <script class="include" type="text/javascript" src="{% static 'Theme/assets/js/jquery.dcjqaccordion.2.7.js' %}"></script>
+        <script src="{% static 'Theme/assets/js/jquery.scrollTo.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'Theme/assets/js/jquery.nicescroll.js' %}"></script>
+        <script src="{% static 'Theme/assets/js/jquery.sparkline.js' %}"></script>
+
+
+        <!--common script for all pages-->
+        <script src="{% static 'Theme/assets/js/common-scripts.js' %}"></script>
+        <script>
+            // Move header request handler method in a seperate file
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                    }
+                }
+            });
+        </script>
         {% block js %}{% endblock %}
     </body>
 </html>

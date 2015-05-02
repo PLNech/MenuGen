@@ -9,38 +9,46 @@
     </div>
 </div>
 <hr>
+
 <div class="row">
     <table class="table">
         <tr>
             <th>Matin</th>
-            {% for i in days %}
-                <td><input type="checkbox" aria-label="..."></td>
+            {% for i in days_range %}
+                <td><input type="checkbox" aria-label="..." checked></td>
             {% endfor %}
         </tr>
         <tr>
             <th>Collation</th>
-            {% for i in days %}
+            {% for i in days_range %}
                 <td><input type="checkbox" aria-label="..."></td>
             {% endfor %}
         </tr>
         <tr>
             <th>Déjeuner</th>
-            {% for i in days %}
-                <td><input type="checkbox" aria-label="..."></td>
+            {% for i in days_range %}
+                <td><input type="checkbox" aria-label="..." checked></td>
             {% endfor %}
         </tr>
         <tr>
             <th>Collation</th>
-            {% for i in days %}
+            {% for i in days_range %}
                 <td><input type="checkbox" aria-label="..."></td>
             {% endfor %}
         </tr>
         <tr>
             <th>Dîner</th>
-            {% for i in days %}
-                <td><input type="checkbox" aria-label="..."></td>
+            {% for i in days_range %}
+                <td><input type="checkbox" aria-label="..." checked></td>
             {% endfor %}
         </tr>
 
     </table>
 </div>
+
+{% block js %}
+
+    <script type="text/javascript">
+        // TODO: update session days matrice via ajax call
+    </script>
+{% endblock %}

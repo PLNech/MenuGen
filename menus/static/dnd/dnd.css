@@ -9,11 +9,24 @@
 }
 
 #planning .slot {
-    border: 2px solid #666666;
+    border: 1px;
+    border-radius: 2px 2px 2px 2px;
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+	-moz-box-shadow: 0 10px 6px -6px #777;
+	box-shadow: 0 10px 6px -6px #777;
     cursor: move;
 }
 
+#planning .slot:hover {
+    border: 1px;
+    -webkit-box-shadow: 0 1px 2px #777;
+	-moz-box-shadow: 0 2px 1px #777;
+	box-shadow: 0 2px 1px #777;
+}
 
 #planning .slot.over {
-    border: 2px dashed #000;
+    border: 1px dotted #000;
+    -webkit-box-shadow: 0 1px 2px #777;
+	-moz-box-shadow: 0 2px 1px #777;
+	box-shadow: 0 2px 1px #777;
 }
