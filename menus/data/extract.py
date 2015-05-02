@@ -340,6 +340,20 @@ def invalid_fields(item):
             invalids.append(field)
     return invalids
 
+def get_food_array(csv):
+    separator = "\t"
+    i = 0
+    with open(csv, 'r', 'utf-8') as f:
+        food_array = []
+        fields = f.readline()
+        for i, line in enumerate(f):
+            fields = line.rstrip("\n").split(separator)
+            if is_invalid_field_list(fields) or has_no_name(fields):
+                continue
+            food = CsvFood(fields)
+            food_array.append(food)
+        return food_array
+
 
 if __name__ == '__main__':
     skip_count_lines = 0
