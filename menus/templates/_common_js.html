@@ -1,0 +1,37 @@
+{% load staticfiles %}
+
+<script src="{% static 'vendor/js/jquery.js' %}"></script>
+<script src="{% static 'vendor/js/bootstrap.js' %}"></script>
+<script src="{% static 'vendor/js/jquery.nanoscroller.min.js' %}"></script>
+<script src="{% static 'vendor/js/scripts.js' %}"></script>
+<script src="{% static 'vendor/js/pace.min.js' %}"></script>
+
+
+
+
+<script src="{% static "jquery.cookie.js" %}"></script>
+
+<!-- Should we load from static ?-->
+<!--<script src="assets/js/bootstrap.min.js"></script>-->
+<script class="include" type="text/javascript" src="{% static 'Theme/assets/js/jquery.dcjqaccordion.2.7.js' %}"></script>
+<script src="{% static 'Theme/assets/js/jquery.scrollTo.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'Theme/assets/js/jquery.nicescroll.js' %}"></script>
+<script src="{% static 'Theme/assets/js/jquery.sparkline.js' %}"></script>
+
+
+<!--common script for all pages-->
+<script src="{% static 'Theme/assets/js/common-scripts.js' %}"></script>
+<script>
+    // Move header request handler method in a seperate file
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+            }
+        }
+    });
+</script>
