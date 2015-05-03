@@ -82,11 +82,14 @@ class Diet(models.Model):
 class Ingredient(models.Model):
     name = models.CharField(max_length=32)
     picture = StdImageField(upload_to='media/images/ingredient')
-    description = models.TextField()
+    description = models.TextField(default="")
     # country =  #  FIXME : use it for local menu generation
     # season?
     family = models.ForeignKey('IngredientFamily')
     nutriments = models.ManyToManyField('Nutriment', through='IngredientNutriment')
+
+    class Meta:
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -95,7 +98,7 @@ class Ingredient(models.Model):
 class IngredientNutriment(models.Model):
     ingredient = models.ForeignKey('Ingredient')
     nutriment = models.ForeignKey('Nutriment')
-    quantity = models.IntegerField()
+    quantity = models.FloatField()
 
 
 class IngredientFamily(models.Model):
