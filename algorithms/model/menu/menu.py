@@ -1,10 +1,10 @@
 __author__ = 'PLNech'
 
 from dietetics import DieteticsNeeds
-from model.menu.menu_manager import MenuManager
+from algorithms.model.menu.menu_manager import MenuManager
 
-from model.individual import Individual
-from model.menu.dish import Dish
+from algorithms.model.individual import Individual
+from algorithms.model.menu.dish import Dish
 from utils.config import Config
 
 

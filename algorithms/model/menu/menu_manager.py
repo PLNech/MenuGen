@@ -3,8 +3,8 @@ __author__ = 'PLNech'
 from random import randrange
 from collections import defaultdict
 
-from model.manager import Manager
-from model.menu.dish import Dish
+from algorithms.model.manager import Manager
+from algorithms.model.menu.dish import Dish
 from utils.config import Config
 
 

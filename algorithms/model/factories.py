@@ -1,27 +1,21 @@
 __author__ = 'PLNech'
 
-from model.trip.city import City
-from model.trip.trip import Trip
-from model.menu.menu import Menu
-from model.menu.dish import Dish
-from model.trip.trip_manager import TripManager
-from model.menu.menu_manager import MenuManager
+from algorithms.model.menu.menu import Menu
+from algorithms.model.menu.dish import Dish
+from algorithms.model.menu.menu_manager import MenuManager
 from utils.config import Config
 
 
 class Factory:
     individual_types = {
-        "Trip": Trip,
         "Menu": Menu,
     }
 
     gene_types = {
-        "Trip": City,
         "Menu": Dish,
     }
 
     manager_types = {
-        "Trip": TripManager,
         "Menu": MenuManager,
     }
 

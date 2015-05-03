@@ -36,7 +36,7 @@ class Config():
         KEY_ELITISM: True,
         KEY_MUTATION_RATE: 0.15,
 
-        KEY_SOLUTION_TYPE: "Menu",
+        KEY_SOLUTION_TYPE: "Menu",  # TODO Get rid of Trip variability
 
         # Trip-related parameters
         KEY_CITIES_NUMBER: 30,

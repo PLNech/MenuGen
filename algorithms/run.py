@@ -1,6 +1,6 @@
 __author__ = 'PLNech'
 
-from model.menu.menu import Menu
+from algorithms.model.menu.menu import Menu
 
 from numpy import arange
 import argparse
@@ -12,8 +12,8 @@ from stats import StatKeeper
 from utils.drawer import Drawer
 from utils.printer import Printer
 from algorithm import Algorithm
-from model.population import Population
-from model.factories import Factory, is_better_than
+from algorithms.model.population import Population
+from algorithms.model.factories import Factory, is_better_than
 
 stats = StatKeeper
 manager = Factory.manager()
@@ -80,8 +80,8 @@ def run(run_name):
                                                                         Config.score_units[solution_type])
         last_detail = detail_menu if type(init_fittest) is Menu else detail_last_trip
 
-        initial_figure = Drawer.draw_individual(init_fittest, name="Initial solution", detail=first_detail)
-        final_figure = Drawer.draw_individual(final_fittest, name="Final solution",
+        initial_figure = Drawer.draw_menu(init_fittest, name="Initial solution", detail=first_detail)
+        final_figure = Drawer.draw_menu(final_fittest, name="Final solution",
                                               detail=last_detail)
         Drawer.display_both(initial_figure, final_figure)
     if Config.draw_progress:

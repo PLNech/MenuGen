@@ -4,13 +4,12 @@ from copy import deepcopy
 from collections import defaultdict
 from math import sqrt
 
-from model.factories import choose_method
-from model.menu.menu import Menu
+from algorithms.model.factories import choose_method
+from algorithms.model.menu.menu import Menu
 from utils.config import Config
 from utils.calc import Calc
 from utils.printer import Printer
 from utils.singleton import Singleton
-from model.trip.trip import Trip
 
 
 class Statistics():
@@ -47,12 +46,6 @@ class Statistics():
                "mean average deviation: %.2f." % self.mad
 
 
-class TripStep(Trip):
-    def __init__(self, generation, cities):
-        super().__init__(cities)
-        self.generation = generation
-
-
 class MenuStep(Menu):
     def __init__(self, generation, dishes):
         super().__init__(dishes)
@@ -70,15 +63,15 @@ class Run():
         for step in self.steps:
             score_str = step.print_score()
             score = step.get_score()
-            step_repr = Printer.print_step(step)
+            step_repr = Printer.print_menu(step)
             ret_str += "Step %s: %s (%f)- %s\n" % ("{:02}".format(step.generation), score_str, score, step_repr)
         return ret_str
 
     def add_step(self, step):
         self.steps.append(deepcopy(step))
 
-    def add(self, generation, genes):
-        step = choose_method(TripStep,
+    def add(self, generation, genes):  # TODO Cleanup
+        step = choose_method(MenuStep,
                              MenuStep,
                              (generation, genes))
         self.add_step(step)

@@ -4,12 +4,12 @@ import random
 import math
 import multiprocessing
 
-from model.factories import Factory, choose_method
+from algorithms.model.factories import Factory, choose_method
 from utils.config import Config
 from utils.printer import Printer
 from utils.multi import cpu_count
-from model.population import Population
-from model.individual import Individual
+from algorithms.model.population import Population
+from algorithms.model.individual import Individual
 
 
 def mutate(individual):

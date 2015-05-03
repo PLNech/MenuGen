@@ -1,7 +1,7 @@
 __author__ = 'PLNech'
 
-from model.factories import Factory
-from model.individual import Individual
+from algorithms.model.factories import Factory
+from algorithms.model.individual import Individual
 from utils.config import Config
 
 

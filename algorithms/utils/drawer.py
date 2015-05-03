@@ -1,4 +1,4 @@
-from model.factories import choose_method
+from algorithms.model.factories import choose_method
 
 __author__ = 'PLNech'
 
@@ -7,14 +7,11 @@ import sys
 import os
 
 from matplotlib.ticker import MaxNLocator
-import networkx as nx
 import matplotlib.pyplot as plt
 
-from model.menu.dish import Dish
-from model.menu.menu import Menu
-from model.trip.city import City
+from algorithms.model.menu.dish import Dish
+from algorithms.model.menu.menu import Menu
 from utils.config import Config
-from model.trip.trip import Trip
 
 
 class Drawer:
@@ -70,77 +67,6 @@ class Drawer:
         return filename
 
     @staticmethod
-    def draw_cities(cities, name, filename, detail=None, should_display=False, should_save_figure=True):
-        """
-        Draws a trip using matplotlib and networkx
-
-        :param cities: the cities to draw
-        :param name: name of the trip
-        :param detail: a detail to add at the end of the title
-        :param should_display: should we display the figure?
-        :param should_save_figure: should we save the figure?
-
-        :type cities: list
-        :type name: str
-        :type detail: str
-        :type should_display: bool
-        :type should_save_figure: bool
-
-        :return: the filename of the created file
-        :rtype: str
-        """
-        graph = nx.Graph()
-        graph.position = {}
-        graph.population = {}
-        population_raw = {}
-        max_trip_length = 0
-
-        # Initialisation with origin of trip
-        old_city = cities[0]
-        graph.add_node(old_city.name)
-        graph.add_edge(old_city.name, cities[-1].name)  # Last edge of the trip
-        population_raw[old_city.name] = old_city.distance_to(cities[-1])  # Length of last edge
-        graph.position[old_city.name] = (old_city.x, old_city.y)  # Position of the first city
-
-        for city in cities[1:]:
-            step_length = city.distance_to(old_city)  # Length of the edge
-            max_trip_length = max(step_length, max_trip_length)
-
-            graph.add_node(city.name)
-            graph.add_edge(city.name, old_city.name)  # Edge of the step
-            population_raw[city.name] = step_length  # Length of last trip
-            graph.position[city.name] = (city.x, city.y)  # Position of the city
-            old_city = city
-
-        # Normalised length for coloring (colors value are between 0 and 1, here between 0.25 and 0.75)
-        graph.population = [1 - (population_raw[n] / max_trip_length) for n in population_raw]
-
-        figure_size = max(min(Drawer.MAX_FIGURE_SIZE, len(cities) / Drawer.SCALING_FACTOR), Drawer.MIN_FIGURE_SIZE)
-        plt.figure(figsize=(figure_size, figure_size))
-        # with nodes sized by population
-        nx.draw(graph, graph.position,
-                node_size=500,
-                node_color="lightblue",
-                with_labels=True,
-                # edge_color=graph.population, edge_cmap=plt.cm.get_cmap("Greens"), # TODO: Actually use colors!
-                edge_color="teal",
-                width=4)
-
-        if detail is not None:
-            plt.text(0.5, 0.92, detail,
-                     horizontalalignment='center',
-                     fontweight="ultralight",
-                     transform=plt.gca().transAxes,
-                     fontsize=20 * (figure_size / 10))
-
-        plt.suptitle(name, fontweight="bold", fontsize=20 * (figure_size / 10))
-        if should_display:
-            plt.show()
-        if should_save_figure:
-            filename = Drawer.save_figure(filename, name)
-            return filename
-
-    @staticmethod
     def display_both(filename1, filename2):
         """
         Displays two pictures
@@ -159,27 +85,6 @@ class Drawer:
 
     @staticmethod
     def draw_steps(run, should_display=False, should_save_figure=True):
-        """
-        :param run: The run whose steps will be drawn
-        :type run stats.Run
-        """
-        choose_method(Drawer.draw_steps_trip,
-                      Drawer.draw_steps_menu,
-                      (run, should_display, should_save_figure))
-
-    @staticmethod
-    def draw_steps_trip(run):
-        for i, step in enumerate(run.steps):
-            step_filename = "%s_%d" % (run.name.replace(" ", "_").lower(), i)
-            step_name = "Run %s - Step %s - %dkm across %d towns." % (run.name.replace(" ", "_").lower(),  # Run name
-                                                                      "{:02}".format(step.generation),  # Step number
-                                                                      step.get_score(),  # Distance
-                                                                      step.genome_length())  # Number of towns
-
-            Drawer.draw_genome(step.genes, step_name, step_filename)
-
-    @staticmethod
-    def draw_steps_menu(run, should_display=False, should_save_figure=True):
         menu_sizes = []
         calories = []
         proteins = []
@@ -254,27 +159,7 @@ class Drawer:
         return filename
 
     @staticmethod
-    def draw_individual(individual, name=None, detail=None, display=None, should_save_figure=True):
-        """
-
-        :param individual:
-         :type individual Individual
-        :param name:
-        :param detail:
-        :param display:
-        :param should_save_figure:
-        :return:
-        """
-        individual_type = type(individual)
-        if individual_type == Trip:
-            return Drawer.draw_trip(individual, name, detail, display, should_save_figure)
-        elif individual_type == Menu:
-            return Drawer.draw_menu(individual, name, detail, display, should_save_figure)
-        else:
-            raise ValueError("%s is not a known drawable individual type." % individual_type)
-
-    @staticmethod
-    def draw_menu(menu, name, detail=None, should_display=False, should_save_figure=True):
+    def draw_menu(menu, name=None, detail=None, should_display=False, should_save_figure=True):
         """
 
         :type menu: Menu
@@ -325,13 +210,3 @@ class Drawer:
         if should_save_figure:
             filename = Drawer.save_figure(filename, name, fig, legend)
         return filename
-
-    @staticmethod
-    def draw_genome(genome, name, filename, detail=None, should_display=False, should_save_figure=True):
-        gene_type = type(genome[0])
-        if gene_type == City:
-            return Drawer.draw_cities(genome, name, filename, detail, should_display, should_save_figure)
-        elif gene_type == Dish:
-            return Drawer.draw_menu(Menu(genome), name, detail, should_display, should_save_figure)
-        else:
-            raise ValueError("%s is not a known drawable gene type." % gene_type)

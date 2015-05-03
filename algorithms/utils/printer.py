@@ -1,7 +1,6 @@
 __author__ = 'PLNech'
 
-from model.factories import choose_method
-from model.trip.trip_manager import TripManager
+from algorithms.model.factories import choose_method
 from utils.config import Config
 
 
@@ -74,22 +73,6 @@ class Printer():
             return Printer.green(msg)
 
     @staticmethod
-    def print_path(trip):
-        """
-        Prints the path of a trip through a manager's cities
-        :type trip: Trip
-        :return: A string representation of the trip's path through the manager's cities
-        """
-        path_str = ""
-        tour_size = trip.genome_length()
-        for i in range(tour_size):
-            city = trip.get_gene(i)
-            index = TripManager.get_index(city)
-            separator = " -> " if i < tour_size - 1 else ""
-            path_str = path_str + "{:02}".format(index) + separator
-        return path_str
-
-    @staticmethod
     def print_menu(menu):  # TODO: Print unique meal ids instead of menu-wise statistics
         """
         Prints the score of a menu
@@ -144,7 +127,7 @@ class Printer():
     @staticmethod
     def print_gen_score(best_individual, generation, run_name):
         best_score = best_individual.get_score()
-        best_str = Printer.print_step(best_individual)
+        best_str = Printer.print_menu(best_individual)
         dimension = Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]]
         print("Run %s, Generation %i - best %s found yet: %.2f - %s" % (run_name, generation, dimension, best_score,
                                                                         best_str),
@@ -161,12 +144,6 @@ class Printer():
         return choose_method(Printer.print_run_init_trip,
                              Printer.print_run_init_menu,
                              (init_score, init_fittest))
-
-    @staticmethod
-    def print_step(step):
-        return choose_method(Printer.print_path,
-                             Printer.print_menu,
-                             step)
 
     @staticmethod
     def print_final(initial_value, best_value, run_name):
@@ -195,18 +172,6 @@ class Printer():
                Config.parameters[Config.KEY_POPULATION_SIZE],
                Config.parameters[Config.KEY_MAX_DISHES],
                Config.parameters[Config.KEY_NB_DISHES]))
-
-    @staticmethod
-    def print_init_trip():
-        print("Hello, traveler!\nEvolving %d generations of %d individuals traveling through %d cities." %
-              (Config.parameters[Config.KEY_NB_GENERATION],
-               Config.parameters[Config.KEY_POPULATION_SIZE],
-               Config.parameters[Config.KEY_CITIES_NUMBER]))
-
-    @staticmethod
-    def print_run_init_trip(init_length, init_fittest):
-        print("Initial %s: %i." % ((Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]]), init_length))
-        print("Initial path:\n%s" % Printer.print_path(init_fittest))
 
     @staticmethod
     def print_run_init_menu(init_length, init_fittest):
