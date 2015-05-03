@@ -1,5 +1,3 @@
-from algorithms.model.factories import choose_method
-
 __author__ = 'PLNech'
 
 import subprocess
@@ -9,7 +7,6 @@ import os
 from matplotlib.ticker import MaxNLocator
 import matplotlib.pyplot as plt
 
-from algorithms.model.menu.dish import Dish
 from algorithms.model.menu.menu import Menu
 from utils.config import Config
 
@@ -19,37 +16,6 @@ class Drawer:
     MAX_FIGURE_SIZE = 100
     SCALING_FACTOR = 5
     OUTPUT_DIR_NAME = "img"
-
-    @staticmethod
-    def draw_trip(trip, name=None, detail=None, display=None, should_save_figure=True):
-        """
-        Draws a trip using matplotlib and networkx
-
-        :param trip: the trip to draw
-        :param name: name of the trip
-        :param detail: a detail to add at the end of the title
-        :param display: should we display the figure?
-        :param should_save_figure: should we save the figure?
-
-        :type trip: Trip
-        :type name: str
-        :type detail: str
-        :type display: bool
-        :type should_save_figure: bool
-
-        :return: the filename of the created file
-        :rtype: str
-        """
-        cities = trip.genes
-        length = trip.get_score()
-        if name is None:
-            filename = "%dcities_%dkm" % (len(cities), int(length))
-            name = "Trip of %d km across %d towns." % (length, len(cities))
-        else:
-            filename = name.replace(" ", "_").lower() + "_%dcities_%dkm" % (len(cities), int(length))
-            name = name.capitalize() + ": %d km across %d towns." % (length, len(cities))
-
-        return Drawer.draw_cities(cities, name, filename, detail, display, should_save_figure)
 
     @staticmethod
     def save_figure(filename, name, figure=None, legend=None):

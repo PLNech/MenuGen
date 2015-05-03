@@ -157,71 +157,6 @@ class Algorithm:
         return child
 
     @staticmethod
-    def mutate_swap(trip):
-        """
-        Swap mutation algorithm
-        We randomly select two objects and swap their positions.
-        By only swapping objects, we avoid introducing any duplicate
-        in our solution.
-
-        :param trip: The trip that will be mutated
-        :return: The trip after his mutation
-        :type trip Trip
-        :rtype Trip
-        """
-        before_path = ""
-        if Config.print_mutation:
-            before_path = Printer.print_path(trip)
-
-        genome_length = trip.genome_length()
-        mutation_repr = [i for i in range(genome_length)]
-        for pos1 in range(genome_length):
-            if random.random() < Config.parameters[Config.KEY_MUTATION_RATE]:
-                pos2 = random.randint(0, genome_length - 1)
-
-                # Swap two cities at random positions
-                trip.swap(pos1, pos2)
-                mutation_repr[pos1], mutation_repr[pos2] = mutation_repr[pos2], mutation_repr[pos1]
-
-        if Config.print_mutation:
-            after_path = Printer.print_path(trip)
-            if before_path != after_path:
-                print(Printer.print_diff(before_path, after_path))
-
-        return trip
-
-    @staticmethod
-    def mutate_invert(trip):
-        """
-        Crossover inversion algorithm
-        For each gene to be mutated, set a random length and invert the following sequence of genes of that length
-        :param trip: The trip that will be mutated
-        :return: The trip after his mutation
-        :type trip Trip
-        :rtype Trip
-        """
-        before_path = ""
-        if Config.print_mutation:
-            before_path = Printer.print_path(trip)
-
-        genome_length = trip.genome_length()
-        mutation_repr = [i for i in range(genome_length)]
-        for pos1 in range(genome_length):
-            if random.random() < Config.parameters[Config.KEY_MUTATION_RATE]:
-                pos2 = random.randint(0, genome_length - 1)
-
-                # Swap the cities between the two positions
-                trip.invert_sequence(pos1, pos2)
-                mutation_repr[pos1], mutation_repr[pos2] = mutation_repr[pos2], mutation_repr[pos1]
-
-        if Config.print_mutation:
-            after_path = Printer.print_path(trip)
-            if before_path != after_path:
-                print(Printer.print_diff(before_path, after_path))
-
-        return trip
-
-    @staticmethod
     def mutate_random(individual):
         """
         Random mutation algorithm
@@ -251,10 +186,9 @@ class Algorithm:
         if Config.print_mutation:
             print("Individual of length %d mutated: %s" % (genome_length, Printer.print_diff(gene_str, mut_str, '. ')))
 
-
+    # @timer("Mutation") # uncomment to measure
     @staticmethod
-    # @timer("Sequential") # uncomment to measure
-    def mutate_sequential(offset, population):
+    def mutate(offset, population):
         """
 
         :param offset: Index at which we should start mutating individuals
@@ -263,18 +197,6 @@ class Algorithm:
         """
         for i in range(offset, population.get_size()):
             Algorithm.func_mutation(population.get_at(i))
-
-    @staticmethod
-    # @timer("Parallel") # uncomment to measure
-    def mutate_parallel(offset, population):  # TODO: Handle offset, even if this is meaningless
-        """
-        Test of parallelisation
-        This is currently way slower than sequential!
-
-        :param population: The population to mutate
-        """
-        with multiprocessing.Pool(cpu_count()) as p:
-            p.map(mutate, population.population)
 
     crossover_fails = 0
     crossover_successes = 0
@@ -317,24 +239,12 @@ class Algorithm:
             next_state.save_at(i, child)
 
         # Mutation
-        Algorithm.mutate_sequential(offset, population)
+        Algorithm.mutate(offset, population)
 
         return next_state
 
     @staticmethod
     def setup():
-        choose_method(Algorithm.setup_trip,
-                      Algorithm.setup_menu,
-                      None)
-
-    @staticmethod
-    def setup_trip():
-        Algorithm.func_selection = Algorithm.tournament_selection
-        Algorithm.func_crossover = Algorithm.crossover_ordered
-        Algorithm.func_mutation = Algorithm.mutate_invert
-
-    @staticmethod
-    def setup_menu():
         Algorithm.func_selection = Algorithm.tournament_selection
         Algorithm.func_crossover = Algorithm.crossover_random
         Algorithm.func_mutation = Algorithm.mutate_random

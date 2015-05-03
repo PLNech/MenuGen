@@ -19,10 +19,14 @@ stats = StatKeeper
 manager = Factory.manager()
 
 
-def run(run_name):
+def run(run_name, init_fittest=None):
     # New run
     stats.new_run(run_name, Config.parameters[Config.KEY_NB_GENERATION])
     population = Population(Config.parameters[Config.KEY_POPULATION_SIZE])
+
+    if init_fittest is None:
+        init_fittest = population.get_at(0)
+
     stats.save_progress(run_name, 0, init_fittest.genes)
 
     run_name_all = run_name + "_all"
@@ -192,7 +196,7 @@ def run_test(parameter="population_size", begin=1, end=100):
     f.close()
 
 
-def run_standard():
+def run_standard(init_fittest=None):
     nb_runs = Config.parameters[Config.KEY_RUN_NUMBER]
     nb_gens = Config.parameters[Config.KEY_NB_GENERATION]
     nb_pop = Config.parameters[Config.KEY_POPULATION_SIZE]
@@ -201,7 +205,7 @@ def run_standard():
     for run_i in range(0, nb_runs):
         if nb_runs > 1:
             run_name = str(run_i)
-        run(run_name)
+        run(run_name, init_fittest)
 
     print("Simulation ended.")
 
@@ -230,13 +234,12 @@ if __name__ == "__main__":
     # First individual for comparison
     # we use the same one to bench all runs
     init_pop = Population(1)
-    init_fittest = init_pop.get_at(0)
-    assert (init_fittest is not None)
-    init_score = init_fittest.get_score()
+    init_first = init_pop.get_at(0)
+    init_score = init_first.get_score()
     if not Config.print_each_run:
         print("Initial %s: %i." % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
                                    init_score))
 
     Algorithm.setup()
     # run_test("mutation_rate", 0.25, 0.5)
-    run_standard()
+    run_standard(init_first)

@@ -134,18 +134,6 @@ class Printer():
               end="\r")
 
     @staticmethod
-    def print_init():
-        return choose_method(Printer.print_init_trip,
-                             Printer.print_init_menu,
-                             None)
-
-    @staticmethod
-    def print_run_init(init_score, init_fittest):
-        return choose_method(Printer.print_run_init_trip,
-                             Printer.print_run_init_menu,
-                             (init_score, init_fittest))
-
-    @staticmethod
     def print_final(initial_value, best_value, run_name):
         solution_type = Config.parameters[Config.KEY_SOLUTION_TYPE]
         improvement = choose_method(Printer.final_improvement_trip,
@@ -165,7 +153,7 @@ class Printer():
         return 100 * (1 - best_value / initial_value)
 
     @staticmethod
-    def print_init_menu():
+    def print_init():
         print("Bonjour, gourmet!")
         print("Evolving %d generations of %d individuals eating up to %d dishes in a set of %d." %
               (Config.parameters[Config.KEY_NB_GENERATION],
@@ -174,6 +162,6 @@ class Printer():
                Config.parameters[Config.KEY_NB_DISHES]))
 
     @staticmethod
-    def print_run_init_menu(init_length, init_fittest):
+    def print_run_init(init_length, init_fittest):
         print("Initial %s: %i." % ((Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]]), init_length))
         print("Initial menu:\n%s" % Printer.print_menu(init_fittest))
