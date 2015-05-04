@@ -1,50 +1,52 @@
-{% extends 'dashboard.html' %}
+{% extends '_base.html' %}
 {% load planning_extras %}
+{% load staticfiles %}
 
 {% block css %}
-    {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'dnd/dnd.css' %}" />
 {% endblock %}
 
-{% block dashboardcontent %}
-    {% if not user.is_authenticated %}
-        <nav>
-            <ul class="pager">
-                <li class="previous"><a href="{% url 'menus.views.generate' %}" ><span aria-hidden="true">&larr;</span> Retour aux critères</a></li>
-            </ul>
-        </nav>
-    {% endif %}
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h1>Votre menu généré</h1>
-        </div>
-    {% include 'menus/generation/modal.html' %}
-    <div class="row">
-        <div class="col-md-12">
-
-            <table id="planning" class="table">
-                {% for meal_time in planning %}
-                    <tr>
-                        <th>{{ forloop.counter0|meal_slot_name }}</th>
-                        {% for meal in meal_time %}
-                            <td>
-                                <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
-                                    <a data-toggle="modal"
-                                        href="{% url 'menus.views.generation_meal_details'%}"
-                                        data-target="#mealDetailsModal">
-                                        DETAILS
-                                    </a>
-                                    {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
-                                </div>
-                            </td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
+{% block content %}
+    <div class="col-lg-12">
+        <div id="content-header" class="clearfix">
+            <div class="pull-left">
+                <ol class="breadcrumb"><p></p></ol>
+                <h1>Mes régimes</h1>
+            </div>
+            <div class="pull-right hidden-xs">
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'menus.views.generate' %}" class="btn btn-primary">
+                        <i class="fa fa-angle-double-left"></i> Paramètres de la génération
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </div>
+
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <div class="main-box-body clearfix">
+                <table id="planning" class="table">
+                    {% for meal_time in planning %}
+                        <tr>
+                            <th>{{ forloop.counter0|meal_slot_name }}</th>
+                            {% for meal in meal_time %}
+                                <td>
+                                    <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
+                                        <a data-toggle="modal"
+                                           href="{% url 'menus.views.generation_meal_details'%}"
+                                           data-target="#mealDetailsModal">
+                                            DETAILS
+                                        </a>
+                                        {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -61,31 +63,31 @@
             }
 
             function handleDragOver(e) {
-              if (e.preventDefault) {
-                e.preventDefault(); // Necessary. Allows us to drop.
-              }
+                if (e.preventDefault) {
+                    e.preventDefault(); // Necessary. Allows us to drop.
+                }
 
-              e.dataTransfer.dropEffect = 'move';
+                e.dataTransfer.dropEffect = 'move';
 
-              return false;
+                return false;
             }
 
             function handleDrop(e) {
-              // this / e.target is current target element.
+                // this / e.target is current target element.
                 console.log("drop");
                 counter = 0;
-                  if (e.stopPropagation) {
+                if (e.stopPropagation) {
                     e.stopPropagation(); // stops the browser from redirecting.
-                  }
+                }
 
                 // Don't do anything if dropping the same column we're dragging.
-              if (dragSrcEl != this) {
-                // Set the source slot's HTML to the HTML of the slot we dropped on.
-                dragSrcEl.innerHTML = this.innerHTML;
-                this.innerHTML = e.dataTransfer.getData('text/html');
-              }
+                if (dragSrcEl != this) {
+                    // Set the source slot's HTML to the HTML of the slot we dropped on.
+                    dragSrcEl.innerHTML = this.innerHTML;
+                    this.innerHTML = e.dataTransfer.getData('text/html');
+                }
 
-              return false;
+                return false;
             }
 
             function handleDragEnd(e) {

@@ -1,90 +1,91 @@
-{% extends 'dashboard.html' %}
+{% extends '_base.html' %}
+{% load staticfiles %}
 
-{% block css %}
-    {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
-{% endblock %}
-
-{% block dashboardcontent %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            {% if not user.is_authenticated %}
-            <nav>
-                <ul class="pager">
-                    <li class="next"><a href="{% url 'menus.views.regimes' %}">Suivant <span aria-hidden="true">&rarr;</span></a></li>
-                </ul>
-            </nav>
-            {% endif %}
-            <h2>Ma physiologie</h2>
-        </div>
-        <div class="panel-body">
-
-            <form class="form-horizontal" name="physiology" action="{% url 'menus.views.physiology' %}" method="POST">
-                 <div class="form-group">
-                     <label for="username" class="col-sm-2 control-label">Nom du profil</label>
-                    <div class="col-sm-5">
-                      <input type="text" class="form-control" id="username" name="username" placeholder="Nom du profil">
-                    </div>
-                </div>
-                <br>
-                <div class="form-group">
-                    <label for="sex" class="col-sm-2 control-label">Sexe</label>
-                    <div class="col-sm-2">
-                        <select class="form-control" id="sex" name="sex">
-                          <option value="1">Homme</option>
-                          <option value="2">Femme</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="age" class="col-sm-2 control-label">Age</label>
-                    <div class="col-sm-2">
-                        <div class="input-group">
-                            <select class="form-control" id="age" name="age">
-                                {% for i in ages %}
-                                    <option>{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <span class="input-group-addon" id="age">ans</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="weight" class="col-sm-2 control-label">Poids</label>
-                    <div class="col-sm-2">
-                        <div class="input-group">
-                            <select class="selectpicker form-control" id="weight" name="weight" aria-describedby="weight-addon">
-                              <option>45</option>
-                              <option>50</option>
-                              <option>55</option>
-                              <option>60</option>
-                              <option>65</option>
-                            </select>
-                            <span class="input-group-addon" id="weight">kg</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                     <label for="height" class="col-sm-2 control-label">Taille</label>
-                    <div class="col-sm-2">
-                        <div class="input-group">
-                            <select class="form-control" id="height" name="height">
-                              <option>1.50</option>
-                              <option>1.60</option>
-                              <option>1.70</option>
-                              <option>1.80</option>
-                              <option>1.90</option>
-                            </select>
-                            <span class="input-group-addon" id="weight">m</span>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="panel-footer">
+{% block content %}
+    <div class="col-lg-12">
+        <div id="content-header" class="clearfix">
+            <div class="pull-left">
+                <ol class="breadcrumb"><p></p></ol>
+                <h1>Ma physiologie</h1>
+            </div>
+            <div class="pull-right hidden-xs">
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'menus.views.regimes' %}" class="btn btn-primary pull-right">
+                        Mes régimes <i class="fa fa-angle-double-right"></i>
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </div>
 
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix"></header>
+            <div class="main-box-body clearfix">
+                <form class="form-horizontal" name="physiology" action="{% url 'menus.views.physiology' %}" method="POST">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">Nom du profil</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Nom du profil">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="sex" class="col-sm-2 control-label">Sexe</label>
+                        <div class="col-sm-2">
+                            <select class="form-control" id="sex" name="sex">
+                                <option value="1">Homme</option>
+                                <option value="2">Femme</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="age" class="col-sm-2 control-label">Age</label>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <select class="form-control" id="age" name="age">
+                                    {% for i in ages %}
+                                        <option>{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                                <span class="input-group-addon" id="age">ans</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight" class="col-sm-2 control-label">Poids</label>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <select class="selectpicker form-control" id="weight" name="weight" aria-describedby="weight-addon">
+                                    <option>45</option>
+                                    <option>50</option>
+                                    <option>55</option>
+                                    <option>60</option>
+                                    <option>65</option>
+                                </select>
+                                <span class="input-group-addon" id="weight">kg</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="height" class="col-sm-2 control-label">Taille</label>
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <select class="form-control" id="height" name="height">
+                                    <option>1.50</option>
+                                    <option>1.60</option>
+                                    <option>1.70</option>
+                                    <option>1.80</option>
+                                    <option>1.90</option>
+                                </select>
+                                <span class="input-group-addon" id="weight">m</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}
@@ -114,7 +115,7 @@
                 // handle a non-successful response
                 error : function(xhr,errmsg,err) {
                     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
                     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
                 }
             });
