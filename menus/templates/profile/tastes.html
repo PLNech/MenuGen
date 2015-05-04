@@ -1,8 +1,8 @@
-{% extends 'dashboard.html' %}
+{% extends '_base.html' %}
 
 {% block css %}{% endblock %}
 
-{% block dashboardcontent %}
+{% block content %}
     <div class="panel panel-default">
         <div class="panel-heading">
             {% if not user.is_authenticated %}

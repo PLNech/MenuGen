@@ -29,7 +29,12 @@
     <div id="page-wrapper" class="container">
         <div class="row">
             {% include '_menu.html' %}
-            {% include '_footer.html' %}
+            <div id="content-wrapper">
+                <div class="row">
+                    {% block content %}{% endblock %}
+                </div>
+                {% include '_footer.html' %}
+            </div>
         </div>
     </div>
 </div>

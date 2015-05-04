@@ -1,23 +1,20 @@
-{% extends 'dashboard.html' %}
+{% extends '_base.html' %}
 
 {% block css %}{% endblock %}
 
-{% block dashboardcontent %}
-
-</div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            {% if not user.is_authenticated %}
+{% block content %}
+    {% if not user.is_authenticated %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
                 <nav>
-                <ul class="pager">
-                    <li class="previous"><a href="{% url 'menus.views.tastes' %}" ><span aria-hidden="true">&larr;</span> Précedent</a></li>
-                </ul>
+                    <ul class="pager">
+                        <li class="previous"><a href="{% url 'menus.views.tastes' %}" ><span aria-hidden="true">&larr;</span> Précedent</a></li>
+                    </ul>
                     <h2>Générer un nouveau menu</h2>
                 </nav>
-            {% endif %}
-
+            </div>
         </div>
-    </div>
+    {% endif %}
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
@@ -25,80 +22,80 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="well">
-                            <h3>Précisez vos critères</h3>
-                            <hr>
-                            <form class="form-horizontal" name="criteria" action="{% url 'menus.views.physiology' %}" method="POST">
-                                 <div class="form-group">
-                                     <label for="budgetRadioOptions" class="col-sm-3 control-label">Budget</label>
-                                     <div class="col-sm-9">
-                                        <label class="radio-inline">
-                                          <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio1" value="0"> Bon marché
-                                        </label>
-                                        <label class="radio-inline">
-                                          <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio2" value="1"> Moyen
-                                        </label>
-                                        <label class="radio-inline">
-                                          <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio3" value="2"> Assez cher
-                                        </label>
-                                     </div>
-                                </div>
-
-                                <div class="form-group">
-                                     <label for="DifficultyRadioOptions" class="col-sm-3 control-label">Difficulté</label>
-                                     <div class="col-sm-9">
-                                        <label class="radio-inline">
-                                          <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio1" value="option1"> Très facile
-                                        </label>
-                                        <label class="radio-inline">
-                                          <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio2" value="option2"> Facile
-                                        </label>
-                                        <label class="radio-inline">
-                                          <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Moyenne
-                                        </label>
-                                         <label class="radio-inline">
-                                          <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio4" value="option4"> Difficile
-                                        </label>
-                                     </div>
-                                </div>
+                                <h3>Précisez vos critères</h3>
                                 <hr>
-                                <br>
-                                <div class="form-group">
-                                    <label for="nb_days" class="col-sm-3 control-label">Pour</label>
-                                    <div class="col-sm-4">
-                                        <div class="input-group">
+                                <form class="form-horizontal" name="criteria" action="{% url 'menus.views.physiology' %}" method="POST">
+                                    <div class="form-group">
+                                        <label for="budgetRadioOptions" class="col-sm-3 control-label">Budget</label>
+                                        <div class="col-sm-9">
+                                            <label class="radio-inline">
+                                                <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio1" value="0"> Bon marché
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio2" value="1"> Moyen
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio3" value="2"> Assez cher
+                                            </label>
+                                        </div>
+                                    </div>
 
-                                        <select class="form-control" id="nb_days" name="nb_days" aria-describedby="day-unit-addon">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7" selected>7</option>
-                                            <option value="8">8</option>
-                                        </select>
-                                            <span class="input-group-addon" id="day-unit-addon">jours</span>
+                                    <div class="form-group">
+                                        <label for="DifficultyRadioOptions" class="col-sm-3 control-label">Difficulté</label>
+                                        <div class="col-sm-9">
+                                            <label class="radio-inline">
+                                                <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio1" value="option1"> Très facile
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio2" value="option2"> Facile
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Moyenne
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio4" value="option4"> Difficile
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <br>
+                                    <div class="form-group">
+                                        <label for="nb_days" class="col-sm-3 control-label">Pour</label>
+                                        <div class="col-sm-4">
+                                            <div class="input-group">
+
+                                                <select class="form-control" id="nb_days" name="nb_days" aria-describedby="day-unit-addon">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7" selected>7</option>
+                                                    <option value="8">8</option>
+                                                </select>
+                                                <span class="input-group-addon" id="day-unit-addon">jours</span>
                                             </div>
+                                        </div>
+                                        <div class="col-md-5 text-right">
+                                            <a id="placements-detail-ajax" href="{% url 'menus.views.generate_placements_detail'%}" class="btn btn-success" type="button">Détails &raquo;</a>
+                                        </div>
                                     </div>
-                                    <div class="col-md-5 text-right">
-                                        <a id="placements-detail-ajax" href="{% url 'menus.views.generate_placements_detail'%}" class="btn btn-success" type="button">Détails &raquo;</a>
-                                    </div>
-                                </div>
-                                <br>
-                                <hr>
-                                <div class="form-group">
-                                    <label for="profils" class="col-sm-3 control-label">Convives</label>
-                                    <div class="col-sm-9">
-                                        <div class="input-group">
-                                        <input type="text" id="profils" name="profils" class="form-control" value="MOI" disabled>
+                                    <br>
+                                    <hr>
+                                    <div class="form-group">
+                                        <label for="profils" class="col-sm-3 control-label">Convives</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" id="profils" name="profils" class="form-control" value="MOI" disabled>
                                          <span class="input-group-btn">
                                             <a id="select-profils-ajax" href="{% url 'menus.views.generate_select_profile' %}" class="btn btn-success" type="button">Ajouter &raquo;</a>
                                          </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                                </form>
+                            </div>
                         </div>
 
 
@@ -173,7 +170,7 @@
                 // handle a non-successful response
                 error : function(xhr,errmsg,err) {
                     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
                     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
                 }
             });
@@ -187,10 +184,10 @@
             var data_dico = { difficulty : $( this ).val() };
             update_pre_generation(data_dico);
         });
-          $('#nb_days').on('change', function(e) {
+        $('#nb_days').on('change', function(e) {
             var data_dico = { nb_days: $( "#nb_days option:selected" ).val() };
-               $("#placements-detail-ajax").trigger('click');
-              update_pre_generation(data_dico);
+            $("#placements-detail-ajax").trigger('click');
+            update_pre_generation(data_dico);
         });
 
     </script>

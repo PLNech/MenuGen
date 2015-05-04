@@ -1,13 +1,13 @@
-{% extends 'dashboard.html' %}
+{% extends '_base.html' %}
 {% load planning_extras %}
 
 {% block css %}
     {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />-->
     <link rel="stylesheet" type="text/css" href="{% static 'dnd/dnd.css' %}" />
 {% endblock %}
 
-{% block dashboardcontent %}
+{% block content %}
     {% if not user.is_authenticated %}
         <nav>
             <ul class="pager">
