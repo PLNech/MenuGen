@@ -49,7 +49,8 @@
                         <tr>
                             <th>{{ forloop.counter0|meal_slot_name }}</th>
                             {% for meal in meal_time %}
-                                <td class="fill">
+                                <td>
+
                                     <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
                                         <a data-toggle="modal"
                                            href="{% url 'menus.views.generation_meal_details'%}"
@@ -58,6 +59,7 @@
                                         </a>
                                         {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
                                     </div>
+
                                 </td>
                             {% endfor %}
                         </tr>
