@@ -107,8 +107,9 @@
             <div class="col-md-6">
                 <div class="main-box clearfix">
                     <div class="main-box-body clearfix">
-                        <header class="main-box-header clearfix">Vue détaillée - Nombre de repas</header>
-                        {% include 'menus/generate/placements_detail.html' with days_range=days_range %}
+                        <div id="contextual-container">
+                            {% include 'menus/generate/placements_detail.html' with days_range=days_range %}
+                        </div>
                     </div>
                 </div>
             </div>

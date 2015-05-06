@@ -50,44 +50,14 @@ def generation(request):
     generating the structure containing the meals
     should be passed to the rendered view """
 
-    starter = Recipe()
-    starter.id = 0
-    starter.name = "Petit déjeuner"
-    starter.prep_time = 5
-    starter.cook_time = 10
-    starter.difficulty = 2
-    starter.price = 2
-
-    main = Recipe()
-    main.id = 1
-    main.name = "Plat principal"
-    main.prep_time = 5
-    main.cook_time = 20
-    main.difficulty = 3
-    main.price = 3
-
-    dessert = Recipe()
-    dessert.id = 2
-    dessert.name = "Dessert"
-    dessert.prep_time = 5
-    dessert.cook_time = 0
-    dessert.difficulty = 2
-    dessert.price = 2
-
     """ Default days number """
     nb_days = 7
     """ Use the days number if exists """
     if 'nb_days' in request.session:
         nb_days = int(request.session['nb_days'])
 
-    """ Here is an example of meal"""
-    meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
-
     """ Here is an example of a matrix containing (nb_days x 5) meals """
     planning = generate_planning(nb_days, 5)
-        # [[meal for y in range(nb_days)] for x in range(5)]
-
-
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 
 
