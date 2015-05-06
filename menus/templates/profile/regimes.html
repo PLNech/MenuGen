@@ -33,7 +33,7 @@
                             {% for regime in health_regimes_list %}
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
-                                    <div class="regime_desc">{{ regime.desc }}</div>
+                                    <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.desc }}</em></div>
                                 </div>
                             {% endfor %}
                         </ul>
@@ -49,7 +49,7 @@
                             {% for regime in value_regimes_list %}
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
-                                    <div class="regime_desc">{{ regime.desc }}</div>
+                                    <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.desc }}</em></div>
                                 </div>
                             {% endfor %}
                         </ul>
