@@ -33,6 +33,7 @@
                             {% for regime in health_regimes_list %}
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
+                                    <div class="regime_desc">{{ regime.desc }}</div>
                                 </div>
                             {% endfor %}
                         </ul>
@@ -48,6 +49,7 @@
                             {% for regime in value_regimes_list %}
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
+                                    <div class="regime_desc">{{ regime.desc }}</div>
                                 </div>
                             {% endfor %}
                         </ul>
@@ -64,6 +66,7 @@
                             {% for regime in nutrients_regimes_list %}
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
+                                    <div class="regime_desc">{{ regime.desc }}</div>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="...">
                                         <button type="button" class="btn btn-default">Min</button>
                                         <button type="button" class="btn btn-default">Recomandé</button>
