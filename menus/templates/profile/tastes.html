@@ -82,7 +82,7 @@
 
 {% block js %}
     <script type="text/javascript">
-        var $rows = $('#aliments li');
+        var $rows = $('#liked-aliments li');
         $('#search').keyup(function() {
             var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
             console.log(val);
@@ -99,7 +99,7 @@
             $(this).children().first().removeClass('glyphicon-thumbs-down');
             $(this).children().first().addClass('glyphicon-thumbs-up');
             $(this).closest('li').prependTo("#disliked-aliments");
-            
+
         });
 
         $("#disliked-aliments").on('click', 'li button', function(){
