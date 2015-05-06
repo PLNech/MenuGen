@@ -20,11 +20,13 @@
         <div class="main-box weather-box-large">
             <div class="main-box-body main-box-no-header clearfix">
                 <div class="current" style="background: url('{% static 'img/landing.jpg' %}') no-repeat scroll 0 0 / cover padding-box transparent">
-                    <h4 style="font-size: 2.2em">MenuGen, le générateur <em>intelligent</em> de menus <em>équilibrés</em> !</h4>
+                    <div id="hackfix" style="margin-bottom: 20px;"></div>
+                    <h4 style="font-size: 2.2em; display: inline;background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);border-radius: 10px; padding: 8px 15px;">
+                        MenuGen, le générateur <em>intelligent</em> de menus <em>équilibrés</em> !</h4>
                     <div class="temp-out-wrapper clearfix">
                         <i class="wi wi-day-sunny icon"></i>
                         <div class="temp-wrapper">
-                            <a class="btn btn-info btn-lg" href="{% url 'menus.views.physiology' %}" role="button">Essayez maintenant &raquo;</a>
+                            <a style="height: 56px; width: 324px; font-size: 28px;" class="btn btn-info btn-lg" href="{% url 'menus.views.physiology' %}" role="button">Essayez maintenant &raquo;</a>
                         </div>
                     </div>
                 </div>
