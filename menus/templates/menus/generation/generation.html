@@ -11,7 +11,7 @@
         <div id="content-header" class="clearfix">
             <div class="pull-left">
                 <ol class="breadcrumb"><p></p></ol>
-                <h1>Mes régimes</h1>
+                <h1>Ma génération</h1>
             </div>
             <div class="pull-right hidden-xs">
                 {% if not user.is_authenticated %}
@@ -32,8 +32,18 @@
     <div class="col-lg-12">
         <div class="main-box clearfix">
             <div class="main-box-body clearfix">
+                <div class="table-responsive">
                 <table id="planning" class="table">
                     {% for meal_time in planning %}
+                        {% if forloop.counter0 == 0 %}
+                            <th></th>
+                                {% for meal in meal_time %}
+                                    <th>
+                                        <h3>Jour {{ forloop.counter0 }}</h3>
+                                        <br>
+                                    </th>
+                                {% endfor %}
+                            {% endif %}
                         <tr>
                             <th>{{ forloop.counter0|meal_slot_name }}</th>
                             {% for meal in meal_time %}
@@ -51,6 +61,7 @@
                         </tr>
                     {% endfor %}
                 </table>
+                </div>
             </div>
         </div>
     </div>
