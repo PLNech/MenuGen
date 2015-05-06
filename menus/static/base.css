@@ -18,3 +18,8 @@
 div.regime {
     margin-top: 20px;
 }
+
+div.regime_desc {
+    margin-top: 8px;
+    margin-bottom: 25px;
+}
