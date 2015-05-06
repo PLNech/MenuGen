@@ -96,7 +96,7 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
     A meal is composed of a starter, a main course and a dessert """
     starter = Recipe()
     starter.id = starter_id
-    starter.name = "Une entrée"
+    starter.name = "Entrée"
     starter.prep_time = 5
     starter.cook_time = 10
     starter.difficulty = 2
@@ -104,7 +104,7 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
 
     main = Recipe()
     main.id = main_course_id
-    main.name = "Un plat principal"
+    main.name = "Plat principal"
     main.prep_time = 5
     main.cook_time = 20
     main.difficulty = 3
@@ -112,7 +112,7 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
 
     dessert = Recipe()
     dessert.id = dessert_id
-    dessert.name = "Un dessert"
+    dessert.name = "Dessert"
     dessert.prep_time = 5
     dessert.cook_time = 0
     dessert.difficulty = 2
