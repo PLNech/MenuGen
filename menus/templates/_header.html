@@ -2,7 +2,7 @@
 
 <header class="navbar" id="header-navbar">
     <div class="container">
-        <a href="" id="logo" class="navbar-brand">
+        <a href="{% url 'menus.views.landing' %}" id="logo" class="navbar-brand">
             <!--
             <img src="img/logo.png" alt="" class="normal-logo logo-white"/>
             <img src="img/logo-black.png" alt="" class="normal-logo logo-black"/>
@@ -10,7 +10,7 @@
             -->
             <div class="raw-brand" style="padding-top: 5px; padding-left: 25px;">
                 <i class="fa fa-cogs"></i>
-                <strong>Menugen</strong>
+                <strong>MenuGen</strong>
             </div>
         </a>
         <div class="clearfix">
@@ -46,7 +46,7 @@
                     </ul>
                 {% else %}
                     <div style="padding-top: 5px; padding-right: 10px;">
-                        <a class="btn btn-primary" href="{% url 'menus.views.sign_in' %}" role="button">Connection</a>
+                        <a class="btn btn-primary" href="{% url 'menus.views.sign_in' %}" role="button">Connexion</a>
                         <a class="btn btn-primary" href="" role="button">Inscription</a>
                     </div>
                 {% endif %}

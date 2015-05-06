@@ -2,15 +2,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
+from menus.data.generator import generate_planning
 from menus.models import Recipe
 
 
 def landing(request):
     request.session.flush()
-    if 'liked_aliments' not in request.session:
-        request.session['liked_aliments'] = ["Eau", "Chocolat", "Tagliatelles", "Dinde", "Poulet", "Boeuf", "Jambon", "Sucre", "Semoule", "Riz", "Spaghetti", "Lasagnes", "Framboise", "Fraise", "Cerise", "Groseille", "Pomme", "Poire", "Ananas", "Courgette", "Carotte", "Aubergine", "Tomate", "Radis", "Lait", "Oeuf", "Myrtille", "Farine", "Abricot", "Ail", "Oignon", "Saumon", "Beurre", "Fromage", "Fruits", "Légumes", "Viande", "Poisson", "Menthe", "Thym", "Huile de tournesol", "Basilique", "Petits pois", "Haricots verts" ]
-    if 'disliked_aliments' not in request.session:
-        request.session['disliked_aliments'] = []
+    # if 'liked_aliments' not in request.session:
+    #     request.session['liked_aliments'] = ["Eau", "Chocolat", "Tagliatelles", "Dinde", "Poulet", "Boeuf", "Jambon", "Sucre", "Semoule", "Riz", "Spaghetti", "Lasagnes", "Framboise", "Fraise", "Cerise", "Groseille", "Pomme", "Poire", "Ananas", "Courgette", "Carotte", "Aubergine", "Tomate", "Radis", "Lait", "Oeuf", "Myrtille", "Farine", "Abricot", "Ail", "Oignon", "Saumon", "Beurre", "Fromage", "Fruits", "Légumes", "Viande", "Poisson", "Menthe", "Thym", "Huile de tournesol", "Basilique", "Petits pois", "Haricots verts" ]
+    # if 'disliked_aliments' not in request.session:
+    #     request.session['disliked_aliments'] = []
 
     return render(request, 'landing.html', {
         'landing': True})
@@ -83,7 +84,9 @@ def generation(request):
     meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
 
     """ Here is an example of a matrix containing (nb_days x 5) meals """
-    planning = [[meal for y in range(nb_days)] for x in range(5)]
+    planning = generate_planning(7, 5)
+        # [[meal for y in range(nb_days)] for x in range(5)]
+
 
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 
@@ -93,7 +96,7 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
     A meal is composed of a starter, a main course and a dessert """
     starter = Recipe()
     starter.id = starter_id
-    starter.name = "Un petit déjeuner"
+    starter.name = "Une entrée"
     starter.prep_time = 5
     starter.cook_time = 10
     starter.difficulty = 2
@@ -244,6 +247,51 @@ def regimes(request):
 
 def tastes(request):
     """ Here should be fetch the aliments """
+
+    if 'liked_aliments' not in request.session:
+        request.session['liked_aliments'] = [ 
+            "Carotte",
+            "Brocoli", 
+            "Concombre",
+            "Aubergine",
+            "Courgette",
+            "Chocolat",
+            "Sucre",
+            "Semoule",
+            "Riz",
+            "Spaghetti",
+            "Lasagnes",
+            "Framboise",
+            "Fraise",
+            "Cerise",
+            "Groseille",
+            "Pomme",
+            "Poire",
+            "Ananas",
+            "Tomate",
+            "Radis",
+            "Lait",
+            "Oeuf",
+            "Myrtille",
+            "Farine",
+            "Abricot",
+            "Ail",
+            "Oignon",
+            "Saumon",
+            "Beurre",
+            "Roquefort",
+            "Camembert",
+            "Sole",
+            "Lieu",
+            "Menthe",
+            "Thym",
+            "Huile de tournesol",
+            "Basilique",
+            "Petits pois",
+            "Haricots verts"
+        ]
+    if 'disliked_aliments' not in request.session:
+        request.session['disliked_aliments'] = [ "Poulet", "Jambon", "Dinde", "Boeuf" ]
 
     return render(request, 'profile/tastes.html', {})
 
