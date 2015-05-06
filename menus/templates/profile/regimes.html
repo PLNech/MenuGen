@@ -33,11 +33,12 @@
                             {% for regime in health_regimes_list %}
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
+                                    <div class="regime_desc">{{ regime.desc }}</div>
                                 </div>
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p>Aucun régime disponible pour le moment</p>
+                        <p>Aucun régime de ce type disponible pour le moment</p>
                     {% endif %}
                 </div>
                 <div class="col-md-6">
@@ -48,22 +49,24 @@
                             {% for regime in value_regimes_list %}
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
+                                    <div class="regime_desc">{{ regime.desc }}</div>
                                 </div>
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p>Aucune valeur disponible pour le moment</p>
+                        <p>Aucun régime de ce type disponible pour le moment</p>
                     {% endif %}
                 </div>
 
                 <div class="col-md-12">
                     <h3><small>Nutriments</small></h3>
                     <hr>
-                    {% if nutriments_list %}
+                    {% if nutrients_regimes_list %}
                         <ul>
-                            {% for nutriment in nutriments_list %}
+                            {% for regime in nutrients_regimes_list %}
                                 <div class="checkbox">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
+                                    <div class="regime_desc">{{ regime.desc }}</div>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="...">
                                         <button type="button" class="btn btn-default">Min</button>
                                         <button type="button" class="btn btn-default">Recomandé</button>
@@ -73,7 +76,7 @@
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p>Aucun nutriment disponible pour le moment</p>
+                        <p>Aucun régime de ce type disponible pour le moment</p>
                     {% endif %}
                 </div>
             </div>
