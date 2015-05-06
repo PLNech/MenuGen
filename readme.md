@@ -52,6 +52,8 @@ Load initial data (so far the ingredients):
 
     ./manage.py loaddata initial_data
 
+Note: initial_data is reloaded every migration
+
 Create a fixture (snapshot from the data currently in the database):
 
     ./manage.py dumpdata > menus/fixtures/myfixture.json
