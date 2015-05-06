@@ -21,6 +21,7 @@ urlpatterns = patterns(
 
     url(r'^update_physio$', 'update_physio'),
     url(r'^update_gen_criteria', 'update_gen_criteria'),
+    url(r'^update_tastes', 'update_tastes'),
     url(r'^physiology$', 'physiology'),
     url(r'^regimes$', 'regimes'),
     url(r'^tastes$', 'tastes'),
