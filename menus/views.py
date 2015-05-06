@@ -84,7 +84,7 @@ def generation(request):
     meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
 
     """ Here is an example of a matrix containing (nb_days x 5) meals """
-    planning = generate_planning(7, 5)
+    planning = generate_planning(nb_days, 5)
         # [[meal for y in range(nb_days)] for x in range(5)]
 
 
