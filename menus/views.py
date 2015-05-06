@@ -181,31 +181,36 @@ def regimes(request):
     value_regimes_list = []
     nutrients_regimes_list = []
     regime_sans_sel = {
-        'name': 'Sans sel',
-        'desc': 'foobar'
+        'name': 'Hyposodé (sans sel)',
+        'desc': "Régime pour restreindre le plus possible les apports en sel dans l'alimentation."
     }
     regime_hyper_prot = {
-        'name': 'HyperProtéiné',
-        'desc': 'barfoo'
+        'name': 'Hyperprotéiné',
+        'desc': "Régime amaigrissant fondé sur l'absorption de protéines aussi pures que possibles. Ce régime est fortement hypocalorique."
+    }
+    regime_sans_gluten = {
+        'name': 'Sans gluten',
+        'desc': "Préconisé dans le cas de l'intolérance au gluten, ce régime permet d'éviter une réaction immunitaire à la gliadine."
     }
     regime_vegetarien = {
         'name': 'Végétarien',
-        'desc': 'barfoo'
+        'desc': "Régime sans chair animale ni sous-produits d'animaux abattus."
     }
     regime_vegetalien = {
         'name': 'Végétalien',
-        'desc': 'barfoo'
+        'desc': "Régime végétarien excluant également le lait, les œufs, le miel ainsi que leurs dérivés."
     }
-    regime_hallal = {
-        'name': 'Hallal',
-        'desc': 'barfoo'
+    regime_halal = {
+        'name': 'Halal',
+        'desc': "Régime religieux impliquant l'interdiction de certains aliments."
     }
 
     health_regimes_list.append(regime_sans_sel)
     health_regimes_list.append(regime_hyper_prot)
+    health_regimes_list.append(regime_sans_gluten)
     value_regimes_list.append(regime_vegetarien)
     value_regimes_list.append(regime_vegetalien)
-    value_regimes_list.append(regime_hallal)
+    value_regimes_list.append(regime_halal)
     return render(request, 'profile/regimes.html',
                   {'health_regimes_list': health_regimes_list,
                    'value_regimes_list': value_regimes_list})
