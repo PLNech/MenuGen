@@ -1,15 +1,82 @@
 {% extends '_base.html' %}
 
 {% block content %}
-     <div class="jumbotron">
+    <!--
+    <div class="jumbotron">
         <div class="parallax-window" data-parallax="scroll" data-image-src="assets/img/landing.jpg">
             <div class="container">
-                <h1>Le générateur intelligent de menus équilibrés</h1>
-                <p>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod.</p>
+                <h1></h1>
+                <p>MenuGen, le générateur <em>intelligent</em> de menus <em>équilibrés</em> !</p>
                 <p>
-                    <a class="btn btn-primary btn-lg" href="{% url 'menus.views.physiology' %}" role="button">Essayez maintenant &raquo;</a>
+                    <a class="btn btn-warning btn-lg" href="{% url 'menus.views.physiology' %}" role="button">Essayez maintenant &raquo;</a>
                 </p>
             </div>
         </div>
     </div>
+    -->
+
+    <div class="col-md-12">
+        <div class="main-box weather-box-large">
+            <div class="main-box-body main-box-no-header clearfix">
+                <div class="current">
+                    <h4>MenuGen, le générateur <em>intelligent</em> de menus <em>équilibrés</em> !</h4>
+                    <div class="temp-out-wrapper clearfix">
+                        <i class="wi wi-day-sunny icon"></i>
+                        <div class="temp-wrapper">
+                            <a class="btn btn-info btn-lg" href="{% url 'menus.views.physiology' %}" role="button">Essayez maintenant &raquo;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-box-body clearfix">
+        <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
+            <div class="pricing-package-inner">
+                <div class="package-header green-bg">
+                    <h3>intelligent</h3>
+                </div>
+                <div class="package-content">
+                    <div class="package-price green-bg">
+                    </div>
+                    <ul class="package-top-features">
+                        <li>Basé sur des données OpenData</li>
+                        <li>Construit à l'aide de puissants algorithmes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
+            <div class="pricing-package-inner">
+                <div class="package-header green-bg">
+                    <h3>équilibré</h3>
+                </div>
+                <div class="package-content">
+                    <div class="package-price green-bg">
+                    </div>
+                    <ul class="package-top-features">
+                        <li>Respecte les prérequis diététiques</li>
+                        <li>Vous aide à plannifier une alimentation variée</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
+            <div class="pricing-package-inner">
+                <div class="package-header green-bg">
+                    <h3>qui vous ressemble</h3>
+                </div>
+                <div class="package-content">
+                    <div class="package-price green-bg">
+                    </div>
+                    <ul class="package-top-features">
+                        <li>Apprend vos goûts</li>
+                        <li>Respecte vos valeurs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
