@@ -119,6 +119,7 @@ class CsvFood(object):
     }
     # Fields needed for further data manipulation
     fields_needed = [
+        'product_name',
         'quantity',
         # 'categories',
         'energy_100g',
@@ -351,6 +352,8 @@ def get_food_array(csv):
             if is_invalid_field_list(fields) or has_no_name(fields):
                 continue
             food = CsvFood(fields)
+            if invalid_fields(food):
+                continue
             food_array.append(food)
         return food_array
 

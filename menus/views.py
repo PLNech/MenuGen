@@ -177,7 +177,38 @@ def physiology(request):
 
 
 def regimes(request):
-    return render(request, 'profile/regimes.html', {})
+    health_regimes_list = []
+    value_regimes_list = []
+    nutrients_regimes_list = []
+    regime_sans_sel = {
+        'name': 'Sans sel',
+        'desc': 'foobar'
+    }
+    regime_hyper_prot = {
+        'name': 'HyperProtéiné',
+        'desc': 'barfoo'
+    }
+    regime_vegetarien = {
+        'name': 'Végétarien',
+        'desc': 'barfoo'
+    }
+    regime_vegetalien = {
+        'name': 'Végétalien',
+        'desc': 'barfoo'
+    }
+    regime_hallal = {
+        'name': 'Hallal',
+        'desc': 'barfoo'
+    }
+
+    health_regimes_list.append(regime_sans_sel)
+    health_regimes_list.append(regime_hyper_prot)
+    value_regimes_list.append(regime_vegetarien)
+    value_regimes_list.append(regime_vegetalien)
+    value_regimes_list.append(regime_hallal)
+    return render(request, 'profile/regimes.html',
+                  {'health_regimes_list': health_regimes_list,
+                   'value_regimes_list': value_regimes_list})
 
 
 def tastes(request):
