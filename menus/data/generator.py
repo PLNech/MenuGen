@@ -92,7 +92,7 @@ names_dessert = [
     "Macadamias",
     "Macaron aux framboises",
     "Macaron aux framboises",
-    "Macaronade &quot;Fruits de mer&quot;",
+    "Macaronade Fruits de mer",
     "Compote Pomme cuite au chaudron",
     "Compote Pomme-poire Bio Monoprix",
     "Compote Pommes Poires Carrefour",
