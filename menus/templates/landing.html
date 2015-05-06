@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load staticfiles %}
 
 {% block content %}
     <!--
@@ -18,7 +19,7 @@
     <div class="col-md-12">
         <div class="main-box weather-box-large">
             <div class="main-box-body main-box-no-header clearfix">
-                <div class="current">
+                <div class="current" style="background: url('{% static 'img/landing.jpg' %}') no-repeat scroll 0 0 / cover padding-box transparent">
                     <h4 style="font-size: 2.2em">MenuGen, le générateur <em>intelligent</em> de menus <em>équilibrés</em> !</h4>
                     <div class="temp-out-wrapper clearfix">
                         <i class="wi wi-day-sunny icon"></i>
