@@ -1,3 +1,9 @@
+<style>
+    div.regime {
+    margin-top: 20px;
+}
+</style>
+
 {% extends '_base.html' %}
 
 {% block css %}{% endblock %}
@@ -12,7 +18,7 @@
             <div class="pull-right hidden-xs">
                 {% if not user.is_authenticated %}
                     <a href="{% url 'menus.views.physiology' %}" class="btn btn-primary">
-                        <i class="fa fa-angle-double-left"></i> Ma physiologie
+                        <i class="fa fa-angle-double-left"></i>Ma physiologie
                     </a>
                     <a href="{% url 'menus.views.tastes' %}" class="btn btn-primary">
                         Mes goûts <i class="fa fa-angle-double-right"></i>
@@ -31,7 +37,7 @@
                     {% if health_regimes_list %}
                         <ul>
                             {% for regime in health_regimes_list %}
-                                <div class="checkbox">
+                                <div class="checkbox regime">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
                                     <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.desc }}</em></div>
                                 </div>
@@ -47,7 +53,7 @@
                     {% if value_regimes_list %}
                         <ul>
                             {% for regime in value_regimes_list %}
-                                <div class="checkbox">
+                                <div class="checkbox regime">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
                                     <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.desc }}</em></div>
                                 </div>
@@ -64,7 +70,7 @@
                     {% if nutrients_regimes_list %}
                         <ul>
                             {% for regime in nutrients_regimes_list %}
-                                <div class="checkbox">
+                                <div class="checkbox regime">
                                     <label><input type="checkbox" value="">{{ regime.name }}</label>
                                     <div class="regime_desc">{{ regime.desc }}</div>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="...">
