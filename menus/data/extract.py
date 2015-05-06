@@ -119,6 +119,7 @@ class CsvFood(object):
     }
     # Fields needed for further data manipulation
     fields_needed = [
+        'product_name',
         'quantity',
         # 'categories',
         'energy_100g',

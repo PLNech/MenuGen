@@ -46,6 +46,24 @@ When models are edited, you must compute the necessary migrations from your data
     ./manage.py makemigrations
     ./manage.py migrate
 
+# Manage data in the database
+
+Load initial data (so far the ingredients):
+
+    ./manage.py loaddata initial_data
+
+Create a fixture (snapshot from the data currently in the database):
+
+    ./manage.py dumpdata > menus/fixtures/myfixture.json
+
+Load a fixture:
+
+    ./manage.py loaddata myfixture
+
+Fill ingredients directly from the csv:
+
+    ./manage.py fill_db
+
 # References
 
 * [Django Documentation](https://docs.djangoproject.com/en/1.7/)
