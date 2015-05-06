@@ -34,7 +34,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-offset-2 col-lg-8">
-                        <ul id="aliments" class="list-group">
+                        <ul id="liked-aliments" class="list-group">
                             {% for aliment in request.session.liked_aliments %}
                                 <li class="list-group-item">
                                     <div class="row">
@@ -93,14 +93,13 @@
             }).hide();
         });
 
-        $("#aliments").on('click', 'li button', function(){
-            console.log($(this).firstElementChild);
+        $("#liked-aliments").on('click', 'li button', function(){
             $(this).removeClass('btn-danger');
             $(this).addClass('btn-success');
             $(this).children().first().removeClass('glyphicon-thumbs-down');
             $(this).children().first().addClass('glyphicon-thumbs-up');
             $(this).closest('li').prependTo("#disliked-aliments");
-
+            
         });
 
         $("#disliked-aliments").on('click', 'li button', function(){
@@ -108,7 +107,7 @@
             $(this).addClass('btn-danger');
             $(this).children().first().removeClass('glyphicon-thumbs-up');
             $(this).children().first().addClass('glyphicon-thumbs-down');
-            $(this).closest('li').prependTo("#aliments");
+            $(this).closest('li').prependTo("#liked-aliments");
         });
     </script>
 
