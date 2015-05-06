@@ -7,6 +7,11 @@ from menus.models import Recipe
 
 def landing(request):
     request.session.flush()
+    if 'liked_aliments' not in request.session:
+        request.session['liked_aliments'] = ["Eau", "Chocolat", "Tagliatelles", "Dinde", "Poulet", "Boeuf", "Jambon", "Sucre", "Semoule", "Riz", "Spaghetti", "Lasagnes", "Framboise", "Fraise", "Cerise", "Groseille", "Pomme", "Poire", "Ananas", "Courgette", "Carotte", "Aubergine", "Tomate", "Radis", "Lait", "Oeuf", "Myrtille", "Farine", "Abricot", "Ail", "Oignon", "Saumon", "Beurre", "Fromage", "Fruits", "Légumes", "Viande", "Poisson", "Menthe", "Thym", "Huile de tournesol", "Basilique", "Petits pois", "Haricots verts" ]
+    if 'disliked_aliments' not in request.session:
+        request.session['disliked_aliments'] = []
+
     return render(request, 'landing.html', {
         'landing': True})
 
@@ -164,6 +169,26 @@ def update_gen_criteria(request):
     return HttpResponse('ok')
 
 
+def update_tastes(request):
+    """ This method is used as ajax call in order to update physio """
+
+    if not request.is_ajax() or not request.method == 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    # if 'liked' in request.POST:
+    #     request.session['liked_aliments'].append(request.POST.get('liked'))
+    # if 'disliked' in request.POST:
+    #     l = request.session['disliked_aliments']
+    #     print(l)
+    #     print(request.POST.get('disliked'))
+    #     request.session['disliked_aliments'] = l.append(request.POST.get('disliked'))
+    #
+    # print(request.POST)
+    # print(request.session['disliked_aliments'])
+
+    return HttpResponse('tastes updated successfully')
+
+
 def physiology(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -219,10 +244,6 @@ def regimes(request):
 
 def tastes(request):
     """ Here should be fetch the aliments """
-    if 'liked_aliments' not in request.session:
-        request.session['liked_aliments'] = ["Eau", "Chocolat", "Tagliatelles", "Dinde", "Poulet", "Boeuf", "Jambon", "Sucre", "Semoule", "Riz", "Spaghetti", "Lasagnes", "Framboise", "Fraise", "Cerise", "Groseille", "Pomme", "Poire", "Ananas", "Courgette", "Carotte", "Aubergine", "Tomate", "Radis", "Lait", "Oeuf", "Myrtille", "Farine", "Abricot", "Ail", "Oignon", "Saumon", "Beurre", "Fromage", "Fruits", "Légumes", "Viande", "Poisson", "Menthe", "Thym", "Huile de tournesol", "Basilique", "Petits pois", "Haricots verts" ]
-    if 'disliked_aliments' not in request.session:
-        request.session['disliked_aliments'] = []
 
     return render(request, 'profile/tastes.html', {})
 

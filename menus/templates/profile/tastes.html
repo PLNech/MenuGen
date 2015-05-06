@@ -85,7 +85,6 @@
         var $rows = $('#liked-aliments li');
         $('#search').keyup(function() {
             var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
-            console.log(val);
 
             $rows.show().filter(function() {
                 var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
@@ -93,13 +92,41 @@
             }).hide();
         });
 
+        // AJAX for posting
+        function update_tastes(data_dico) {
+            console.log("sanity check") // sanity check
+            $.ajax({
+                url : '{% url 'menus.views.update_tastes' %}', // the endpoint
+                type : "POST", // http method
+                data : data_dico, // data sent with the post request
+
+                // handle a successful response
+                success : function(json) {
+                    console.log(json); // log the returned json to the console
+                    console.log("success"); // another sanity check
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        };
+
         $("#liked-aliments").on('click', 'li button', function(){
             $(this).removeClass('btn-danger');
             $(this).addClass('btn-success');
             $(this).children().first().removeClass('glyphicon-thumbs-down');
             $(this).children().first().addClass('glyphicon-thumbs-up');
-            $(this).closest('li').prependTo("#disliked-aliments");
 
+            var list_item = $(this).closest('li');
+            var aliment_text = jQuery('span.name', list_item).text();
+            var data_dico = { disliked : aliment_text };
+
+            update_tastes(data_dico);
+            list_item.prependTo("#disliked-aliments");
         });
 
         $("#disliked-aliments").on('click', 'li button', function(){
@@ -107,6 +134,12 @@
             $(this).addClass('btn-danger');
             $(this).children().first().removeClass('glyphicon-thumbs-up');
             $(this).children().first().addClass('glyphicon-thumbs-down');
+
+            var list_item = $(this).closest('li');
+            var aliment_text = jQuery('span.name', list_item).text();
+            var data_dico = { liked : aliment_text };
+
+            update_tastes(data_dico);
             $(this).closest('li').prependTo("#liked-aliments");
         });
     </script>
