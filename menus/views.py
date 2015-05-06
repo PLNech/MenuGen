@@ -326,3 +326,4 @@ def sign_up(request):
 def sign_out(request):
     logout(request)
     return redirect('menus.views.landing')
+
