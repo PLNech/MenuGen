@@ -40,7 +40,7 @@
                         {% if forloop.counter0 == 0 %}
                             <th></th>
                                 {% for meal in meal_time %}
-                                    <th>
+                                    <th class="col-md-{{ meal_time|length|column_size }}">
                                         <h3>Jour {{ forloop.counter }}</h3>
                                         <br>
                                     </th>
@@ -49,7 +49,7 @@
                         <tr>
                             <th>{{ forloop.counter0|meal_slot_name }}</th>
                             {% for meal in meal_time %}
-                                <td>
+                                <td class="fill">
                                     <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
                                         <a data-toggle="modal"
                                            href="{% url 'menus.views.generation_meal_details'%}"
