@@ -2,7 +2,7 @@
 
 <header class="navbar" id="header-navbar">
     <div class="container">
-        <a href="" id="logo" class="navbar-brand">
+        <a href="{% url 'menus.views.landing' %}" id="logo" class="navbar-brand">
             <!--
             <img src="img/logo.png" alt="" class="normal-logo logo-white"/>
             <img src="img/logo-black.png" alt="" class="normal-logo logo-black"/>
@@ -10,14 +10,16 @@
             -->
             <div class="raw-brand" style="padding-top: 5px; padding-left: 25px;">
                 <i class="fa fa-cogs"></i>
-                <strong>Menugen</strong>
+                <strong>MenuGen</strong>
             </div>
         </a>
         <div class="clearfix">
-            <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="fa fa-bars"></span>
-            </button>
+            {% if user.is_authenticated %}
+                <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="fa fa-bars"></span>
+                </button>
+            {% endif %}
             <div class="nav-no-collapse navbar-left pull-left hidden-sm hidden-xs">
                 <ul class="nav navbar-nav pull-left">
                     <li>
@@ -28,19 +30,26 @@
                 </ul>
             </div>
             <div class="nav-no-collapse pull-right" id="header-nav">
-                <ul class="nav navbar-nav pull-right">
-                    <li class="dropdown profile-dropdown">
-                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{% static 'vendor/img/default-avatar.png' %}" alt=""/>
-                            <span class="hidden-xs">John Doe</span> <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href=""><i class="fa fa-user"></i>Profile</a></li>
-                            <li><a href=""><i class="fa fa-cog"></i>Settings</a></li>
-                            <li><a href=""><i class="fa fa-power-off"></i>Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                {% if user.is_authenticated %}
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="dropdown profile-dropdown">
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="{% static 'vendor/img/default-avatar.png' %}" alt=""/>
+                                <span class="hidden-xs">John Doe</span> <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href=""><i class="fa fa-user"></i>Profile</a></li>
+                                <li><a href=""><i class="fa fa-cog"></i>Settings</a></li>
+                                <li><a href="{% url 'menus.views.sign_out' %}"><i class="fa fa-power-off"></i>Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                {% else %}
+                    <div style="padding-top: 5px; padding-right: 10px;">
+                        <a class="btn btn-primary" href="{% url 'menus.views.sign_in' %}" role="button">Connection</a>
+                        <a class="btn btn-primary" href="" role="button">Inscription</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
