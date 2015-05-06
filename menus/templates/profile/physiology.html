@@ -1,5 +1,6 @@
 {% extends '_base.html' %}
 {% load staticfiles %}
+{% load utils_extras %}
 
 {% block content %}
     <div class="col-lg-12">
@@ -44,7 +45,7 @@
                         <div class="col-sm-2">
                             <div class="input-group">
                                 <select class="form-control" id="age" name="age">
-                                    {% for i in ages %}
+                                    {% for i in 6|range_to:150 %}
                                         <option>{{ i }}</option>
                                     {% endfor %}
                                 </select>
@@ -57,11 +58,9 @@
                         <div class="col-sm-2">
                             <div class="input-group">
                                 <select class="selectpicker form-control" id="weight" name="weight" aria-describedby="weight-addon">
-                                    <option>45</option>
-                                    <option>50</option>
-                                    <option>55</option>
-                                    <option>60</option>
-                                    <option>65</option>
+                                    {% for i in 30|range_to:150 %}
+                                        <option>{{ i }}</option>
+                                    {% endfor %}
                                 </select>
                                 <span class="input-group-addon" id="weight">kg</span>
                             </div>
@@ -72,11 +71,9 @@
                         <div class="col-sm-2">
                             <div class="input-group">
                                 <select class="form-control" id="height" name="height">
-                                    <option>1.50</option>
-                                    <option>1.60</option>
-                                    <option>1.70</option>
-                                    <option>1.80</option>
-                                    <option>1.90</option>
+                                    {% for i in 10|stepped_range_to:25 %}
+                                        <option>{{ i }}</option>
+                                    {% endfor %}
                                 </select>
                                 <span class="input-group-addon" id="weight">m</span>
                             </div>

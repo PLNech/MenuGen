@@ -6,6 +6,7 @@ from menus.models import Recipe
 
 
 def landing(request):
+    request.session.flush()
     return render(request, 'landing.html', {
         'landing': True})
 
@@ -173,7 +174,7 @@ def physiology(request):
         """ TODO:
         - Use current_physio in template to pre-fill profile information.
         - Add ranges for to fill the select tag in template (refer to ages ?) """
-        return render(request, 'profile/physiology.html', {'current_physio': request.session, 'ages': range(5, 151)})
+        return render(request, 'profile/physiology.html', {'current_physio': request.session })
 
 
 def regimes(request):
