@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from menus.data.generator import generate_planning
 from menus.models import Recipe
+from menus.models import Ingredient
 
 
 def landing(request):
@@ -218,52 +219,13 @@ def regimes(request):
 def tastes(request):
     """ Here should be fetch the aliments """
 
-    if 'liked_aliments' not in request.session:
-        request.session['liked_aliments'] = [ 
-            "Carotte",
-            "Brocoli", 
-            "Concombre",
-            "Aubergine",
-            "Courgette",
-            "Chocolat",
-            "Sucre",
-            "Semoule",
-            "Riz",
-            "Spaghetti",
-            "Lasagnes",
-            "Framboise",
-            "Fraise",
-            "Cerise",
-            "Groseille",
-            "Pomme",
-            "Poire",
-            "Ananas",
-            "Tomate",
-            "Radis",
-            "Lait",
-            "Oeuf",
-            "Myrtille",
-            "Farine",
-            "Abricot",
-            "Ail",
-            "Oignon",
-            "Saumon",
-            "Beurre",
-            "Roquefort",
-            "Camembert",
-            "Sole",
-            "Lieu",
-            "Menthe",
-            "Thym",
-            "Huile de tournesol",
-            "Basilique",
-            "Petits pois",
-            "Haricots verts"
-        ]
-    if 'disliked_aliments' not in request.session:
-        request.session['disliked_aliments'] = [ "Poulet", "Jambon", "Dinde", "Boeuf" ]
+    #if 'liked_aliments' not in request.session:
+    #    request.session['liked_aliments'] = [ingredient.name for ingredient in Ingredient.objects.all()]
+    #if 'disliked_aliments' not in request.session:
+    #    request.session['disliked_aliments'] = [ "Poulet", "Jambon", "Dinde", "Boeuf" ]
 
-    return render(request, 'profile/tastes.html', {})
+    return render(request, 'profile/tastes.html',
+            {'ingredients': [ingredient.name for ingredient in Ingredient.objects.all()]})
 
 
 @login_required
