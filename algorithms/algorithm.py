@@ -1,13 +1,14 @@
+from menus.models import Menu
+from model.menu.dish import Dish
+from model.menu.menu_manager import MenuManager
+
 __author__ = 'PLNech'
 
 import random
 import math
-import multiprocessing
 
-from algorithms.model.factories import Factory, choose_method
 from utils.config import Config
 from utils.printer import Printer
-from utils.multi import cpu_count
 from algorithms.model.population import Population
 from algorithms.model.individual import Individual
 
@@ -97,7 +98,7 @@ class Algorithm:
         :type parent1 Individual
         :type parent2 Individual
         """
-        child = Factory.individual()
+        child = Menu()
 
         r1 = random.randint(0, parent1.genome_length())
         r2 = random.randint(0, parent1.genome_length())
@@ -138,7 +139,7 @@ class Algorithm:
         :type parent1 Individual
         :type parent2 Individual
         """
-        child = Factory.individual()
+        child = Menu()
         genome_length = min(parent1.genome_length(), parent2.genome_length())
         child_str = [""] * genome_length
         child.genes = [None] * genome_length
@@ -166,18 +167,19 @@ class Algorithm:
         :type individual Individual
         :rtype Individual
         """
-        manager = Factory.manager()
         gene_str = ""
         mut_str = ""
         digit_format = "%" + str(math.ceil(math.log10(Config.parameters[Config.KEY_NB_DISHES]))) + "d."
         genome_length = individual.genome_length()
+        manager = MenuManager()
         for i in range(genome_length):
             assert (i < genome_length)
+
             index = manager.get_index(individual.get_gene(i))
             index_str = digit_format % index
             gene_str += index_str
             if random.random() < Config.parameters[Config.KEY_MUTATION_RATE]:
-                gene = Factory.gene()
+                gene = Dish()
                 individual.set_gene(i, gene)
                 mut_str += digit_format % manager.get_index(gene)
             else:

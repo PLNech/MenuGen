@@ -1,15 +1,17 @@
+from model.menu.menu_manager import MenuManager
+
 __author__ = 'PLNech'
 
 from algorithms.model.menu.menu import Menu
 
-from numpy import arange
+# from numpy import arange
 import argparse
 import os
 import sys
 
 from utils.config import Config
 from stats import StatKeeper
-from utils.drawer import Drawer
+# from utils.drawer import Drawer
 from utils.printer import Printer
 from algorithm import Algorithm
 from algorithms.model.population import Population
@@ -21,6 +23,9 @@ manager = Factory.manager()
 
 def run(run_name, init_fittest=None):
     # New run
+    manager = MenuManager()
+    nb_dishes = len(manager.dishes)
+    print("New run: MM has %i dishes. (%s)" % (nb_dishes, os.getpid()))
     stats.new_run(run_name, Config.parameters[Config.KEY_NB_GENERATION])
     population = Population(Config.parameters[Config.KEY_POPULATION_SIZE])
 
@@ -84,17 +89,17 @@ def run(run_name, init_fittest=None):
                                                                         Config.score_units[solution_type])
         last_detail = detail_menu if type(init_fittest) is Menu else detail_last_trip
 
-        initial_figure = Drawer.draw_menu(init_fittest, name="Initial solution", detail=first_detail)
-        final_figure = Drawer.draw_menu(final_fittest, name="Final solution",
-                                              detail=last_detail)
-        Drawer.display_both(initial_figure, final_figure)
-    if Config.draw_progress:
-        Drawer.draw_steps(stats.get_run(run_name))
-
-    if Config.draw_all:
-        print("Drawing all steps of run...")
-        Drawer.draw_steps(stats.get_run(run_name_all))
-
+        # initial_figure = Drawer.draw_menu(init_fittest, name="Initial solution", detail=first_detail)
+        # final_figure = Drawer.draw_menu(final_fittest, name="Final solution",
+        #                                       detail=last_detail)
+        # Drawer.display_both(initial_figure, final_figure)
+    # if Config.draw_progress:
+    #     Drawer.draw_steps(stats.get_run(run_name))
+    #
+    # if Config.draw_all:
+    #     print("Drawing all steps of run...")
+    #     Drawer.draw_steps(stats.get_run(run_name_all))
+    #
     return final_fittest
 
 
@@ -105,95 +110,95 @@ def init_log(log_filename):
     return f
 
 
-def run_test(parameter="population_size", begin=1, end=100):
-    """
-    Test several values of a parameter to find optimal one
-    :param parameter: The key in Config.parameters of a parameter to test
-    :type parameter str
-    :param begin: first value of test range
-    :type begin float
-    :param end: last value of test range
-    :type end float
-    """
-    # TODO: Take time into account
-
-    Config.print_each_run = False
-    Config.parameters[Config.KEY_RUN_NUMBER] = 20
-
-    best_score = sys.maxsize
-    best_mean = sys.maxsize
-    best_median = sys.maxsize
-    best_mode = sys.maxsize
-    best_efficacy = 0
-    best_efficiency = 0
-
-    best_dist_param = -42
-    best_mean_param = -42
-    best_median_param = -42
-    best_mode_param = -42
-    best_efficacy_param = -42
-    best_efficiency_param = -42
-
-    interval = (begin, end)  # inclusive
-    step = (end - begin) / Config.parameters[Config.KEY_NB_TEST_STEPS]
-    values = arange(begin, end, step)
-    statistics = {}
-
-    log_filename = parameter + "(%.3f,%.3f).log" % (begin, end)
-    f = init_log(log_filename)
-    f.write("Initial %s: %i.\n" % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
-                                   init_score))
-
-    for v in values:
-        if parameter not in Config.parameters:
-            raise KeyError("%s is not a defined parameter." % parameter)
-        Config.parameters[parameter] = v
-
-        for run_i in range(Config.parameters[Config.KEY_RUN_NUMBER]):
-            run_name = str(run_i) + "-" + str(v) + "/" + str(interval[1])
-            final_fittest = run(run_name)
-            final_score = final_fittest.get_score()
-
-            statistics = StatKeeper.generate_stats()
-
-            if is_better_than(final_score, best_score):
-                best_score = final_score
-                best_dist_param = v
-
-            if is_better_than(statistics.mean, best_mean):
-                best_mean = statistics.mean
-                best_mean_param = v
-
-            if is_better_than(statistics.median, best_median):
-                best_median = statistics.median
-                best_median_param = v
-
-            if is_better_than(statistics.mode, best_mode):
-                best_mode = statistics.mode
-                best_mode_param = v
-
-            if statistics.efficacy > best_efficacy:
-                best_efficacy = statistics.efficacy
-                best_efficacy_param = v
-
-            if statistics.efficiency > best_efficiency:
-                best_efficiency = statistics.efficiency
-                best_efficiency_param = v
-
-        message = "End of simulation : %s=%.3f - %s" % (parameter, v, str(statistics))
-        Printer.print_and_log(message, f)
-        f.flush()
-
-    print("End of test.")
-    Printer.print_and_log("best_score value = %.3f (%.2f)" % (best_dist_param, best_score), f)
-    Printer.print_and_log("best_mean value = %.3f (%.2f)" % (best_mean_param, best_mean), f)
-    Printer.print_and_log("best_median value = %.3f (%.2f)" % (best_median_param, best_median), f)
-    Printer.print_and_log("best_mode value = %.3f (%.2f)" % (best_mode_param, best_mode), f)
-    Printer.print_and_log("best_efficacy value = %.3f (%.2f%%)" % (best_efficacy_param, best_efficacy), f)
-    Printer.print_and_log("best_efficiency value = %.3f (%.2f)" % (best_efficiency_param, best_efficiency), f)
-
-    f.flush()
-    f.close()
+# def run_test(parameter="population_size", begin=1, end=100):
+#     """
+#     Test several values of a parameter to find optimal one
+#     :param parameter: The key in Config.parameters of a parameter to test
+#     :type parameter str
+#     :param begin: first value of test range
+#     :type begin float
+#     :param end: last value of test range
+#     :type end float
+#     """
+#     # TODO: Take time into account
+#
+#     Config.print_each_run = False
+#     Config.parameters[Config.KEY_RUN_NUMBER] = 20
+#
+#     best_score = sys.maxsize
+#     best_mean = sys.maxsize
+#     best_median = sys.maxsize
+#     best_mode = sys.maxsize
+#     best_efficacy = 0
+#     best_efficiency = 0
+#
+#     best_dist_param = -42
+#     best_mean_param = -42
+#     best_median_param = -42
+#     best_mode_param = -42
+#     best_efficacy_param = -42
+#     best_efficiency_param = -42
+#
+#     interval = (begin, end)  # inclusive
+#     step = (end - begin) / Config.parameters[Config.KEY_NB_TEST_STEPS]
+#     values = arange(begin, end, step)
+#     statistics = {}
+#
+#     log_filename = parameter + "(%.3f,%.3f).log" % (begin, end)
+#     f = init_log(log_filename)
+#     f.write("Initial %s: %i.\n" % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
+#                                    init_score))
+#
+#     for v in values:
+#         if parameter not in Config.parameters:
+#             raise KeyError("%s is not a defined parameter." % parameter)
+#         Config.parameters[parameter] = v
+#
+#         for run_i in range(Config.parameters[Config.KEY_RUN_NUMBER]):
+#             run_name = str(run_i) + "-" + str(v) + "/" + str(interval[1])
+#             final_fittest = run(run_name)
+#             final_score = final_fittest.get_score()
+#
+#             statistics = StatKeeper.generate_stats()
+#
+#             if is_better_than(final_score, best_score):
+#                 best_score = final_score
+#                 best_dist_param = v
+#
+#             if is_better_than(statistics.mean, best_mean):
+#                 best_mean = statistics.mean
+#                 best_mean_param = v
+#
+#             if is_better_than(statistics.median, best_median):
+#                 best_median = statistics.median
+#                 best_median_param = v
+#
+#             if is_better_than(statistics.mode, best_mode):
+#                 best_mode = statistics.mode
+#                 best_mode_param = v
+#
+#             if statistics.efficacy > best_efficacy:
+#                 best_efficacy = statistics.efficacy
+#                 best_efficacy_param = v
+#
+#             if statistics.efficiency > best_efficiency:
+#                 best_efficiency = statistics.efficiency
+#                 best_efficiency_param = v
+#
+#         message = "End of simulation : %s=%.3f - %s" % (parameter, v, str(statistics))
+#         Printer.print_and_log(message, f)
+#         f.flush()
+#
+#     print("End of test.")
+#     Printer.print_and_log("best_score value = %.3f (%.2f)" % (best_dist_param, best_score), f)
+#     Printer.print_and_log("best_mean value = %.3f (%.2f)" % (best_mean_param, best_mean), f)
+#     Printer.print_and_log("best_median value = %.3f (%.2f)" % (best_median_param, best_median), f)
+#     Printer.print_and_log("best_mode value = %.3f (%.2f)" % (best_mode_param, best_mode), f)
+#     Printer.print_and_log("best_efficacy value = %.3f (%.2f%%)" % (best_efficacy_param, best_efficacy), f)
+#     Printer.print_and_log("best_efficiency value = %.3f (%.2f)" % (best_efficiency_param, best_efficiency), f)
+#
+#     f.flush()
+#     f.close()
 
 
 def run_standard(init_fittest=None):

@@ -1,6 +1,5 @@
 __author__ = 'PLNech'
 
-
 class Calculator():
     EXERCISE_LOW = 'low'
     EXERCISE_LIGHT = 'light'

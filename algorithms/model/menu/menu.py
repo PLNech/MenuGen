@@ -1,3 +1,5 @@
+import os
+
 __author__ = 'PLNech'
 
 from dietetics import DieteticsNeeds
@@ -134,12 +136,16 @@ class Menu(Individual):  # TODO Document!
         self.fitness_fats = 0
 
     def generate(self):
+        manager = MenuManager()
+        nb_dishes = len(manager.dishes)
+        print("Generate: MM has %i dishes. (%s)" % (nb_dishes, os.getpid()))
+
         accu_calories = 0
         over_size = 2439.7 * 7 * Config.parameters[Config.KEY_OVERWEIGHT_FACTOR]  # TODO: Use actual calories objective
         genes_length = Config.parameters[Config.KEY_MAX_DISHES]
         # random.randrange(0, Config.parameters[Config.KEY_MAX_DISHES])  # TODO: Consider random genome length
         for _ in range(genes_length):
-            dish = MenuManager.get_random()
+            dish = manager.get_random()
             accu_calories += dish.calories
             if accu_calories + dish.calories > over_size:
                 break

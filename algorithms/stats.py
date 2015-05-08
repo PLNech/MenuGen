@@ -9,7 +9,7 @@ from algorithms.model.menu.menu import Menu
 from utils.config import Config
 from utils.calc import Calc
 from utils.printer import Printer
-from utils.singleton import Singleton
+from utils.singleton import singleton
 
 
 class Statistics():
@@ -77,7 +77,7 @@ class Run():
         self.add_step(step)
 
 
-class StatKeeper(Singleton):
+class StatKeeper(singleton):
     runs = {}
 
     @staticmethod

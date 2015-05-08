@@ -15,7 +15,7 @@ names_starter = [
     "Fromage blanc",
     "Salade de champignons",
     "Tomate mozarella"
-    ]
+]
 
 names_main = [
     "Poulet roti",
@@ -50,7 +50,7 @@ names_main = [
     "Macaroni",
     "Macaroni",
     "Macaroni & Cheese",
-    ]
+]
 
 names_dessert = [
     "espresso",
@@ -120,7 +120,8 @@ names_dessert = [
     "Cake aux fruits",
     "Confiture allégée abricot",
     "Galettes chocolat Gayelord Hauser",
-    ]
+]
+
 
 def generate_recipe(name):
     r = Recipe()

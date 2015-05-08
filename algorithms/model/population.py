@@ -1,12 +1,16 @@
+import os
+from model.menu.menu import Menu
+from model.menu.menu_manager import MenuManager
+
 __author__ = 'PLNech'
 
-from algorithms.model.factories import Factory
 from algorithms.model.individual import Individual
 from utils.config import Config
 
 
 class Population():
     def __init__(self, size=Config.parameters[Config.KEY_POPULATION_SIZE], initialise=True):
+
         """
         :param size:
         :param initialise:
@@ -14,12 +18,19 @@ class Population():
         :rtype Population
         """
         self.population = [None] * size
+        manager = MenuManager()
+        nb_dishes = len(manager.dishes)
+        print("Pop init: MM has %i dishes. (%s)" % (nb_dishes, os.getpid()))
+
         if initialise:
             if Config.print_population:
                 print("Initialising population of size %i" % size)
             for i in range(size):
-                new_individual = Factory.individual()
+                nb_dishes = len(manager.dishes)
+                print("New indiv %i: MM has %i dishes. (%s)" % (i, nb_dishes, os.getpid()))
+                new_individual = Menu()
                 new_individual.generate()
+
                 self.save_at(i, new_individual)
             if Config.print_population:
                 print("Population generated: \n%s\n." % str(self))

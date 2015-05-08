@@ -1,7 +1,8 @@
 __author__ = 'PLNech'
 
+import os
+
 from random import randrange
-from collections import defaultdict
 
 from algorithms.model.manager import Manager
 from algorithms.model.menu.dish import Dish
@@ -12,49 +13,44 @@ class MenuManager(Manager):
     dishes = []
     names_count = {}
 
-    @staticmethod
-    def init():
+    def init(self):
         for i in range(Config.parameters[Config.KEY_NB_DISHES]):
             dish = Dish()
             gen_name = dish.name
-            if gen_name in MenuManager.names_count:
-                MenuManager.names_count[gen_name] += 1
-                dish.name += "(%d)" % MenuManager.names_count[gen_name]
+            if gen_name in self.names_count:
+                self.names_count[gen_name] += 1
+                dish.name += "(%d)" % self.names_count[gen_name]
             else:
-                MenuManager.names_count[gen_name] = 1
-            MenuManager.add_item(dish)
+                self.names_count[gen_name] = 1
+            self.add_item(dish)
 
             if Config.print_items:
                 print("Dish %s." % dish)
+        print("Initialised MenuManager with %i dishes." % len(self.dishes))
 
-    @staticmethod
-    def reset():
-        MenuManager.dishes = []
+    def reset(self):
+        self.dishes = []
 
-    @staticmethod
-    def add_item(dish):
-        MenuManager.dishes.append(dish)
+    def add_item(self, dish):
+        self.dishes.append(dish)
 
-    @staticmethod
-    def get_item(index):
-        return MenuManager.dishes[index]
+    def get_item(self, index):
+        return self.dishes[index]
 
-    @staticmethod
-    def get_random():
-        return MenuManager.dishes[randrange(0, len(MenuManager.dishes))]
+    def get_random(self):
+        nb_dishes = len(self.dishes)
+        print("MenuManager currently has %i dishes.. (%s)" % (nb_dishes, os.getpid()))
+        return self.dishes[randrange(0, nb_dishes)]
 
-    @staticmethod
-    def get_index(dish):
+    def get_index(self, dish):
         try:
-            return MenuManager.dishes.index(dish)
+            return self.dishes.index(dish)
         except ValueError:
-            print("%s was not found in MenuManager:\n%s." % (str(dish), MenuManager.print_items()))
+            print("%s was not found in MenuManager:\n%s." % (str(dish), self.print_items()))
             raise ValueError()
 
-    @staticmethod
-    def print_items():
-        return "\n".join(map(str, MenuManager.dishes))
+    def print_items(self):
+        return "\n".join(map(str, self.dishes))
 
-    @staticmethod
-    def count():
-        return len(MenuManager.dishes)
+    def count(self):
+        return len(self.dishes)

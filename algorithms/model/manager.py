@@ -1,31 +1,28 @@
 __author__ = 'PLNech'
 
-from utils.singleton import Singleton
+from utils.singleton import singleton
 
 
-class Manager(Singleton):
+class Manager(singleton):
 
     def __str__(self):
-        return Manager.print_items()
+        return Manager.print_items(self)
 
-    @staticmethod
-    def init():
+    def init(self):
         """
         Initialises the manager with random items
 
         """
         raise NotImplementedError()
 
-    @staticmethod
-    def reset():
+    def reset(self):
         """
         Resets the manager, emptying its item list
         :return:
         """
         raise NotImplementedError()
 
-    @staticmethod
-    def add_item(item):
+    def add_item(self, item):
         """
         Adds an item to the manager's list
 
@@ -34,8 +31,7 @@ class Manager(Singleton):
         """
         raise NotImplementedError()
 
-    @staticmethod
-    def get_item(index):
+    def get_item(self, index):
         """
         Get the item at the given index
 
@@ -45,8 +41,7 @@ class Manager(Singleton):
         """
         raise NotImplementedError()
 
-    @staticmethod
-    def get_index(item):
+    def get_index(self, item):
         """
         Get the index of a given item
         :param item: The item to lookup
@@ -55,16 +50,14 @@ class Manager(Singleton):
         """
         raise NotImplementedError()
 
-    @staticmethod
-    def print_items():
+    def print_items(self):
         """
         Prints the items currently in the manager
 
         """
         raise NotImplementedError()
 
-    @staticmethod
-    def count():
+    def count(self):
         """
         Returns the amount of items in the manager
         :rtype int
