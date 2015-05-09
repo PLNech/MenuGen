@@ -13,6 +13,10 @@ class MenuManager(Manager):
     dishes = []
     names_count = {}
 
+    def __init__(self):
+        if len(self.dishes) == 0:
+            self.init()
+
     def init(self):
         for i in range(Config.parameters[Config.KEY_NB_DISHES]):
             dish = Dish()
@@ -39,7 +43,6 @@ class MenuManager(Manager):
 
     def get_random(self):
         nb_dishes = len(self.dishes)
-        print("MenuManager currently has %i dishes.. (%s)" % (nb_dishes, os.getpid()))
         return self.dishes[randrange(0, nb_dishes)]
 
     def get_index(self, dish):

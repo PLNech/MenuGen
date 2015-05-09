@@ -20,14 +20,12 @@ class Population():
         self.population = [None] * size
         manager = MenuManager()
         nb_dishes = len(manager.dishes)
-        print("Pop init: MM has %i dishes. (%s)" % (nb_dishes, os.getpid()))
 
         if initialise:
             if Config.print_population:
                 print("Initialising population of size %i" % size)
             for i in range(size):
                 nb_dishes = len(manager.dishes)
-                print("New indiv %i: MM has %i dishes. (%s)" % (i, nb_dishes, os.getpid()))
                 new_individual = Menu()
                 new_individual.generate()
 

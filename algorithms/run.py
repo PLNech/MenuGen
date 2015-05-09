@@ -25,7 +25,6 @@ def run(run_name, init_fittest=None):
     # New run
     manager = MenuManager()
     nb_dishes = len(manager.dishes)
-    print("New run: MM has %i dishes. (%s)" % (nb_dishes, os.getpid()))
     stats.new_run(run_name, Config.parameters[Config.KEY_NB_GENERATION])
     population = Population(Config.parameters[Config.KEY_POPULATION_SIZE])
 
