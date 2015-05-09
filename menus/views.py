@@ -1,4 +1,3 @@
-import time
 from dietetics import Calculator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -6,14 +5,12 @@ from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from menus.data.generator import generate_planning
 from menus.models import Recipe
-from run import run_standard
-from utils.config import Config
 
 
 def landing(request):
     request.session.flush()
     # if 'liked_aliments' not in request.session:
-    #     request.session['liked_aliments'] = ["Eau", "Chocolat", "Tagliatelles", "Dinde", "Poulet", "Boeuf", "Jambon", "Sucre", "Semoule", "Riz", "Spaghetti", "Lasagnes", "Framboise", "Fraise", "Cerise", "Groseille", "Pomme", "Poire", "Ananas", "Courgette", "Carotte", "Aubergine", "Tomate", "Radis", "Lait", "Oeuf", "Myrtille", "Farine", "Abricot", "Ail", "Oignon", "Saumon", "Beurre", "Fromage", "Fruits", "Légumes", "Viande", "Poisson", "Menthe", "Thym", "Huile de tournesol", "Basilique", "Petits pois", "Haricots verts" ]
+    # request.session['liked_aliments'] = ["Eau", "Chocolat", "Tagliatelles", "Dinde", "Poulet", "Boeuf", "Jambon", "Sucre", "Semoule", "Riz", "Spaghetti", "Lasagnes", "Framboise", "Fraise", "Cerise", "Groseille", "Pomme", "Poire", "Ananas", "Courgette", "Carotte", "Aubergine", "Tomate", "Radis", "Lait", "Oeuf", "Myrtille", "Farine", "Abricot", "Ail", "Oignon", "Saumon", "Beurre", "Fromage", "Fruits", "Légumes", "Viande", "Poisson", "Menthe", "Thym", "Huile de tournesol", "Basilique", "Petits pois", "Haricots verts" ]
     # if 'disliked_aliments' not in request.session:
     #     request.session['disliked_aliments'] = []
 
@@ -41,7 +38,6 @@ def generate_placements_detail(request):
 
 
 def generation(request):
-
     """ Profile values are accessible from current session
         ex:
         WhateverAlgo(request.session['sex'], request.session['age'], request.session['height'], request.session['weight'])
@@ -183,7 +179,7 @@ def update_tastes(request):
         return HttpResponseNotAllowed(['POST'])
 
     # if 'liked' in request.POST:
-    #     request.session['liked_aliments'].append(request.POST.get('liked'))
+    # request.session['liked_aliments'].append(request.POST.get('liked'))
     # if 'disliked' in request.POST:
     #     l = request.session['disliked_aliments']
     #     print(l)
@@ -206,13 +202,13 @@ def physiology(request):
         """ TODO:
         - Use current_physio in template to pre-fill profile information.
         - Add ranges for to fill the select tag in template (refer to ages ?) """
-        return render(request, 'profile/physiology.html', {'current_physio': request.session })
+        return render(request, 'profile/physiology.html', {'current_physio': request.session})
 
 
 def regimes(request):
     health_regimes_list = []
     value_regimes_list = []
-    nutrients_regimes_list = []
+    nutrients_regimes_st = []
     regime_sans_sel = {
         'name': 'Hyposodé (sans sel)',
         'desc': "Régime pour restreindre le plus possible les apports en sel dans l'alimentation."
@@ -295,7 +291,7 @@ def tastes(request):
             "Haricots verts"
         ]
     if 'disliked_aliments' not in request.session:
-        request.session['disliked_aliments'] = [ "Poulet", "Jambon", "Dinde", "Boeuf" ]
+        request.session['disliked_aliments'] = ["Poulet", "Jambon", "Dinde", "Boeuf"]
 
     return render(request, 'profile/tastes.html', {})
 
