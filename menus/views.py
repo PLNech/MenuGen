@@ -1,3 +1,4 @@
+import time
 from dietetics import Calculator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -80,7 +81,7 @@ def generation(request):
     if 'sex' in request.session:
         user_sex = request.session['sex']
     else:
-        user_sex = request.session['sex']
+        user_sex = Calculator.SEX_H
 
     needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
 
@@ -88,7 +89,7 @@ def generation(request):
     planning = generate_planning(nb_days, nb_meals, nb_dishes)
 
     # Config.parameters[Config.KEY_MAX_DISHES] = nb_days * nb_meals * nb_dishes
-    # planning2 = run_standard()
+    # planning2 = run_standard(None, time.ctime())
     # print(planning2)
 
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})

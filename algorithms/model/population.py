@@ -19,13 +19,11 @@ class Population():
         """
         self.population = [None] * size
         manager = MenuManager()
-        nb_dishes = len(manager.dishes)
 
         if initialise:
             if Config.print_population:
                 print("Initialising population of size %i" % size)
             for i in range(size):
-                nb_dishes = len(manager.dishes)
                 new_individual = Menu()
                 new_individual.generate()
 

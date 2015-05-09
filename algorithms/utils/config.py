@@ -35,11 +35,11 @@ class Config():
 
         # Amounts
         KEY_RUN_NUMBER: 1,  # Number of runs
-        KEY_NB_GENERATION: 100,  # Number of generations
+        KEY_NB_GENERATION: 200,  # Number of generations
 
         # Algorithm parameters
         KEY_ELITISM: True,
-        KEY_MUTATION_RATE: 0.15,
+        KEY_MUTATION_RATE: 0.015,
 
         KEY_SOLUTION_TYPE: "Menu",  # TODO Get rid of Trip variability
 
@@ -48,7 +48,7 @@ class Config():
         KEY_GRID_SIZE: 200,  # Size of the city position grid
 
         # Menu-related parameters
-        KEY_NB_DISHES: 1000,  # Number of dishes to choose between
+        KEY_NB_DISHES: 10,  # Number of dishes to choose between
         KEY_MAX_DISHES: 7 * 5 * 3,  # Maximum dishes per weekly menu
         KEY_MAX_DISH_CALORIES: 250,  # Maximum amount of calories in a dish
         KEY_MAX_DISH_FATS: 100,  # Maximum amount of grams of fat in a dish
@@ -65,13 +65,13 @@ class Config():
         KEY_NB_TEST_STEPS: 20,  # Number of test steps
     }
 
-    draw_progress = True  # Should we draw progress of each significative generation?
-    draw_results = parameters[KEY_SOLUTION_TYPE] is "Trip"  # Should we draw results of each run?
-    draw_all = parameters[KEY_SOLUTION_TYPE] is "Menu"  # Should we draw all steps of each run?
+    draw_progress = False  # Should we draw progress of each significative generation?
+    draw_results = False  # Should we draw results of each run?
+    draw_all = False  # Should we draw all steps of each run?
 
     print_each_run = True  # Should we print results for each run?
     print_generation = True  # Should we print details of each generation?
-    print_population = False  # Should we print the generated population?
+    print_population = True  # Should we print the generated population?
     print_items = False  # Should we print the randomly generated items ?
     print_selection = False  # Should we print the selection of individuals?
     print_crossover = False  # Should we print the crossover of individuals?

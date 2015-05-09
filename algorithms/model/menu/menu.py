@@ -137,7 +137,6 @@ class Menu(Individual):  # TODO Document!
 
     def generate(self):
         manager = MenuManager()
-        nb_dishes = len(manager.dishes)
 
         accu_calories = 0
         over_size = 2439.7 * 7 * Config.parameters[Config.KEY_OVERWEIGHT_FACTOR]  # TODO: Use actual calories objective

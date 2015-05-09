@@ -1,6 +1,5 @@
 __author__ = 'PLNech'
 
-from algorithms.model.factories import choose_method
 from utils.config import Config
 
 
@@ -136,21 +135,11 @@ class Printer():
     @staticmethod
     def print_final(initial_value, best_value, run_name):
         solution_type = Config.parameters[Config.KEY_SOLUTION_TYPE]
-        improvement = choose_method(Printer.final_improvement_trip,
-                                    Printer.final_improvement_menu,
-                                    (initial_value, best_value))
+        improvement = best_value - initial_value
         print("Run %s - best %s found: %.2f%s. (%+.2f%%)" % (
             run_name, Config.score_dimensions[solution_type],
             best_value, Config.score_units[solution_type],
             improvement))
-
-    @staticmethod
-    def final_improvement_menu(initial_value, best_value):
-        return best_value - initial_value
-
-    @staticmethod
-    def final_improvement_trip(initial_value, best_value):
-        return 100 * (1 - best_value / initial_value)
 
     @staticmethod
     def print_init():

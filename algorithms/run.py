@@ -1,8 +1,7 @@
+import algorithm
 from model.menu.menu_manager import MenuManager
 
 __author__ = 'PLNech'
-
-from algorithms.model.menu.menu import Menu
 
 # from numpy import arange
 import argparse
@@ -13,9 +12,8 @@ from utils.config import Config
 from stats import StatKeeper
 # from utils.drawer import Drawer
 from utils.printer import Printer
-from algorithm import Algorithm
-from algorithms.model.population import Population
-from algorithms.model.factories import Factory, is_better_than
+from model.population import Population
+from model.factories import Factory, is_better_than
 
 stats = StatKeeper
 manager = Factory.manager()
@@ -30,18 +28,18 @@ def run(run_name, init_fittest=None):
 
     if init_fittest is None:
         init_fittest = population.get_at(0)
-
+    init_score = init_fittest.get_score()
     stats.save_progress(run_name, 0, init_fittest.genes)
 
-    run_name_all = run_name + "_all"
     if Config.draw_all:
+        run_name_all = run_name + "_all"
         stats.new_run(run_name_all, Config.parameters[Config.KEY_NB_GENERATION])
         stats.save_progress(run_name_all, 0, init_fittest.genes)
 
     if Config.print_each_run:
         Printer.print_run_init(init_score, init_fittest)
 
-    population = Algorithm.evolve(population)
+    population = algorithm.evolve(population)
     if is_better_than(sys.maxsize, 0):
         old_best = 0
     else:
@@ -49,14 +47,15 @@ def run(run_name, init_fittest=None):
 
     for generation_i in range(Config.parameters[Config.KEY_NB_GENERATION]):
         stat_index = generation_i + 1  # the first individual was already added in stats
-        population = Algorithm.evolve(population)
+        population = algorithm.evolve(population)
         best_individual = population.get_fittest()
         best_score = best_individual.get_score()
 
         if is_better_than(best_score, old_best):
             stats.save_progress(run_name, stat_index, best_individual.genes)
             old_best = best_score
-        stats.save_progress(run_name_all, stat_index, best_individual.genes)
+        if Config.draw_all:
+            stats.save_progress(run_name_all, stat_index, best_individual.genes)
 
         if Config.print_generation:
             if generation_i < Config.parameters[Config.KEY_NB_GENERATION] - 1:
@@ -78,27 +77,6 @@ def run(run_name, init_fittest=None):
     if Config.print_each_run:
         stats.print_run_stats(efficacy_str_color, efficiency_str_color, init_fittest, final_fittest, run_name)
 
-    if Config.draw_results:
-        detail_menu = init_fittest.print_fitness()
-        detail_trip = ""
-        first_detail = detail_menu if type(init_fittest) is Menu else detail_trip  # TODO: Cleanup
-
-        detail_menu = final_fittest.print_fitness()
-        detail_last_trip = "%s shorter, %s%s gained per generation." % (efficacy_str_raw, efficiency_str_raw,
-                                                                        Config.score_units[solution_type])
-        last_detail = detail_menu if type(init_fittest) is Menu else detail_last_trip
-
-        # initial_figure = Drawer.draw_menu(init_fittest, name="Initial solution", detail=first_detail)
-        # final_figure = Drawer.draw_menu(final_fittest, name="Final solution",
-        #                                       detail=last_detail)
-        # Drawer.display_both(initial_figure, final_figure)
-    # if Config.draw_progress:
-    #     Drawer.draw_steps(stats.get_run(run_name))
-    #
-    # if Config.draw_all:
-    #     print("Drawing all steps of run...")
-    #     Drawer.draw_steps(stats.get_run(run_name_all))
-    #
     return final_fittest
 
 
@@ -110,7 +88,7 @@ def init_log(log_filename):
 
 
 # def run_test(parameter="population_size", begin=1, end=100):
-#     """
+# """
 #     Test several values of a parameter to find optimal one
 #     :param parameter: The key in Config.parameters of a parameter to test
 #     :type parameter str
@@ -200,12 +178,11 @@ def init_log(log_filename):
 #     f.close()
 
 
-def run_standard(init_fittest=None):
+def run_standard(init_fittest=None, run_name="run"):
     nb_runs = Config.parameters[Config.KEY_RUN_NUMBER]
     nb_gens = Config.parameters[Config.KEY_NB_GENERATION]
     nb_pop = Config.parameters[Config.KEY_POPULATION_SIZE]
 
-    run_name = "%i Générations de %i Menus" % (nb_gens, nb_pop)
     for run_i in range(0, nb_runs):
         if nb_runs > 1:
             run_name = str(run_i)
@@ -213,8 +190,8 @@ def run_standard(init_fittest=None):
 
     print("Simulation ended.")
 
-    if nb_runs > 1:
-        StatKeeper.print_statistics(init_score)
+    if nb_runs > 1 and init_fittest is not None:
+        StatKeeper.print_statistics(init_fittest.get_score())
 
 
 if __name__ == "__main__":
@@ -236,13 +213,12 @@ if __name__ == "__main__":
 
     # First individual for comparison
     # we use the same one to bench all runs
-    init_pop = Population(1)
-    init_first = init_pop.get_at(0)
-    init_score = init_first.get_score()
+    main_pop = Population(1)
+    main_first = main_pop.get_at(0)
     if not Config.print_each_run:
         print("Initial %s: %i." % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
-                                   init_score))
+                                   main_first.get_score()))
 
-    Algorithm.setup()
+    algorithm.setup()
     # run_test("mutation_rate", 0.25, 0.5)
-    run_standard(init_first)
+    run_standard(main_first)

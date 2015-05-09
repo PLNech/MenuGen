@@ -1,9 +1,8 @@
 __author__ = 'PLNech'
 
-import os
-
 from random import randrange
 
+from utils.printer import Printer
 from algorithms.model.manager import Manager
 from algorithms.model.menu.dish import Dish
 from utils.config import Config
@@ -14,7 +13,8 @@ class MenuManager(Manager):
     names_count = {}
 
     def __init__(self):
-        if len(self.dishes) == 0:
+        if len(self.dishes) == 0:  # FIXME Still empty
+            print(Printer.err("Manager is empty. Initialising..."), flush=True)
             self.init()
 
     def init(self):
@@ -49,8 +49,9 @@ class MenuManager(Manager):
         try:
             return self.dishes.index(dish)
         except ValueError:
-            print("%s was not found in MenuManager:\n%s." % (str(dish), self.print_items()))
-            raise ValueError()
+            msg = "%s was not found in MenuManager:\n%s." % (str(dish), self.print_items())
+            print(msg, flush=True)
+            raise ValueError(msg)
 
     def print_items(self):
         return "\n".join(map(str, self.dishes))
