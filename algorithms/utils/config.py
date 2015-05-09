@@ -21,6 +21,11 @@ class Config():
     KEY_NB_DISHES = "nb_dishes"
     KEY_MAX_DISHES = "max_dishes"
 
+    KEY_OBJECTIVE_CALORIES = "max_calories"
+    KEY_OBJECTIVE_PROTEINS = "max_proteins"
+    KEY_OBJECTIVE_CARBOHYDRATES = "max_carbs"
+    KEY_OBJECTIVE_FATS = "max_fats"
+
     KEY_NB_TEST_STEPS = "nb_test_steps"
 
     parameters = {
@@ -50,6 +55,12 @@ class Config():
         KEY_MAX_DISH_CARBOHYDRATES: 106,  # Maximum amount of grams of carbohydrates in a dish
         KEY_MAX_DISH_PROTEINS: 50,  # Maximum amount of grams of proteins in a dish TODO Use real value
         KEY_OVERWEIGHT_FACTOR: 1.1,  # Factor of allowed overweight
+
+        # Optimisation-related parameters
+        KEY_OBJECTIVE_CALORIES: 2439.7 * 7,
+        KEY_OBJECTIVE_PROTEINS: 364.0 * 7,
+        KEY_OBJECTIVE_CARBOHYDRATES: 1341.8 * 7,
+        KEY_OBJECTIVE_FATS: 670.9 * 7,
 
         KEY_NB_TEST_STEPS: 20,  # Number of test steps
     }

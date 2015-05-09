@@ -1,9 +1,12 @@
+from dietetics import Calculator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from menus.data.generator import generate_planning
 from menus.models import Recipe
+from run import run_standard
+from utils.config import Config
 
 
 def landing(request):
@@ -55,9 +58,39 @@ def generation(request):
     """ Use the days number if exists """
     if 'nb_days' in request.session:
         nb_days = int(request.session['nb_days'])
+    nb_meals = 5  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
+    nb_dishes = 3  # TODO: Determine appropriate amount for meals ?
+
+    user_exercise = Calculator.EXERCISE_MODERATE  # TODO: Get exercise of user
+    if 'age' in request.session:
+        user_age = int(request.session['age'])
+    else:
+        user_age = 20
+
+    if 'height' in request.session:
+        user_height = int(float(request.session['height']) * 100)
+    else:
+        user_height = 180
+
+    if 'weight' in request.session:
+        user_weight = int(request.session['weight'])
+    else:
+        user_weight = 75
+
+    if 'sex' in request.session:
+        user_sex = request.session['sex']
+    else:
+        user_sex = request.session['sex']
+
+    needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
 
     """ Here is an example of a matrix containing (nb_days x 5) meals """
-    planning = generate_planning(nb_days, 5)
+    planning = generate_planning(nb_days, nb_meals, nb_dishes)
+
+    # Config.parameters[Config.KEY_MAX_DISHES] = nb_days * nb_meals * nb_dishes
+    # planning2 = run_standard()
+    # print(planning2)
+
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 
 
@@ -219,9 +252,9 @@ def tastes(request):
     """ Here should be fetch the aliments """
 
     if 'liked_aliments' not in request.session:
-        request.session['liked_aliments'] = [ 
+        request.session['liked_aliments'] = [
             "Carotte",
-            "Brocoli", 
+            "Brocoli",
             "Concombre",
             "Aubergine",
             "Courgette",

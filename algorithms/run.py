@@ -234,7 +234,6 @@ if __name__ == "__main__":
         Config.parameters[Config.KEY_SOLUTION_TYPE] = args['type']
 
     Printer.print_init()
-    manager.init()
 
     # First individual for comparison
     # we use the same one to bench all runs

@@ -1,5 +1,6 @@
 __author__ = 'PLNech'
 
+
 class Calculator():
     EXERCISE_LOW = 'low'
     EXERCISE_LIGHT = 'light'
@@ -47,6 +48,16 @@ class Calculator():
 
     @staticmethod
     def estimate_needs(age, size, weight, sex, exercise):
+        """
+        Return a DieteticsNeeds object describing the calculated needs
+
+        :type age: int
+        :type size: int (cm)
+        :type weight: int (kg)
+        :type sex: str SEX_H / SEX_F
+        :type exercise: float EXERCISE_X
+        :rtype: DieteticsNeeds
+        """
         print("Calculating objectives for a %i year-old %s of %icm and %ikg, exercising %sly..." %
               (age, sex, size, weight, exercise))
 
@@ -71,6 +82,7 @@ class Calculator():
 
 
 class DieteticsNeeds():
+    # FIXME Use min and max objectives
     def __init__(self, calories, proteins, carbohydrates, fats):
         self.calories = calories
         self.grams_fats = fats

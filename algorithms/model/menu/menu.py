@@ -72,11 +72,11 @@ class Menu(Individual):  # TODO Document!
         """
         if self.fitness != 0:
             return self.fitness
-        if objectives is None:  # TODO: Link to dietetics
-            objective_calories = 2439.7 * 7
-            objective_proteins = 364.0 * 7
-            objective_carbohydrates = 1341.8 * 7
-            objective_fats = 670.9 * 7
+        if objectives is None:
+            objective_calories = Config.parameters[Config.KEY_MAX_DISH_CALORIES]
+            objective_proteins = Config.parameters[Config.KEY_MAX_DISH_PROTEINS]
+            objective_carbohydrates = Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES]
+            objective_fats = Config.parameters[Config.KEY_OBJECTIVE_FATS]
         else:
             objective_calories = objectives.calories
             objective_proteins = objectives.grams_proteins

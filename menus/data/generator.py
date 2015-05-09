@@ -133,7 +133,7 @@ def generate_recipe(name):
     return r
 
 
-def generate_planning(nb_days, nb_meals_per_day):
+def generate_planning(nb_days, nb_meals_per_day, nb_dishes):
     planning = []
     for j in range(nb_meals_per_day):
         daily_planning = []
