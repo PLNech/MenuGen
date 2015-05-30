@@ -24,7 +24,7 @@ ACTIVITY = (
     (0, 'Jamais'),
     (1, 'De temps en temps'),
     (2, 'Souvent'),
-    (3, 'Tous le temps'),
+    (3, 'Tout le temps'),
 )
 
 
@@ -54,7 +54,7 @@ class Recipe(models.Model):
     cook_time = models.IntegerField()
     amount = models.IntegerField()
     difficulty = models.IntegerField(choices=EASE)
-    price = models.IntegerField(choices=PRICE)  # FIXME : exact quantification? -> check marmiton
+    price = models.IntegerField(choices=PRICE)
     steps = models.TextField()
     detail = models.TextField()
     drink = models.TextField()

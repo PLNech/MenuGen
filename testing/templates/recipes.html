@@ -1,0 +1,101 @@
+{% extends 'base.html' %}  
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{% url 'testing.views.index' %}">Testing: Recipes (scraping and ingredient text mining)</a>
+      </div>
+    </div>
+  </nav>
+
+  <p><a class="btn btn-default pull-right" href="{% url 'testing.views.recipes' %}">random recipe</a></p>
+
+  <ul class="nav nav-tabs">
+    <li class="active"> <a href="#infos" data-toggle="tab">General infos</a> </li>
+    <li> <a href="#ingredients" data-toggle="tab">Ingredients</a> </li>
+  </ul>
+
+  <div class="row col-md-6 pull-left tab-content">
+    <table class="table table-striped tab-pane active" id="infos">
+      <tbody>
+        <tr>
+          <th>Titre:</th>
+          <td>{{ recipe.title }}</td>
+        </tr>
+        <tr>
+          <th>Url:</th>
+          <td><a href="{{ recipe.url }}">{{ recipe.url }}</a></td>
+        </tr>
+        <tr>
+          <th>Image:</th>
+          <td>{{ recipe.picture_url }}</td>
+        </tr>
+        <tr>
+          <th>Type de repas:</th>
+          <td>{{ recipe.meal_type }}</td>
+        </tr>
+        <tr>
+          <th>Difficulté:</th>
+          <td>{{ recipe.difficulty }}</td>
+        </tr>
+        <tr>
+          <th>Gamme de prix:</th>
+          <td>{{ recipe.price_range }}</td>
+        </tr>
+        <tr>
+          <th>Temps de préparation:</th>
+          <td>{{ recipe.preptime }} {{ recipe.preptime_unit }}</td>
+        </tr>
+        <tr>
+          <th>Temps de cuisson:</th>
+          <td>{{ recipe.cooktime }} {{ recipe.cooktime_unit }}</td>
+        </tr>
+        <tr>
+          <th>Nombre de personnes:</th>
+          <td>{{ recipe.nb_person }}</td>
+        </tr>
+        <tr>
+          <th>Instructions:</th>
+          <td>{{ recipe.instructions }}</td>
+        </tr>
+        <tr>
+          <th>Remarques:</th>
+          <td>{{ recipe.remarks }}</td>
+        </tr>
+        <tr>
+          <th>Boisson:</th>
+          <td>{{ recipe.drink }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-striped tab-pane" id="ingredients">
+      <tbody>
+        <tr>
+          <th>Text</th>
+          <th>Parsed quantity</th>
+          <th>Parsed unit</th>
+          <th>Parsed name</th>
+        </tr>
+        {% for i in recipe.ingredients %}
+        <tr>
+          <td>{{ i.text }}</td>
+          <td>{{ i.quantity }}</td>
+          <td>{{ i.unit }}</td>
+          <td>{{ i.name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row col-md-6 pull-right">
+    <p><img class="img-thumbnail" src="{% static 'screen.png' %}" alt="no screenshot found"/></p>
+  </div>
+
+</div>
+{% endblock %}

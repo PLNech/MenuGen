@@ -3,3 +3,5 @@ django-stdimage==1.2.2
 Pillow==2.8.1
 progressbar2==2.7.3
 numpy
+requests
+beautifulsoup4
