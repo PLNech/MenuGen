@@ -1,3 +1,7 @@
+/*
+ * Webshot: take a screenshot of the page at the given url
+ * requires phantomjs
+ */
 
 var width = 800
 var height = 600

@@ -12,7 +12,19 @@
     </div>
   </nav>
 
-  <p><a class="btn btn-default pull-right" href="{% url 'testing.views.recipes' %}">random recipe</a></p>
+  <div class="row">
+    <div class="col-sm-12">
+      <a class="btn btn-default pull-right" href="{% url 'testing.views.recipes' %}">Recette au hasard</a>
+      <form class="form-horizontal col-sm-7 pull-right" action="{% url 'testing.views.recipes' %}" method="POST">
+        <label for="url-input" class="col-sm-6 control-label">Url spécifique:</label>
+        <div class="col-sm-4">
+          <input type="text" id="url-input" name="recipe_url" class="form-control">
+        </div>
+        {% csrf_token %}
+        <button class="btn btn-default col-sm-1" type="submit">Go</button>
+      </form>
+    </div>
+  </div>
 
   <ul class="nav nav-tabs">
     <li class="active"> <a href="#infos" data-toggle="tab">General infos</a> </li>

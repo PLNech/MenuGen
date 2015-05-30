@@ -12,7 +12,7 @@ class Ingredient:
 
         word2num = {
                 "un demi" : 1/2,
-                "trois-quarts" : 3/4, "trois quarts" : 3/4,
+                "trois-quarts" : 3/4, "trois quarts" : 3/4, "3 quart" : 3/4,
                 "un" : 1, "une" : 1,
                 "deux" : 2,
                 "trois" : 3,
