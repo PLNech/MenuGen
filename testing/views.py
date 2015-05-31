@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+from testing.models import Comment
 from testing.recipe_engine.scraper import random_recipe, Recipe
 
 def index(request):
@@ -9,5 +11,19 @@ def recipes(request):
         recipe = Recipe(request.POST['recipe_url'])
     else:
         recipe = random_recipe()
-    #recipe.save_screenshot()
-    return render(request, 'recipes.html', { 'recipe': recipe })
+    recipe.save_screenshot()
+
+    com_saved = False
+    if 'new_comment' in request.POST and request.POST['new_comment']:
+        if 'com_url' in request.POST and request.POST['com_url']:
+            com = Comment(url=request.POST['com_url'], text=request.POST['new_comment'])
+            com.save()
+            com_saved = True
+
+    comments = Comment.objects.all()
+
+    return render(request, 'recipes.html', {
+        'recipe': recipe,
+        'com_saved': com_saved,
+        'comments': comments
+    })

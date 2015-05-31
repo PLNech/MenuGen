@@ -7,4 +7,4 @@
 migrations/
 __pycache__/
 algorithms/img/
-testing/static/*.png
+testing/static/screen.png

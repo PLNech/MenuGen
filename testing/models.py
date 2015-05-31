@@ -1,3 +1,5 @@
 from django.db import models
 
-# Create your models here.
+class Comment(models.Model):
+    url = models.URLField()
+    text = models.TextField()
