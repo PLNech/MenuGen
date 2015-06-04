@@ -1,8 +1,8 @@
 __author__ = 'PLNech'
 
-from algorithms.model.menu.menu import Menu
-from algorithms.model.menu.dish import Dish
-from algorithms.model.menu.menu_manager import MenuManager
+from model.menu.menu import Menu
+from model.menu.dish import Dish
+from model.menu.menu_manager import MenuManager
 from utils.config import Config
 
 

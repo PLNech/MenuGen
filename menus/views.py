@@ -1,3 +1,4 @@
+import time
 from menus.algorithms.dietetics import Calculator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -6,6 +7,8 @@ from django.shortcuts import render, redirect
 from menus.data.generator import generate_planning
 from menus.models import Recipe
 from menus.models import Ingredient
+from run import run_standard
+from utils.config import Config
 
 
 def landing(request):

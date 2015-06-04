@@ -1,6 +1,6 @@
-from model.menu.menu import Menu
-from model.menu.dish import Dish
-from model.menu.menu_manager import MenuManager
+from menus.algorithms.model.menu.menu import Menu
+from menus.algorithms.model.menu.dish import Dish
+from menus.algorithms.model.menu.menu_manager import MenuManager
 
 __author__ = 'PLNech'
 
@@ -157,7 +157,7 @@ def mutate_random(individual):
     mut_str = ""
     digit_format = "%" + str(math.ceil(math.log10(Config.parameters[Config.KEY_NB_DISHES]))) + "d."
     genome_length = individual.genome_length()
-    manager = MenuManager()
+    manager = MenuManager.get()
     for i in range(genome_length):
         assert (i < genome_length)
 
@@ -165,7 +165,7 @@ def mutate_random(individual):
         index_str = digit_format % index
         gene_str += index_str
         if random.random() < Config.parameters[Config.KEY_MUTATION_RATE]:
-            gene = Dish()
+            gene = manager.get_random()
             individual.set_gene(i, gene)
             mut_str += digit_format % manager.get_index(gene)
         else:

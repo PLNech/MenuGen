@@ -4,15 +4,15 @@ from copy import deepcopy
 from collections import defaultdict
 from math import sqrt
 
-from algorithms.model.factories import choose_method
-from algorithms.model.menu.menu import Menu
+from menus.algorithms.model.factories import choose_method
+from menus.algorithms.model.menu.menu import Menu
 from utils.config import Config
 from utils.calc import Calc
 from utils.printer import Printer
 from utils.singleton import singleton
 
 
-class Statistics():
+class Statistics:
     """
     Statistics holder object
     Mean = Mean value in float

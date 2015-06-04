@@ -1,14 +1,13 @@
-import os
+__author__ = 'PLNech'
+
 from model.menu.menu import Menu
 from model.menu.menu_manager import MenuManager
 
-__author__ = 'PLNech'
-
-from algorithms.model.individual import Individual
+from menus.algorithms.model.individual import Individual
 from utils.config import Config
 
 
-class Population():
+class Population:
     def __init__(self, size=Config.parameters[Config.KEY_POPULATION_SIZE], initialise=True):
 
         """
@@ -18,7 +17,7 @@ class Population():
         :rtype Population
         """
         self.population = [None] * size
-        manager = MenuManager()
+        manager = MenuManager.get()
 
         if initialise:
             if Config.print_population:

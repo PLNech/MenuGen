@@ -1,5 +1,5 @@
 import algorithm
-from model.menu.menu_manager import MenuManager
+from menus.algorithms.model.menu.menu_manager import MenuManager
 
 __author__ = 'PLNech'
 
@@ -16,12 +16,10 @@ from model.population import Population
 from model.factories import Factory, is_better_than
 
 stats = StatKeeper
-manager = Factory.manager()
-
 
 def run(run_name, init_fittest=None):
     # New run
-    manager = MenuManager()
+    manager = MenuManager.get()
     nb_dishes = len(manager.dishes)
     stats.new_run(run_name, Config.parameters[Config.KEY_NB_GENERATION])
     population = Population(Config.parameters[Config.KEY_POPULATION_SIZE])
@@ -186,12 +184,13 @@ def run_standard(init_fittest=None, run_name="run"):
     for run_i in range(0, nb_runs):
         if nb_runs > 1:
             run_name = str(run_i)
-        run(run_name, init_fittest)
+        final_fittest = run(run_name, init_fittest)
 
     print("Simulation ended.")
 
     if nb_runs > 1 and init_fittest is not None:
         StatKeeper.print_statistics(init_fittest.get_score())
+    return final_fittest
 
 
 if __name__ == "__main__":

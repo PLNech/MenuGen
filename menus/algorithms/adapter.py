@@ -1,5 +1,5 @@
 from menus.models import Recipe
-from model.menu.dish import Dish
+from .model.menu.dish import Dish
 
 __author__ = 'PLNech'
 

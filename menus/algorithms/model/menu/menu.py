@@ -3,10 +3,10 @@ import os
 __author__ = 'PLNech'
 
 from dietetics import DieteticsNeeds
-from algorithms.model.menu.menu_manager import MenuManager
+from menus.algorithms.model.menu.menu_manager import MenuManager
 
-from algorithms.model.individual import Individual
-from algorithms.model.menu.dish import Dish
+from menus.algorithms.model.individual import Individual
+from menus.algorithms.model.menu.dish import Dish
 from utils.config import Config
 
 
@@ -136,7 +136,7 @@ class Menu(Individual):  # TODO Document!
         self.fitness_fats = 0
 
     def generate(self):
-        manager = MenuManager()
+        manager = MenuManager.get()
 
         accu_calories = 0
         over_size = 2439.7 * 7 * Config.parameters[Config.KEY_OVERWEIGHT_FACTOR]  # TODO: Use actual calories objective
