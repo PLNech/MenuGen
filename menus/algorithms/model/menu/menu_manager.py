@@ -58,6 +58,7 @@ class MenuManager(Manager):
                 dish.name += "(%d)" % self.names_count[gen_name]
             else:
                 self.names_count[gen_name] = 1
+            # dish.name = dish.name + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
             self.add_item(dish)
 
             if Config.print_items:

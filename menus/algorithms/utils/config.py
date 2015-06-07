@@ -35,7 +35,7 @@ class Config():
 
         # Amounts
         KEY_RUN_NUMBER: 1,  # Number of runs
-        KEY_NB_GENERATION: 200,  # Number of generations
+        KEY_NB_GENERATION: 10,  # Number of generations
 
         # Algorithm parameters
         KEY_ELITISM: True,
@@ -71,7 +71,7 @@ class Config():
 
     print_each_run = True  # Should we print results for each run?
     print_generation = True  # Should we print details of each generation?
-    print_population = True  # Should we print the generated population?
+    print_population = False  # Should we print the generated population?
     print_items = False  # Should we print the randomly generated items ?
     print_selection = False  # Should we print the selection of individuals?
     print_crossover = False  # Should we print the crossover of individuals?

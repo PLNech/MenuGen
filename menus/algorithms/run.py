@@ -75,6 +75,8 @@ def run(run_name, init_fittest=None):
     if Config.print_each_run:
         stats.print_run_stats(efficacy_str_color, efficiency_str_color, init_fittest, final_fittest, run_name)
 
+    print("Final fittest:")
+    print(final_fittest)
     return final_fittest
 
 

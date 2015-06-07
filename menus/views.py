@@ -83,14 +83,17 @@ def generation(request):
     else:
         user_sex = Calculator.SEX_H
 
-    needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
+    # needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
 
-    """ Here is an example of a matrix containing (nb_days x 5) meals """
+    # """ Here is an example of a matrix containing (nb_days x 5) meals """
     planning = generate_planning(nb_days, nb_meals, nb_dishes)
 
-    # Config.parameters[Config.KEY_MAX_DISHES] = nb_days * nb_meals * nb_dishes
-    # planning2 = run_standard(None, time.ctime())
-    # print(planning2)
+    Config.parameters[Config.KEY_MAX_DISHES] = nb_days * nb_meals * nb_dishes
+    menu = run_standard(None, time.ctime())
+    menu_str = ""
+    for g in menu.genes:
+        menu_str += g.name + "\n"
+    print("Result planning:" + menu_str)
 
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 
@@ -250,7 +253,7 @@ def regimes(request):
 
 
 def tastes(request):
-    return render(request, 'profile/tastes.html', 
+    return render(request, 'profile/tastes.html',
             { 'ingredients': [ingredient.name for ingredient in Ingredient.objects.all()] })
 
 
