@@ -26,25 +26,27 @@
 </head>
 
 <body class="theme-white fixed-footer fixed-header fixed-leftmenu">
-<div id="theme-wrapper">
-    {% include '_header.html' %}
-    {% include 'auth/sign_in.html' %}
-    <div id="page-wrapper" class="container">
-        <div class="row">
-            {% if user.is_authenticated %}
-                {% include '_menu.html' %}
-                <div id="content-wrapper">
-            {% else %}
-                <div id="content-wrapper" style="margin-left: 0;">
-            {% endif %}
+    <div id="theme-wrapper">
+        {% include '_header.html' %}
+        {% include 'auth/sign_in.html' %}
+        <div id="page-wrapper" class="container">
+            <div class="row">
+                {% if user.is_authenticated %}
+                    {% include '_menu.html' %}
+                    <div id="content-wrapper">
+                {% else %}
+                    <div id="content-wrapper" style="margin-left: 0;">
+                {% endif %}
                 <div class="row">
                     {% block content %}{% endblock %}
                 </div>
+                </div>
+
                 {% include '_footer.html' %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% include '_common_js.html' %}
 {% block js %}{% endblock %}
