@@ -1,5 +1,60 @@
-{% extends '_base.html' %}
+{% block css %}
+    <style type="text/css">
+        ul.errorlist {
+            margin: 0;
+            padding: 0;
+        }
+        .errorlist li {
+            background-color: red;
+            color: white;
+            display: block;
+            font-size: 10px;
+            margin: 0 0 3px;
+            padding: 4px 5px;
+        }
+    </style>
+{% endblock %}
 
-{% block content %}
-    <h2>Sign-up</h2>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">
+        Inscription
+    </h4>
+</div>
+<div class="modal-body">
+     {% if form.errors %}
+        <p style="color: red;">
+            Formulaire invalide
+        </p>
+    {% endif %}
+    <form class="form-horizontal" id="SignUpForm" method="POST" action="{% url 'menus.views.sign_up' %}">
+        <div class="modal-body">
+            {% csrf_token %}
+            {{ form.as_table }}
+        </div>
+        <div class="control-group">
+            <div class="controls text-right">
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% block js %}
+    <script>
+        $('.modal-body').on('submit', '#SignUpForm', function() {
+            $.ajax({
+                type: $(this).attr('method'),
+                url: this.action,
+                data: $(this).serialize(),
+                context: this,
+                success: function(data, status) {
+                     $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data);
+                }
+            });
+            return false;
+        });
+        $(document).on("hidden.bs.modal", function (e) {
+            $(e.target).removeData("bs.modal").find(".modal-content").empty();
+        });
+    </script>
 {% endblock %}

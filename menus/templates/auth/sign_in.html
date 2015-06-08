@@ -1,46 +1,84 @@
-{% load staticfiles %}
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap_overrides/modal.css' %}" />
+    <style type="text/css">
+        ul.errorlist {
+            margin: 0;
+            padding: 0;
+        }
+        .errorlist li {
+            background-color: red;
+            color: white;
+            display: block;
+            font-size: 10px;
+            margin: 0 0 3px;
+            padding: 4px 5px;
+        }
+    </style>
 {% endblock %}
-
-<div class="modal fade bs-example-modal-sm" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="vertical-alignment-helper">
-        <div class="modal-dialog vertical-align-center modal-sm">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">
-                    Connection
-                </h4>
-              </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" name="LoginForm" action="{% url 'menus.views.sign_in' %}" method="POST">
-                      <div class="modal-body">
-                        {% csrf_token %}
-                        {% if next %}
-                            <input type="hidden" name="next" value="{{ next }}" />
-                        {% endif %}
-                        <div class="form-group">
-                            <label class="control-label" for="username">Utilisateur</label>
-                            <div class="controls">
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Utilisateur">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="password">Mot de passe</label>
-                            <div class="controls">
-                                <input type="password" class="form-control" name="password" id="password" placeholder="Mot de passe">
-                            </div>
-                        </div>
-                      </div>
-                      <div class="control-group">
-                          <div class="controls text-right">
-                            <button type="submit" class="btn btn-primary">Se connecter</button>
-                          </div>
-                      </div>
-                    </form>
-                </div>
-            </div>
-      </div>
-    </div>
+{#{% load staticfiles %}#}
+{#{% block css %}#}
+{#    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap_overrides/modal.css' %}" />#}
+{#{% endblock %}#}
+{##}
+{#<div class="modal fade bs-example-modal-sm" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
+{#    <div class="vertical-alignment-helper">#}
+{#        <div class="modal-dialog vertical-align-center modal-sm">#}
+{#            <div class="modal-content">#}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">
+        Connection
+    </h4>
 </div>
+<div class="modal-body">
+    <form class="form-horizontal" id="signInForm" action="{% url 'menus.views.sign_in' %}" method="POST">
+        <div class="modal-body">
+            {% csrf_token %}
+            {{ form.as_table }}
+        </div>
+        <div class="control-group">
+            <div class="controls text-right">
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </div>
+        </div>
+    </form>
+</div>
+{#            </div>#}
+{#      </div>#}
+{#    </div>#}
+{#</div>#}
+
+{% block js %}
+    <script>
+        $('.modal-body').on('submit', '#signInForm', function() {
+            var is_allowed = false
+            $.ajax({
+                type: $(this).attr('method'),
+                url: this.action,
+                data: $(this).serialize(),
+                context: this,
+                statusCode: {
+                    200: function (response) {
+                        location.href = '{% url 'menus.views.friends' %}';
+                    },
+                    403: function (response) {
+{#                        console.log(response["responseText"]);#}
+{#                        $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(response["responseText"]);#}
+                    }
+                },
+                success: function(data, status) {
+
+{#                    location.href = {% url 'menus.views.friends' %}#}
+{#                    $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data);#}
+                },
+                error:  function(data, status) {
+                    console.log(data);
+                    $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data);
+                }
+            });
+            return false;
+        });
+        $(document).on("hidden.bs.modal", function (e) {
+            $(e.target).removeData("bs.modal").find(".modal-content").empty();
+        });
+    </script>
+{% endblock %}

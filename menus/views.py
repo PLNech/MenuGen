@@ -1,4 +1,5 @@
 import time
+from django.template.response import TemplateResponse
 from menus.algorithms.dietetics import Calculator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,8 +8,8 @@ from django.shortcuts import render, redirect
 from menus.data.generator import generate_planning
 from menus.models import Recipe
 from menus.models import Ingredient
-from run import run_standard
-from utils.config import Config
+from menus.algorithms.run import run_standard
+from menus.algorithms.utils.config import Config
 
 
 def landing(request):
@@ -262,26 +263,61 @@ def account(request):
     return render(request, 'profile/account.html', {})
 
 
+# def sign_in(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(username=username, password=password)
+#         if user is not None:
+#             if user.is_active:
+#                 login(request, user)
+#                 return redirect('menus.views.friends')
+#             else:
+#                 return render(request, 'auth/sign_in.html', {})
+#         else:
+#             return render(request, 'auth/sign_in.html', {})
+#     else:
+#         return render(request, 'auth/sign_in.html', {})
+
+from menus.forms import RegistrationForm, SignInForm
+
 def sign_in(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return redirect('menus.views.friends')
-            else:
-                return render(request, 'auth/sign_in.html', {})
-        else:
-            return render(request, 'auth/sign_in.html', {})
-    else:
-        return render(request, 'auth/sign_in.html', {})
+    if request.method == "GET":
+        form = SignInForm
+        return render(request, 'auth/sign_in.html', {'form': form})
+    if request.method == "POST":
+        form = SignInForm(data=request.POST)
+        print("here")
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    # response = HttpResponse(content="", status=303)
+                    # response["Location"] = redirect('menus.views.friends')
+                    return redirect('menus.views.friends')
+        response = render(request, 'auth/sign_in.html', {'form': form})
+        response.status_code = 403
+        return response
 
 
 def sign_up(request):
-    return render(request, 'auth/sign_up.html', {})
+    if request.method == "GET":
+        form = RegistrationForm()
+        return render(request, 'auth/sign_up.html', {'form': form})
+    if request.method == "POST":
+        form = RegistrationForm(data=request.POST)
+        if form.is_valid():
+            user = form.save(False)
+            user.set_password(user.password)
+            user.save()
+            user = authenticate(username=user.username, password=request.POST['password1'])
+            login(request, user)
 
+            return redirect('/')
+        return render(request, 'auth/sign_up.html', {'form': form})
 
 @login_required
 def sign_out(request):
