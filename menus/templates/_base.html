@@ -28,6 +28,7 @@
 <body class="theme-white fixed-footer fixed-header fixed-leftmenu">
 <div id="theme-wrapper">
     {% include '_header.html' %}
+    {% include 'auth/sign_in.html' %}
     <div id="page-wrapper" class="container">
         <div class="row">
             {% if user.is_authenticated %}
