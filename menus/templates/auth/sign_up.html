@@ -27,7 +27,7 @@
             Formulaire invalide
         </p>
     {% endif %}
-    <form class="form-horizontal" id="SignUpForm" method="POST" action="{% url 'menus.views.sign_up' %}">
+    <form class="form-horizontal" id="sign-up-form" method="POST" action="{% url 'menus.views.sign_up' %}">
         <div class="modal-body">
             {% csrf_token %}
             {{ form.as_table }}
@@ -41,14 +41,17 @@
 </div>
 {% block js %}
     <script>
-        $('.modal-body').on('submit', '#SignUpForm', function() {
+        $('.modal-body').on('submit', '#sign-up-form', function() {
             $.ajax({
                 type: $(this).attr('method'),
                 url: this.action,
                 data: $(this).serialize(),
                 context: this,
                 success: function(data, status) {
-                     $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data);
+                     location.href = '{% url 'menus.views.friends' %}';
+                },
+                error:  function(data, status) {
+                    $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data.responseText);
                 }
             });
             return false;
