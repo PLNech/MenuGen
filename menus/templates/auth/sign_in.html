@@ -50,29 +50,17 @@
 {% block js %}
     <script>
         $('.modal-body').on('submit', '#signInForm', function() {
-            var is_allowed = false
             $.ajax({
+                is_allowed: false,
                 type: $(this).attr('method'),
                 url: this.action,
                 data: $(this).serialize(),
                 context: this,
-                statusCode: {
-                    200: function (response) {
-                        location.href = '{% url 'menus.views.friends' %}';
-                    },
-                    403: function (response) {
-{#                        console.log(response["responseText"]);#}
-{#                        $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(response["responseText"]);#}
-                    }
-                },
                 success: function(data, status) {
-
-{#                    location.href = {% url 'menus.views.friends' %}#}
-{#                    $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data);#}
+                    location.href = '{% url 'menus.views.friends' %}';
                 },
                 error:  function(data, status) {
-                    console.log(data);
-                    $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data);
+                    $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data.responseText);
                 }
             });
             return false;
