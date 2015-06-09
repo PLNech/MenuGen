@@ -1,6 +1,6 @@
 __author__ = 'PLNech'
 
-from utils.singleton import singleton
+from menus.algorithms.utils.singleton import singleton
 
 
 class Manager(singleton):
