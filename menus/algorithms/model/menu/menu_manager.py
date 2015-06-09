@@ -6,10 +6,10 @@ __author__ = 'PLNech'
 from random import randrange
 import threading
 
-from utils.printer import Printer
+from menus.algorithms.utils.printer import Printer
 from menus.algorithms.model.manager import Manager
 from menus.algorithms.model.menu.dish import Dish
-from utils.config import Config
+from menus.algorithms.utils.config import Config
 
 _local = threading.local()
 

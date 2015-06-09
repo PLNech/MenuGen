@@ -1,4 +1,5 @@
 import time
+from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from menus.algorithms.dietetics import Calculator
 from django.contrib.auth import authenticate, login, logout
@@ -295,12 +296,10 @@ def sign_in(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    # response = HttpResponse(content="", status=303)
-                    # response["Location"] = redirect('menus.views.friends')
                     return redirect('menus.views.friends')
-        response = render(request, 'auth/sign_in.html', {'form': form})
-        response.status_code = 403
-        return response
+        return HttpResponse(content=render(request, 'auth/sign_in.html', {'form': form}),
+                                content_type='text/html; charset=utf-8',
+                                status=403)
 
 
 def sign_up(request):
