@@ -6,10 +6,10 @@ from math import sqrt
 
 from menus.algorithms.model.factories import choose_method
 from menus.algorithms.model.menu.menu import Menu
-from menus.algorithms.utils.config import Config
-from menus.algorithms.utils.calc import Calc
-from menus.algorithms.utils.printer import Printer
-from menus.algorithms.utils.singleton import singleton
+from utils.config import Config
+from utils.calc import Calc
+from utils.printer import Printer
+from utils.singleton import singleton
 
 
 class Statistics:

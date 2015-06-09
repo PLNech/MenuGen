@@ -1,9 +1,9 @@
 __author__ = 'PLNech'
 
-from menus.algorithms.model.menu.menu import Menu
-from menus.algorithms.model.menu.dish import Dish
-from menus.algorithms.model.menu.menu_manager import MenuManager
-from menus.algorithms.utils.config import Config
+from model.menu.menu import Menu
+from model.menu.dish import Dish
+from model.menu.menu_manager import MenuManager
+from utils.config import Config
 
 
 class Factory:

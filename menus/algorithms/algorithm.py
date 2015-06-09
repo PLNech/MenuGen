@@ -7,10 +7,10 @@ __author__ = 'PLNech'
 import random
 import math
 
-from menus.algorithms.utils.config import Config
-from menus.algorithms.utils.printer import Printer
-from menus.algorithms.model.population import Population
-from menus.algorithms.model.individual import Individual
+from utils.config import Config
+from utils.printer import Printer
+from model.population import Population
+from model.individual import Individual
 
 
 def func_selection(population):

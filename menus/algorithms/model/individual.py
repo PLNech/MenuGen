@@ -1,6 +1,6 @@
 __author__ = 'PLNech'
 
-from menus.algorithms.utils.comparable import Comparable
+from utils.comparable import Comparable
 
 
 class Individual(Comparable):

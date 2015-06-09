@@ -2,9 +2,9 @@ __author__ = 'PLNech'
 
 import random
 
-from menus.algorithms.utils.format import format_length_integer
-from menus.algorithms.utils.config import Config
-from menus.algorithms.utils.comparable import Comparable
+from utils.format import format_length_integer
+from utils.config import Config
+from utils.comparable import Comparable
 
 
 class Dish(Comparable):

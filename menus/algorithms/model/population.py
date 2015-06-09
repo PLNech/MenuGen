@@ -1,10 +1,10 @@
 __author__ = 'PLNech'
 
-from menus.algorithms.model.menu.menu import Menu
-from menus.algorithms.model.menu.menu_manager import MenuManager
+from model.menu.menu import Menu
+from model.menu.menu_manager import MenuManager
 
 from menus.algorithms.model.individual import Individual
-from menus.algorithms.utils.config import Config
+from utils.config import Config
 
 
 class Population:

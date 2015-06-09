@@ -1,6 +1,6 @@
 __author__ = 'PLNech'
 
-from menus.algorithms.utils.config import Config
+from utils.config import Config
 
 
 class Printer():

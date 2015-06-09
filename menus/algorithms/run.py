@@ -1,4 +1,4 @@
-import menus.algorithms.algorithm
+import algorithm
 from menus.algorithms.model.menu.menu_manager import MenuManager
 
 __author__ = 'PLNech'
@@ -8,12 +8,12 @@ import argparse
 import os
 import sys
 
-from menus.algorithms.utils.config import Config
-from menus.algorithms.stats import StatKeeper
+from utils.config import Config
+from stats import StatKeeper
 # from utils.drawer import Drawer
-from menus.algorithms.utils.printer import Printer
-from menus.algorithms.model.population import Population
-from menus.algorithms.model.factories import Factory, is_better_than
+from utils.printer import Printer
+from model.population import Population
+from model.factories import Factory, is_better_than
 
 stats = StatKeeper
 

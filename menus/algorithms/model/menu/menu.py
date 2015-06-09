@@ -2,12 +2,12 @@ import os
 
 __author__ = 'PLNech'
 
-from menus.algorithms.dietetics import DieteticsNeeds
+from dietetics import DieteticsNeeds
 from menus.algorithms.model.menu.menu_manager import MenuManager
 
 from menus.algorithms.model.individual import Individual
 from menus.algorithms.model.menu.dish import Dish
-from menus.algorithms.utils.config import Config
+from utils.config import Config
 
 
 class Menu(Individual):  # TODO Document!
