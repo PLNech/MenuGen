@@ -132,6 +132,34 @@ def generate_recipe(name):
     r.price = random.randint(1, 3)
     return r
 
+def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
+    """
+
+    :type nb_days: int
+    :type nb_meals_per_day: int
+    :type  menu: model.menu.menu.Menu
+    """
+
+    dishes_remaining = len(menu.genes)
+
+    planning = []
+    random.shuffle(menu.genes)
+    for j in range(nb_meals_per_day):
+        daily_planning = []
+        for i in range(nb_days):
+            dishes_remaining -= 3
+            if dishes_remaining < 0:
+                print("I had to break the loop, even if %d dishes are still missing." %
+                      (len(menu.genes) - dishes_remaining))
+                break
+            dish = menu.genes.pop()
+            dish2 = menu.genes.pop()
+            dish3 = menu.genes.pop()
+            menu_item = {'starter': dish, 'main_course': dish2, 'dessert': dish3}
+            daily_planning.append(menu_item)
+        planning.append(daily_planning)
+
+    return planning
 
 def generate_planning(nb_days, nb_meals_per_day, nb_dishes):
     planning = []

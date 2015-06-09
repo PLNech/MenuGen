@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
-from menus.data.generator import generate_planning
+from menus.data.generator import generate_planning, generate_planning_from_list
 from menus.models import Recipe
 from menus.models import Ingredient
 from menus.algorithms.run import run_standard
@@ -84,10 +84,10 @@ def generation(request):
     else:
         user_sex = Calculator.SEX_H
 
-    # needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
+    needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
 
     # """ Here is an example of a matrix containing (nb_days x 5) meals """
-    planning = generate_planning(nb_days, nb_meals, nb_dishes)
+    # planning = generate_planning(nb_days, nb_meals, nb_dishes)
 
     Config.parameters[Config.KEY_MAX_DISHES] = nb_days * nb_meals * nb_dishes
     menu = run_standard(None, time.ctime())
@@ -95,7 +95,7 @@ def generation(request):
     for g in menu.genes:
         menu_str += g.name + "\n"
     print("Result planning:" + menu_str)
-
+    planning = generate_planning_from_list(nb_days, nb_meals, menu)
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 
 

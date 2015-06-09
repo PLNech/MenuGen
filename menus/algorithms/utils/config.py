@@ -20,7 +20,6 @@ class Config():
     KEY_OVERWEIGHT_FACTOR = "overweight_factor"
     KEY_NB_DISHES = "nb_dishes"
     KEY_MAX_DISHES = "max_dishes"
-
     KEY_OBJECTIVE_CALORIES = "max_calories"
     KEY_OBJECTIVE_PROTEINS = "max_proteins"
     KEY_OBJECTIVE_CARBOHYDRATES = "max_carbs"
