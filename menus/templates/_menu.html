@@ -7,15 +7,26 @@
                     <li class="nav-header nav-header-first hidden-sm hidden-xs">
                         Navigation
                     </li>
+
                     -->
-                    <!--
                     <li>
-                        <a href="">
-                            <i class="fa fa-dashboard"></i>
-                            <span>Acceuil</span>
+                        <a href="{% url 'menus.views.generate' %}">
+                            <i class="fa fa-cogs"></i>
+                            <span>Générer</span>
                         </a>
                     </li>
-                    -->
+                    <li>
+                        <a href="{% url 'menus.views.menus' %}">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span>Mes Menus</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'menus.views.friends' %}">
+                            <i class="fa fa-users"></i>
+                            <span>Mes Convives</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
