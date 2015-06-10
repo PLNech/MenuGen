@@ -149,6 +149,7 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
         for i in range(nb_days):
             dishes_remaining -= 3
             if dishes_remaining < 0:
+                # TODO: Propagate number of meals to algorithm's Config
                 print("I had to break the loop, even if %d dishes are still missing." %
                       (len(menu.genes) - dishes_remaining))
                 break
