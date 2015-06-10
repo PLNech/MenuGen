@@ -1,0 +1,63 @@
+{% extends '_base.html' %}
+
+{% block css %}{% endblock %}
+
+{% block content %}
+    <div class="col-lg-12">
+        <div id="content-header" class="clearfix">
+            <div class="pull-left">
+                <ol class="breadcrumb"><p></p></ol>
+                <h1>Mon profil</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-box">
+                <div class="main-box-body clearfix">
+                    <div class="table-responsive">
+                        <table class="table user-list table-hover">
+                            {% include "profiles/guests/guest.html" with profile=user.profile%}
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            </br>
+            </br>
+            <div class="col-lg-12">
+                <div id="content-header" class="clearfix">
+                    <div class="pull-left">
+                        <ol class="breadcrumb"><p></p></ol>
+                        <h1>Mes convives</h1>
+                    </div>
+                    <div class="pull-right hidden-xs">
+                        <a class="btn btn-primary btn-sm" href="{% url 'menus.views.physiology' %}" role="button">
+                            <i class="fa fa-plus-circle fa-lg"></i>
+                            Nouveau profil
+                        </a>
+                    </div>
+                </div>
+                <div class="main-box">
+                    <div class="main-box-body clearfix">
+                        <div class="table-responsive">
+                            <table class="table user-list table-hover">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                {% for profile in guests %}
+                                    {% include "profiles/guests/guest.html" with profile=profile%}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

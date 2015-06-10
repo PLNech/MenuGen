@@ -1,0 +1,14 @@
+#guests .guest {
+    border: 1px;
+    border-radius: 2px 2px 2px 2px;
+    -webkit-box-shadow: 0 6px 4px -6px #777;
+	-moz-box-shadow: 0 6px 4px -6px #777;
+	box-shadow: 0 6px 4px -6px #777;
+}
+
+#guests .guest:hover {
+    border: 1px;
+    -webkit-box-shadow: 0 2px 1px #777;
+	-moz-box-shadow: 0 2px 1px #777;
+	box-shadow: 0 2px 1px #777;
+}
