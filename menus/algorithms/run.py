@@ -1,4 +1,4 @@
-import menus.algorithms.algorithm
+import menus.algorithms.algorithm as algorithm
 from menus.algorithms.model.menu.menu_manager import MenuManager
 
 __author__ = 'PLNech'
@@ -16,6 +16,7 @@ from menus.algorithms.model.population import Population
 from menus.algorithms.model.factories import Factory, is_better_than
 
 stats = StatKeeper
+
 
 def run(run_name, init_fittest=None):
     # New run
