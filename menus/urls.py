@@ -17,6 +17,7 @@ urlpatterns = patterns(
 
     url(r'^menus$', 'menus'),
     url(r'^friends$', 'friends'),
+    url(r'^profile_infos$', 'profile_infos'),
     url(r'^statistics$', 'statistics'),
 
     url(r'^update_physio$', 'update_physio'),

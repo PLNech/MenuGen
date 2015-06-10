@@ -157,6 +157,11 @@ def friends(request):
 
 
 @login_required
+def profile_infos(request):
+    return render(request, 'profiles/guests/guest_infos.html')
+
+
+@login_required
 def statistics(request):
     return render(request, 'menus/statistics.html', {})
 
