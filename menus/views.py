@@ -137,7 +137,23 @@ def menus(request):
 
 @login_required
 def friends(request):
-    return render(request, 'menus/friends.html', {})
+    guests = []
+    guest_1 = {
+        'username': 'Kevin',
+        'imc': 20.2
+    }
+    guest_2 = {
+        'username': 'Paul louis',
+        'imc': 18
+    }
+    guest_3 = {
+        'username': 'Guillaume',
+        'imc': 25
+    }
+    guests.append(guest_1)
+    guests.append(guest_2)
+    guests.append(guest_3)
+    return render(request, 'profiles/guests/guests.html', {'guests': guests})
 
 
 @login_required
@@ -208,9 +224,9 @@ def physiology(request):
         weight = request.POST['weight']
     else:
         """ TODO:
-        - Use current_physio in template to pre-fill profile information.
+        - Use current_physio in template to pre-fill profiles information.
         - Add ranges for to fill the select tag in template (refer to ages ?) """
-        return render(request, 'profile/physiology.html', {'current_physio': request.session})
+        return render(request, 'profiles/physiology.html', {'current_physio': request.session})
 
 
 def regimes(request):
@@ -248,19 +264,19 @@ def regimes(request):
     value_regimes_list.append(regime_vegetarien)
     value_regimes_list.append(regime_vegetalien)
     value_regimes_list.append(regime_halal)
-    return render(request, 'profile/regimes.html',
+    return render(request, 'profiles/regimes.html',
                   {'health_regimes_list': health_regimes_list,
                    'value_regimes_list': value_regimes_list})
 
 
 def tastes(request):
-    return render(request, 'profile/tastes.html',
-            { 'ingredients': [ingredient.name for ingredient in Ingredient.objects.all()] })
+    return render(request, 'profiles/tastes.html',
+            {'ingredients': [ingredient.name for ingredient in Ingredient.objects.all()] })
 
 
 @login_required
 def account(request):
-    return render(request, 'profile/account.html', {})
+    return render(request, 'profiles/account.html', {})
 
 
 from menus.forms import RegistrationForm, SignInForm
