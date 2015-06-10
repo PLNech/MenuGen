@@ -20,6 +20,13 @@
                     <a href="{% url 'menus.views.generate' %}" class="btn btn-primary">
                         <i class="fa fa-angle-double-left"></i> Paramètres de la génération
                     </a>
+                    <a class="btn btn-warning"
+                           href="{% url 'menus.views.sign_up'%}"
+                           role="button"
+                           data-toggle="modal"
+                           data-target="#signInUpModal">
+                            Sauvegarder et créer un compte <i class="fa fa-angle-double-right"></i>
+                        </a>
                 {% endif %}
             </div>
         </div>

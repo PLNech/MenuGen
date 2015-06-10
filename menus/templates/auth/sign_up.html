@@ -22,7 +22,16 @@
     </h4>
 </div>
 <div class="modal-body">
-     {% if form.errors %}
+
+    {% if planning %}
+        <div class="alert alert-info fade in">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong>Felicitations!</strong> Vous venez de générer votre premier menu a partir de votre profil. Créez votre compte en un clic pour ne pas en perdre une miette et découvrir les fonctionnalités avancées de MenuGen!
+        </div>
+    {% endif %}
+
+
+    {% if form.errors %}
         <p style="color: red;">
             Formulaire invalide
         </p>
@@ -34,7 +43,7 @@
         </div>
         <div class="control-group">
             <div class="controls text-right">
-                <button type="submit" class="btn btn-primary">Se connecter</button>
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
             </div>
         </div>
     </form>
@@ -48,7 +57,7 @@
                 data: $(this).serialize(),
                 context: this,
                 success: function(data, status) {
-                     location.href = '{% url 'menus.views.friends' %}';
+                    location.href = '{% url 'menus.views.friends' %}';
                 },
                 error:  function(data, status) {
                     $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data.responseText);
