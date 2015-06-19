@@ -7,25 +7,12 @@ urlpatterns = patterns(
     url(r'^home$', 'home', name='home'),
 
     url(r'^menus$', 'menus', name='menus'),
-    url(r'^friends$', 'friends', name='friends'),
-    url(r'^profile_infos$', 'profile_infos', name='profile_infos'),
     url(r'^statistics$', 'statistics', name='statistics'),
-
-    url(r'^update_physio$', 'update_physio', name='update_physio'),
-    # url(r'^update_gen_criteria', 'update_gen_criteria'),
-    url(r'^update_tastes', 'update_tastes', name='update_tastes'),
-    url(r'^physiology$', 'physiology', name='physiology'),
-    url(r'^regimes$', 'regimes', name='regimes'),
-    url(r'^tastes$', 'tastes', name='tastes'),
-
     url(r'^account$', 'account', name='account'),
-    url(r'^sign-in$', 'sign_in', name='sign_in'),
-    url(r'^sign-up$', 'sign_up', name='sign_up'),
-    url(r'^sign-out$', 'sign_out', name='sign_out'),
 )
 
-""" |Pre generation
-    |
+"""
+    Pre generation
 """
 urlpatterns += patterns(
     'menus.views.generation.pre_generation_views',
@@ -37,8 +24,8 @@ urlpatterns += patterns(
     url(r'^update_gen_criteria', 'update_gen_criteria', name='update_gen_criteria'),
 )
 
-""" |Post generation
-    |
+"""
+    Post generation
 """
 urlpatterns += patterns(
     'menus.views.generation.post_generation_views',
@@ -49,4 +36,31 @@ urlpatterns += patterns(
          'main_course_id': 1,
          'dessert_id': 2},
         name='generation_meal_details'),
+)
+
+"""
+    Authentication
+"""
+urlpatterns += patterns(
+    'menus.views.auth.auth_views',
+
+    url(r'^sign-in$', 'sign_in', name='sign_in'),
+    url(r'^sign-up$', 'sign_up', name='sign_up'),
+    url(r'^sign-out$', 'sign_out', name='sign_out'),
+)
+
+"""
+    Profiles
+"""
+urlpatterns += patterns(
+    'menus.views.profiles.profiles_views',
+
+    url(r'^friends$', 'friends', name='friends'),
+    url(r'^profile_infos$', 'profile_infos', name='profile_infos'),
+    url(r'^update_physio$', 'update_physio', name='update_physio'),
+    # url(r'^update_gen_criteria', 'update_gen_criteria'),
+    url(r'^update_tastes', 'update_tastes', name='update_tastes'),
+    url(r'^physiology$', 'physiology', name='physiology'),
+    url(r'^regimes$', 'regimes', name='regimes'),
+    url(r'^tastes$', 'tastes', name='tastes'),
 )
