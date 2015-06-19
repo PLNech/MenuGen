@@ -1,6 +1,10 @@
 {% extends '_base.html' %}
+{% load staticfiles %}
 
-{% block css %}{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'dnd/dnd.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'loader.css' %}"/>
+{% endblock %}
 
 {% block content %}
     <div class="col-lg-12">
@@ -14,14 +18,14 @@
                     <a href="{% url 'menus.views.tastes' %}" class="btn btn-primary">
                         <i class="fa fa-angle-double-left"></i> Mes goûts
                     </a>
-                    <a href="{% url 'menus.views.generation' %}" class="btn btn-primary">
+                    <a href="{% url 'menus.views.generation' %}" class="btn btn-primary" id="generate-button">
                         Générer <i class="fa fa-angle-double-right"></i>
                     </a>
                 {% endif %}
             </div>
         </div>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12" id="generate">
         <div class="row">
             <div class="col-md-6">
                 <div class="main-box clearfix">
@@ -135,9 +139,50 @@
 
         </div>
     </div>
+
+    <div class="row" style="margin-top: 170px;" id="loader">
+        <div class="col-lg-offset-4 col-lg-4">
+            <div class="main-box weather-box">
+                <header class="main-box-header clearfix">
+                    <h2 class="pull-left">Génération en cours</h2>
+                </header>
+                <div class="main-box-body clearfix">
+                    <div class="current">
+                        <div class="clearfix center-block" style="width: 220px;">
+                            <div class="container">
+                                <span class="dots"></span>
+                                <span class="dots"></span>
+                                <span class="dots"></span>
+                                <span class="dots"></span>
+                                <span class="dots"></span>
+                                <span class="dots"></span>
+                                <span class="dots"></span>
+                                <span class="dots"></span>
+                                <span class="dots"></span>
+                                <span class="dots"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="next" style="background-color: #FF9900">
+                        <div class="clearfix">
+                            <p><strong>Merci de patienter un court instant...</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}
+     <script>
+        $("#loader").hide();
+        $("#generate-button").click(function(){
+            $("#generate").hide();
+            $("#loader").show();
+        });
+    </script>
+
     <script type="text/javascript">
 
         $(document).ready(function () {

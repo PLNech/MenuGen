@@ -1,12 +1,9 @@
-from menus.algorithms import algorithm
-from menus.algorithms.model.menu.menu_manager import MenuManager
-
-__author__ = 'PLNech'
-
 import argparse
 import os
 import sys
 
+from menus.algorithms import algorithm
+from menus.algorithms.model.menu.menu_manager import MenuManager
 from menus.algorithms.utils.config import Config
 from menus.algorithms.stats import StatKeeper
 from menus.algorithms.utils.printer import Printer

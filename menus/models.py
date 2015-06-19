@@ -37,7 +37,7 @@ class Profile(models.Model):
     height = models.IntegerField()
     sex = models.IntegerField(choices=SEX)
     activity = models.IntegerField(choices=ACTIVITY)
-    picture = StdImageField(upload_to='media/images/profile')
+    picture = StdImageField(upload_to='media/images/profiles')
 
     unlikes = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
