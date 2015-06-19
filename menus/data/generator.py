@@ -139,6 +139,8 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
     :type nb_meals_per_day: int
     :type  menu: model.menu.menu.Menu
     """
+
+    # TODO: Use recipe.category to place appropriate meals
     nb_dishes = len(menu.genes)
     nb_dishes_per_meal = 3
     nb_meals = nb_meals_per_day * nb_days * nb_dishes_per_meal

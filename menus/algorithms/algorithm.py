@@ -1,5 +1,4 @@
 from menus.algorithms.model.menu.menu import Menu
-from menus.algorithms.model.menu.dish import Dish
 from menus.algorithms.model.menu.menu_manager import MenuManager
 
 __author__ = 'PLNech'

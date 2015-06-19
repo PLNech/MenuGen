@@ -1,5 +1,3 @@
-import os
-
 __author__ = 'PLNech'
 
 from menus.algorithms.dietetics import DieteticsNeeds
@@ -27,7 +25,6 @@ class Menu(Individual):  # TODO Document!
         self.proteins = 0
         self.carbohydrates = 0
         self.fats = 0
-
 
     def __str__(self):
         ret_str = "["

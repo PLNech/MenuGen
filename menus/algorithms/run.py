@@ -3,21 +3,26 @@ from menus.algorithms.model.menu.menu_manager import MenuManager
 
 __author__ = 'PLNech'
 
-# from numpy import arange
 import argparse
 import os
 import sys
 
 from menus.algorithms.utils.config import Config
 from menus.algorithms.stats import StatKeeper
-# from menus.algorithms.utils.drawer import Drawer
 from menus.algorithms.utils.printer import Printer
 from menus.algorithms.model.population import Population
-from menus.algorithms.model.factories import Factory, is_better_than
+from menus.algorithms.model.factories import is_better_than
 
 stats = StatKeeper
 
+
 def run(run_name, init_fittest=None):
+    '''
+
+    :type run_name: str
+    :type init_fittest: menus.algorithms.model.individual.Individual
+    :rtype: menus.algorithms.model.individual.Individual
+    '''
     # New run
     manager = MenuManager.get()
     nb_dishes = len(manager.dishes)
