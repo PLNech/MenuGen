@@ -17,10 +17,10 @@
             </div>
             <div class="pull-right hidden-xs">
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'menus.views.physiology' %}" class="btn btn-primary">
+                    <a href="{% url 'physiology' %}" class="btn btn-primary">
                         <i class="fa fa-angle-double-left"></i>Ma physiologie
                     </a>
-                    <a href="{% url 'menus.views.tastes' %}" class="btn btn-primary">
+                    <a href="{% url 'tastes' %}" class="btn btn-primary">
                         Mes goûts <i class="fa fa-angle-double-right"></i>
                     </a>
                 {% endif %}

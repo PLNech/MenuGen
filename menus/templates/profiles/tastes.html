@@ -9,10 +9,10 @@
             </div>
             <div class="pull-right hidden-xs">
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'menus.views.regimes' %}" class="btn btn-primary">
+                    <a href="{% url 'regimes' %}" class="btn btn-primary">
                         <i class="fa fa-angle-double-left"></i> Mes régimes
                     </a>
-                    <a href="{% url 'menus.views.generate' %}" class="btn btn-primary">
+                    <a href="{% url 'generate' %}" class="btn btn-primary">
                         Génération <i class="fa fa-angle-double-right"></i>
                     </a>
                 {% endif %}
@@ -96,7 +96,7 @@
         function update_tastes(data_dico) {
             console.log("sanity check") // sanity check
             $.ajax({
-                url : '{% url 'menus.views.update_tastes' %}', // the endpoint
+                url : '{% url 'update_tastes' %}', // the endpoint
                 type : "POST", // http method
                 data : data_dico, // data sent with the post request
 

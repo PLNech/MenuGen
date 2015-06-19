@@ -1,36 +1,52 @@
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns(
-    'menus.views',
+    'menus.views.views',
 
-    url(r'^$', 'landing'),
+    url(r'^$', 'landing', name='landing'),
+    url(r'^home$', 'home', name='home'),
 
-    url(r'^home$', 'home'),
-    url(r'^generate$', 'generate'),
-    url(r'^generate/select_profile$', 'generate_select_profile'),
-    url(r'^generate/placements_detail$', 'generate_placements_detail'),
-    url(r'^generation$', 'generation'),
+    url(r'^menus$', 'menus', name='menus'),
+    url(r'^friends$', 'friends', name='friends'),
+    url(r'^profile_infos$', 'profile_infos', name='profile_infos'),
+    url(r'^statistics$', 'statistics', name='statistics'),
+
+    url(r'^update_physio$', 'update_physio', name='update_physio'),
+    # url(r'^update_gen_criteria', 'update_gen_criteria'),
+    url(r'^update_tastes', 'update_tastes', name='update_tastes'),
+    url(r'^physiology$', 'physiology', name='physiology'),
+    url(r'^regimes$', 'regimes', name='regimes'),
+    url(r'^tastes$', 'tastes', name='tastes'),
+
+    url(r'^account$', 'account', name='account'),
+    url(r'^sign-in$', 'sign_in', name='sign_in'),
+    url(r'^sign-up$', 'sign_up', name='sign_up'),
+    url(r'^sign-out$', 'sign_out', name='sign_out'),
+)
+
+""" |Pre generation
+    |
+"""
+urlpatterns += patterns(
+    'menus.views.generation.pre_generation_views',
+
+    url(r'^generate$', 'generate', name='generate'),
+    url(r'^generate/select_profile$', 'generate_select_profile', name='generate_select_profile'),
+    url(r'^generate/placements_detail$', 'generate_placements_detail', name='generate_placements_detail'),
+
+    url(r'^update_gen_criteria', 'update_gen_criteria', name='update_gen_criteria'),
+)
+
+""" |Post generation
+    |
+"""
+urlpatterns += patterns(
+    'menus.views.generation.post_generation_views',
+
+    url(r'^generation$', 'generation', name='generation'),
     url(r'^generation/meal_details$', 'generation_meal_details',
         {'starter_id': 0,
          'main_course_id': 1,
-         'dessert_id': 2}),
-
-    url(r'^menus$', 'menus'),
-    url(r'^friends$', 'friends'),
-    url(r'^profile_infos$', 'profile_infos'),
-    url(r'^statistics$', 'statistics'),
-
-    url(r'^update_physio$', 'update_physio'),
-    url(r'^update_gen_criteria', 'update_gen_criteria'),
-    url(r'^update_tastes', 'update_tastes'),
-    url(r'^physiology$', 'physiology'),
-    url(r'^regimes$', 'regimes'),
-    url(r'^tastes$', 'tastes'),
-
-    url(r'^account$', 'account'),
-    url(r'^sign-in$', 'sign_in'),
-    url(r'^sign-up$', 'sign_up'),
-    url(r'^sign-out$', 'sign_out'),
+         'dessert_id': 2},
+        name='generation_meal_details'),
 )
-
-

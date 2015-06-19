@@ -11,7 +11,7 @@
             </div>
             <div class="pull-right hidden-xs">
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'menus.views.regimes' %}" class="btn btn-primary pull-right">
+                    <a href="{% url 'regimes' %}" class="btn btn-primary pull-right">
                         Mes régimes <i class="fa fa-angle-double-right"></i>
                     </a>
                 {% endif %}
@@ -23,7 +23,7 @@
         <div class="main-box clearfix">
             <header class="main-box-header clearfix"></header>
             <div class="main-box-body clearfix">
-                <form class="form-horizontal" name="physiology" action="{% url 'menus.views.physiology' %}" method="POST">
+                <form class="form-horizontal" name="physiology" action="{% url 'physiology' %}" method="POST">
                     <div class="form-group">
                         <label for="username" class="col-sm-2 control-label">Nom du profil</label>
                         <div class="col-sm-5">
@@ -99,7 +99,7 @@
         function update_physio(data_dico) {
             console.log("sanity check") // sanity check
             $.ajax({
-                url : '{% url 'menus.views.update_physio' %}', // the endpoint
+                url : '{% url 'update_physio' %}', // the endpoint
                 type : "POST", // http method
                 data : data_dico, // data sent with the post request
 
