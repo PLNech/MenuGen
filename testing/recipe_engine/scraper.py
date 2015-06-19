@@ -31,8 +31,6 @@ class Recipe:
             return None;
 
     def __init__(self, url):
-        #with open(url, "r") as f:
-            #soup = BeautifulSoup(f)
         response = requests.get(url)
         soup = BeautifulSoup(response.text)
 
@@ -114,6 +112,5 @@ class Recipe:
 
 
 def random_recipe():
-    #return Recipe("testing/recipe_engine/poulet.htm")
     with  open("testing/recipe_engine/good_recipes.txt", "r") as f:
         return Recipe(random.choice(f.readlines()).rstrip("\n"))

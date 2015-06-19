@@ -55,13 +55,13 @@ class Recipe(models.Model):
     amount = models.IntegerField()
     difficulty = models.IntegerField(choices=EASE)
     price = models.IntegerField(choices=PRICE)
-    steps = models.TextField()
-    detail = models.TextField()
-    drink = models.TextField()
+    steps = models.TextField(blank=True, null=True)
+    detail = models.TextField(blank=True, null=True)
+    drink = models.TextField(blank=True, null=True)
     origin_url = models.URLField()
 
     ingredients = models.ManyToManyField('Ingredient')
-    #category = models.CharField()  # TODO : relation
+    category = models.CharField(default="Plat", max_length=128)
 
     def __str__(self):
         return self.name
