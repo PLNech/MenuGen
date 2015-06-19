@@ -6,7 +6,7 @@
     <div class="col-lg-12">
         <div id="content-header" class="clearfix">
             <div class="pull-left">
-                <ol class="breadcrumb"><p></p></ol>
+                <ol class="breadcrumb"></ol>
                 <h1>Générer un nouveau menu</h1>
             </div>
             <div class="pull-right hidden-xs">
@@ -27,47 +27,60 @@
                 <div class="main-box clearfix">
                     <header class="main-box-header clearfix">Précisez vos critères</header>
                     <div class="main-box-body clearfix">
-                        <form class="form-horizontal" name="criteria" action="{% url 'menus.views.physiology' %}" method="POST">
+                        <form class="form-horizontal" name="criteria" action="{% url 'menus.views.physiology' %}"
+                              method="POST">
                             <div class="form-group">
                                 <label for="budgetRadioOptions" class="col-sm-3 control-label">Budget</label>
+
                                 <div class="col-sm-9">
                                     <label class="radio-inline">
-                                        <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio1" value="0"> Bon marché
+                                        <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio1"
+                                               value="0"> Bon marché
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio2" value="1"> Moyen
+                                        <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio2"
+                                               value="1"> Moyen
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio3" value="2"> Assez cher
+                                        <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio3"
+                                               value="2"> Assez cher
                                     </label>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="DifficultyRadioOptions" class="col-sm-3 control-label">Difficulté</label>
+
                                 <div class="col-sm-9">
                                     <label class="radio-inline">
-                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio1" value="option1"> Très facile
+                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions"
+                                               id="inlineRadio1" value="option1"> Très facile
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio2" value="option2"> Facile
+                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions"
+                                               id="inlineRadio2" value="option2"> Facile
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Moyenne
+                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions"
+                                               id="inlineRadio3" value="option3"> Moyenne
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions" id="inlineRadio4" value="option4"> Difficile
+                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions"
+                                               id="inlineRadio4" value="option4"> Difficile
                                     </label>
                                 </div>
                             </div>
                             <hr>
                             <br>
+
                             <div class="form-group">
                                 <label for="nb_days" class="col-sm-3 control-label">Pour</label>
+
                                 <div class="col-sm-4">
                                     <div class="input-group">
 
-                                        <select class="form-control" id="nb_days" name="nb_days" aria-describedby="day-unit-addon">
+                                        <select class="form-control" id="nb_days" name="nb_days"
+                                                aria-describedby="day-unit-addon">
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
@@ -81,18 +94,24 @@
                                     </div>
                                 </div>
                                 <div class="col-md-5 text-right">
-                                    <a id="placements-detail-ajax" href="{% url 'menus.views.generate_placements_detail'%}" class="btn btn-success" type="button">Détails &raquo;</a>
+                                    <a id="placements-detail-ajax"
+                                       href="{% url 'menus.views.generate_placements_detail' %}" class="btn btn-success"
+                                       type="button">Détails &raquo;</a>
                                 </div>
                             </div>
                             <br>
                             <hr>
                             <div class="form-group">
                                 <label for="profils" class="col-sm-3 control-label">Convives</label>
+
                                 <div class="col-sm-9">
                                     <div class="input-group">
-                                        <input type="text" id="profils" name="profils" class="form-control" value="MOI" disabled>
+                                        <input type="text" id="profils" name="profils" class="form-control" value="MOI"
+                                               disabled>
                                          <span class="input-group-btn">
-                                            <a id="select-profils-ajax" href="{% url 'menus.views.generate_select_profile' %}" class="btn btn-success" type="button">Ajouter &raquo;</a>
+                                            <a id="select-profils-ajax"
+                                               href="{% url 'menus.views.generate_select_profile' %}"
+                                               class="btn btn-success" type="button">Ajouter &raquo;</a>
                                          </span>
                                     </div>
                                 </div>
@@ -121,22 +140,22 @@
 {% block js %}
     <script type="text/javascript">
 
-        $(document).ready( function() {
-            $("#select-profils-ajax").click(function(e){
+        $(document).ready(function () {
+            $("#select-profils-ajax").click(function (e) {
                 var lien = $(this).attr('href');
                 console.log(lien);
-                $('#contextual-container').fadeOut('fast', function(){
-                    $('#contextual-container').load(lien, function() {
+                $('#contextual-container').fadeOut('fast', function () {
+                    $('#contextual-container').load(lien, function () {
                         $('#contextual-container').fadeIn('fast');
                     });
                 });
                 e.preventDefault()
             });
-            $("#placements-detail-ajax").click(function(e){
+            $("#placements-detail-ajax").click(function (e) {
                 var lien = $(this).attr('href');
-                var data = $( "#nb_days option:selected" ).val();
-                $('#contextual-container').fadeOut('fast', function(){
-                    $('#contextual-container').load(lien, { nb_days: data }, function() {
+                var data = $("select#nb_days option:selected").val();
+                $('#contextual-container').fadeOut('fast', function () {
+                    $('#contextual-container').load(lien, {nb_days: data}, function () {
                         $('#contextual-container').fadeIn('fast');
                     });
                 });
@@ -144,47 +163,49 @@
             });
         });
 
-        $(function(){
-            $(".dropdown-menu li a").click(function(){
-                $(".btn:first-child").text($(this).text());
-                $(".btn:first-child").val($(this).text());
+        $(function () {
+            $(".dropdown-menu li a").click(function () {
+                var btnFirstSelector = $(".btn:first-child");
+                btnFirstSelector.text($(this).text());
+                btnFirstSelector.val($(this).text());
             });
         });
 
 
         // AJAX for posting
         function update_pre_generation(data_dico) {
-            console.log("sanity check") // sanity check
+            console.log("sanity check"); // sanity check TODO KEVIN : Log meaningful things or stop logging
             $.ajax({
-                url : '{% url 'menus.views.update_gen_criteria' %}', // the endpoint
-                type : "POST", // http method
-                data : data_dico, // data sent with the post request
+                url: '{% url 'menus.views.update_gen_criteria' %}', // the endpoint
+                type: "POST", // http method
+                data: data_dico, // data sent with the post request
 
                 // handle a successful response
-                success : function(json) {
+                success: function (json) {
                     console.log(json); // log the returned json to the console
                     console.log("success"); // another sanity check
                 },
 
                 // handle a non-successful response
-                error : function(xhr,errmsg,err) {
-                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                error: function (xhr, errmsg, err) { //TODO KEVIN Display err, or at least remove parameter
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
                     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    // TODO KEVIN : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
                 }
             });
-        };
+        }
 
-        $('.budget').on('click', function(e) {
-            var data_dico = { budget : $( this ).val() };
+        $('.budget').on('click', function () {
+            var data_dico = {budget: $(this).val()};
             update_pre_generation(data_dico);
         });
-        $('.difficulty').on('click', function(e) {
-            var data_dico = { difficulty : $( this ).val() };
+        $('.difficulty').on('click', function () {
+            var data_dico = {difficulty: $(this).val()};
             update_pre_generation(data_dico);
         });
-        $('#nb_days').on('change', function(e) {
-            var data_dico = { nb_days: $( "#nb_days option:selected" ).val() };
+        $('#nb_days').on('change', function () {
+            var data_dico = {nb_days: $("select#nb_days option:selected").val()};
             $("#placements-detail-ajax").trigger('click');
             update_pre_generation(data_dico);
         });
