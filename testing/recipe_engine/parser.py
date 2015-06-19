@@ -39,10 +39,11 @@ class Ingredient:
                 "cuillères à café" : "cuillère à café",
                 "verres" : "verre",
                 "tranches" : "tranche",
-                "gousses" : "gousse"
+                "gousses" : "gousse",
+                "boîtes": "boîte", "boites": "boîte"
         }
 
-        units = [ "mg", "g", "cg", "kg", "l", "cl", "cuillère à soupe", "cuillère à café", "verre", "tranche" , "gousse" ]
+        units = [ "mg", "g", "cg", "kg", "l", "cl", "cuillère à soupe", "cuillère à café", "verre", "tranche" , "gousse", "boîte" ]
         
         useless = [ "de" ]
 

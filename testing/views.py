@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from testing.models import Comment
 from testing.recipe_engine.scraper import random_recipe, Recipe
+from testing.recipe_engine.db_link import save_recipe
 
 def index(request):
     return render(request, 'index.html', {})
@@ -11,7 +12,8 @@ def recipes(request):
         recipe = Recipe(request.POST['recipe_url'])
     else:
         recipe = random_recipe()
-    recipe.save_screenshot()
+    #recipe.save_screenshot()
+    #save_recipe(recipe)
 
     com_saved = False
     if 'new_comment' in request.POST and request.POST['new_comment']:
