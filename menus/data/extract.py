@@ -391,6 +391,6 @@ if __name__ == '__main__':
         print("Items had on average %d fields filled." % filled)
         print("Skipped %d lines with encoding errors." % skip_count_lines)
         print("Skipped %d items missing needed attribute(s)." % skip_count_items)
-        for field, skip_count in sorted(skip_count_fields.items(), key=lambda x: x[1]):  # TODO: Sort
+        for field, skip_count in sorted(skip_count_fields.items(), key=lambda x: x[1]):
             print("-\t%d items had no %s." % (skip_count, field))
         print_stats(food_array)

@@ -160,7 +160,6 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
             remaining_dishes -= nb_dishes_per_meal
             remaining_slots -= nb_dishes_per_meal
             if remaining_dishes < 0 or remaining_slots < 0:
-                # TODO: Propagate number of meals to algorithm's Config
                 print("I had to break the loop : %d dishes left <-> %d slots left." %
                       (remaining_dishes, remaining_slots))
                 should_break = True
@@ -175,6 +174,7 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
     return planning
 
 def generate_planning(nb_days, nb_meals_per_day, nb_dishes):
+    # TODO : Handle variable structure of meals (not only starter-main-dessert)
     planning = []
     for j in range(nb_meals_per_day):
         daily_planning = []
