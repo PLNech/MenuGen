@@ -68,7 +68,7 @@ def run(run_name, init_fittest=None):
     efficacy, efficiency = stats.calculate_effs(init_score, final_score)
     efficacy_str_raw = "%+.1f%%" % (efficacy * 100)
     efficacy_str_color = Printer.if_positive(efficacy_str_raw, efficacy)
-    efficiency_format = "%2d" if solution_type is "Trip" else "%+.3f"  # TODO: Cleanup
+    efficiency_format = "%2d" if solution_type is "Trip" else "%+.3f"
     efficiency_str_raw = efficiency_format % (efficiency * 100)
     efficiency_str_color = Printer.if_positive(efficiency_str_raw, efficiency)
 

@@ -13,5 +13,4 @@ def dish_to_recipe(dish):
     """
     recipe = Recipe()
     recipe.name = dish.name
-    # TODO: Generate dummy data to be used in views
     return recipe
