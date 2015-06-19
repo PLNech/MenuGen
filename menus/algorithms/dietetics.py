@@ -89,6 +89,10 @@ class DieteticsNeeds:
         self.grams_carbohydrates = carbohydrates
         self.grams_proteins = proteins
 
+    def __str__(self):
+        return "Needs: %d kcal, %d g fats, %d g carbs, %d g prots" % \
+               (self.calories, self.grams_fats, self.grams_carbohydrates, self.grams_proteins)
+
 
 if __name__ == "__main__":
     given_age = 18

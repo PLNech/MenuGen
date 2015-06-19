@@ -86,16 +86,12 @@ def generation(request):
         user_sex = Calculator.SEX_H
 
     needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
-
+    print(str(needs))
     # """ Here is an example of a matrix containing (nb_days x 5) meals """
     # planning = generate_planning(nb_days, nb_meals, nb_dishes)
 
     Config.parameters[Config.KEY_MAX_DISHES] = nb_days * nb_meals * nb_dishes
     menu = run_standard(None, time.ctime())
-    menu_str = ""
-    for g in menu.genes:
-        menu_str += g.name + "\n"
-    print("Result planning:" + menu_str)
     planning = generate_planning_from_list(nb_days, nb_meals, menu)
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 
