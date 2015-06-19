@@ -46,7 +46,9 @@
                                 </thead>
                                 <tbody>
                                 {% for profile in guests %}
+                                    <div class="profile">
                                     {% include "profiles/guests/guest.html" with profile=profile%}
+                                    </div>
                                 {% endfor %}
                                 </tbody>
                             </table>
@@ -56,8 +58,34 @@
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="profil-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center modal-md">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}
+    <script>
+        $('a .info').on('click', function() {
+            console.log("djasbdjasbck");
+            $('#profile-modal').removeData("bs.modal").find(".modal-content").html('{% url 'menus.views.profile_infos' %}');
+
+{#            $.ajax({#}
+{#                url: $(this).attr('href'),#}
+{#                context: this,#}
+{#                success: function(data, status) {#}
+{#                    $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);#}
+{#                }#}
+{#            });#}
+            return false;
+        });
+
+        $(document).on("hidden.bs.modal", function (e) {
+            $(e.target).removeData("bs.modal").find(".modal-content").empty();
+        });
+    </script>
 {% endblock %}

@@ -12,11 +12,11 @@
             </div>
             <div class="pull-right hidden-xs">
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'menus.views.generate' %}" class="btn btn-primary">
+                    <a href="{% url 'generate' %}" class="btn btn-primary">
                         <i class="fa fa-angle-double-left"></i> Paramètres de la génération
                     </a>
                     <a class="btn btn-warning"
-                           href="{% url 'menus.views.sign_up'%}"
+                           href="{% url 'sign_up'%}"
                            role="button"
                            data-toggle="modal"
                            data-target="#signInUpModal">
@@ -55,7 +55,7 @@
 
                                     <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
                                         <a data-toggle="modal"
-                                           href="{% url 'menus.views.generation_meal_details'%}"
+                                           href="{% url 'generation_meal_details'%}"
                                            data-target="#mealDetailsModal">
                                             DETAILS
                                         </a>

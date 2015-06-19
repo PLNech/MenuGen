@@ -6,7 +6,7 @@
 
 <header class="navbar" id="header-navbar">
     <div class="container">
-        <a href="{% url 'menus.views.landing' %}" id="logo" class="navbar-brand">
+        <a href="{% url 'landing' %}" id="logo" class="navbar-brand">
             <!--
             <img src="img/logo.png" alt="" class="normal-logo logo-white"/>
             <img src="img/logo-black.png" alt="" class="normal-logo logo-black"/>
@@ -45,21 +45,21 @@
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href=""><i class="fa fa-user"></i>Profile</a></li>
                                 <li><a href=""><i class="fa fa-cog"></i>Settings</a></li>
-                                <li><a href="{% url 'menus.views.sign_out' %}"><i class="fa fa-power-off"></i>Logout</a></li>
+                                <li><a href="{% url 'sign_out' %}"><i class="fa fa-power-off"></i>Logout</a></li>
                             </ul>
                         </li>
                     </ul>
                 {% else %}
                     <div style="padding-top: 5px; padding-right: 10px;">
                         <a class="btn btn-primary"
-                           href="{% url 'menus.views.sign_in'%}"
+                           href="{% url 'sign_in'%}"
                            role="button"
                            data-toggle="modal"
                            data-target="#signInUpModal">
                             Connexion
                         </a>
                         <a class="btn btn-primary"
-                           href="{% url 'menus.views.sign_up'%}"
+                           href="{% url 'sign_up'%}"
                            role="button"
                            data-toggle="modal"
                            data-target="#signInUpModal">
@@ -67,13 +67,13 @@
                         </a>
                     </div>
                     <div class="modal fade" id="signInUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="vertical-alignment-helper">
-                                <div class="modal-dialog vertical-align-center modal-sm">
-                                    <div class="modal-content">
-                                    </div>
+                        <div class="vertical-alignment-helper">
+                            <div class="modal-dialog vertical-align-center modal-sm">
+                                <div class="modal-content">
                                 </div>
                             </div>
                         </div>
+                    </div>
                 {% endif %}
             </div>
         </div>
