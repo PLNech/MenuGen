@@ -43,7 +43,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    # 'menus.middleware.ResetTLSMiddleware',
+    # 'menus.middleware.ResetTLSMiddleware', #TODO: Check with Kevin usage of Middleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
