@@ -81,7 +81,7 @@ class Calculator():
         return DieteticsNeeds(calories, proteins_g, carbohydrates_g, fats_g)
 
 
-class DieteticsNeeds():
+class DieteticsNeeds:
     # FIXME Use min and max objectives
     def __init__(self, calories, proteins, carbohydrates, fats):
         self.calories = calories
