@@ -250,8 +250,9 @@ def regimes(request):
 
 
 def tastes(request):
+    ingredient_list = []  # Ingredient.objects.all()  # TODO: Filter most frequent
     return render(request, 'profile/tastes.html',
-            { 'ingredients': [ingredient.name for ingredient in Ingredient.objects.all()] })
+                  {'ingredients': [ingredient.name for ingredient in ingredient_list]})
 
 
 @login_required
