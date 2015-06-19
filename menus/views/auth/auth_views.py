@@ -15,7 +15,7 @@ def sign_in(request):
         form = SignInForm(data=request.POST)
         if form.is_valid():
             login(request, form.user_cache)
-            return redirect('menus.views.friends')
+            return redirect('profiles')
         return HttpResponse(content=render(request, 'auth/sign_in.html', {'form': form}),
                             content_type='text/html; charset=utf-8',
                             status=form.error_code)
@@ -32,7 +32,7 @@ def sign_up(request):
             user = authenticate(username=user.username, password=request.POST['password1'])
             login(request, user)
 
-            return redirect('menus.views.friends')
+            return redirect('profiles')
         return HttpResponse(content=render(request, 'auth/sign_up.html', {'form': form}),
                                 content_type='text/html; charset=utf-8',
                                 status=400)
@@ -40,4 +40,4 @@ def sign_up(request):
 @login_required
 def sign_out(request):
     logout(request)
-    return redirect('menus.views.landing')
+    return redirect('landing')

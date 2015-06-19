@@ -55,7 +55,7 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     'menus.views.profiles.profiles_views',
 
-    url(r'^friends$', 'friends', name='friends'),
+    url(r'^profiles$', 'profiles', name='profiles'),
     url(r'^profile_infos$', 'profile_infos', name='profile_infos'),
     url(r'^update_physio$', 'update_physio', name='update_physio'),
     # url(r'^update_gen_criteria', 'update_gen_criteria'),

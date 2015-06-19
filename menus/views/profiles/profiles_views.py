@@ -5,7 +5,7 @@ from django.shortcuts import render
 __author__ = 'kiyoakimenager'
 
 @login_required
-def friends(request):
+def profiles(request):
     guests = []
     guest_1 = {
         'username': 'Kevin',

@@ -1,12 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import render, redirect
-from menus.data.generator import generate_planning_from_list
-from menus.models import Recipe
-from menus.models import Ingredient
-from menus.algorithms.run import run_standard
-from menus.algorithms.utils.config import Config
-
+from django.shortcuts import render
 
 def landing(request):
     request.session.flush()

@@ -50,7 +50,7 @@
                 data: $(this).serialize(),
                 context: this,
                 success: function(data, status) {
-                    location.href = '{% url 'friends' %}';
+                    location.href = '{% url 'profiles' %}';
                 },
                 error:  function(data, status) {
                     $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data.responseText);
