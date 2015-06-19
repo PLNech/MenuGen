@@ -20,26 +20,29 @@ class MenuManager(Manager):
     def get():
         caller = inspect.getouterframes(inspect.currentframe(), 2)[1][3]
         if 'MenuManager' not in _local.__dict__:
-            print(Printer.err("MenuManager not found. initialising cache procedure..."))
+            if Config.print_manager:
+                print(Printer.err("MenuManager not found. initialising cache procedure..."))
+
             _local.MenuManager = MenuManager()
             _local.MenuManager.init()
             items = _local.MenuManager.count()
 
-            # print("Caching MenuManager with %d items          <%s.%s object at %s> [%s]" % (
-            #     items,
-            #     _local.MenuManager.__class__.__module__,
-            #     _local.MenuManager.__class__.__name__,
-            #     hex(id(_local.MenuManager)),
-            #     caller))
-            print(_local.MenuManager.print_items())
-        else:
-            items = _local.MenuManager.count()
-            # print("Returning cached MenuManager with %d items <%s.%s object at %s> [%s]" % (
-            #     items,
-            #     _local.MenuManager.__class__.__module__,
-            #     _local.MenuManager.__class__.__name__,
-            #     hex(id(_local.MenuManager)),
-            #     caller))
+            if Config.print_manager:
+                print("Caching MenuManager with %d items          <%s.%s object at %s> [%s]" % (
+                    items,
+                    _local.MenuManager.__class__.__module__,
+                    _local.MenuManager.__class__.__name__,
+                    hex(id(_local.MenuManager)),
+                    caller))
+                print(_local.MenuManager.print_items())
+        elif Config.print_manager:
+                items = _local.MenuManager.count()
+                print("Returning cached MenuManager with %d items <%s.%s object at %s> [%s]" % (
+                    items,
+                    _local.MenuManager.__class__.__module__,
+                    _local.MenuManager.__class__.__name__,
+                    hex(id(_local.MenuManager)),
+                    caller))
 
         return _local.MenuManager
 
@@ -61,9 +64,10 @@ class MenuManager(Manager):
             # dish.name = dish.name + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
             self.add_item(dish)
 
-            if Config.print_items:
+            if Config.print_manager:
                 print("Dish %s." % dish)
-        print("Initialised MenuManager with %i dishes." % len(self.dishes))
+        if Config.print_manager:
+            print("Initialised MenuManager with %i dishes." % len(self.dishes))
 
     def reset(self):
         self.dishes = []
@@ -83,7 +87,8 @@ class MenuManager(Manager):
             return self.dishes.index(dish)
         except ValueError:
             msg = "%s was not found in MenuManager:\n%s." % (str(dish), self.print_items())
-            print(msg, flush=True)
+            if Config.print_manager:
+                print(msg, flush=True)
             raise ValueError(msg)
 
     def print_items(self):
