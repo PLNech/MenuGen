@@ -1,7 +1,7 @@
 __author__ = 'PLNech'
 
 
-class Config():
+class Config:
     KEY_POPULATION_SIZE = "population_size"
     KEY_TOURNAMENT_SIZE = "tournament_size"
     KEY_RUN_NUMBER = "nb_runs"
@@ -202,3 +202,11 @@ class Config():
         "Macaroni",
         "Macaroni & Cheese",
         ]
+
+    @staticmethod
+    def update_needs(needs, nb_days):
+        Config.parameters[Config.KEY_OBJECTIVE_CALORIES] = needs.calories * nb_days
+        Config.parameters[Config.KEY_OBJECTIVE_PROTEINS] = needs.grams_proteins * nb_days
+        Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES] = needs.grams_carbohydrates * nb_days
+        Config.parameters[Config.KEY_OBJECTIVE_FATS] = needs.grams_fats * nb_days
+        print("Dietetic needs set to %s." % needs)

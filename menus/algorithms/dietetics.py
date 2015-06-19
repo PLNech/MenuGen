@@ -1,7 +1,7 @@
 __author__ = 'PLNech'
 
 
-class Calculator():
+class Calculator:
     EXERCISE_LOW = 'low'
     EXERCISE_LIGHT = 'light'
     EXERCISE_MODERATE = 'moderate'
@@ -90,7 +90,7 @@ class DieteticsNeeds:
         self.grams_proteins = proteins
 
     def __str__(self):
-        return "Needs: %d kcal, %d g fats, %d g carbs, %d g prots" % \
+        return "%d kcal, %d g fats, %d g carbs, %d g proteins" % \
                (self.calories, self.grams_fats, self.grams_carbohydrates, self.grams_proteins)
 
 

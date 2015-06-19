@@ -139,19 +139,31 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
     :type nb_meals_per_day: int
     :type  menu: model.menu.menu.Menu
     """
+    nb_dishes = len(menu.genes)
+    nb_dishes_per_meal = 3
+    nb_meals = nb_meals_per_day * nb_days * nb_dishes_per_meal
 
-    dishes_remaining = len(menu.genes)
+    remaining_dishes = nb_dishes
+    remaining_slots = nb_meals
+
+    print("Generating a planning : %d days x %d x 3 = %d from a %d long list." %
+          (nb_days, nb_meals_per_day, nb_meals, nb_dishes))
 
     planning = []
     random.shuffle(menu.genes)
+    should_break = False
     for j in range(nb_meals_per_day):
+        if should_break:
+            break
         daily_planning = []
         for i in range(nb_days):
-            dishes_remaining -= 3
-            if dishes_remaining < 0:
+            remaining_dishes -= nb_dishes_per_meal
+            remaining_slots -= nb_dishes_per_meal
+            if remaining_dishes < 0 or remaining_slots < 0:
                 # TODO: Propagate number of meals to algorithm's Config
-                print("I had to break the loop, even if %d dishes are still missing." %
-                      (len(menu.genes) - dishes_remaining))
+                print("I had to break the loop : %d dishes left <-> %d slots left." %
+                      (remaining_dishes, remaining_slots))
+                should_break = True
                 break
             dish = menu.genes.pop()
             dish2 = menu.genes.pop()

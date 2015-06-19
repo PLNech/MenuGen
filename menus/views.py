@@ -1,12 +1,11 @@
 import time
-from django.core.urlresolvers import reverse
-from django.template.response import TemplateResponse
+
 from menus.algorithms.dietetics import Calculator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
-from menus.data.generator import generate_planning, generate_planning_from_list
+from menus.data.generator import generate_planning_from_list
 from menus.models import Recipe
 from menus.models import Ingredient
 from menus.algorithms.run import run_standard
@@ -61,7 +60,7 @@ def generation(request):
     """ Use the days number if exists """
     if 'nb_days' in request.session:
         nb_days = int(request.session['nb_days'])
-    nb_meals = 5  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
+    nb_meals = 3  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
     nb_dishes = 3  # TODO: Determine appropriate amount for meals ?
 
     user_exercise = Calculator.EXERCISE_MODERATE  # TODO: Get exercise of user
@@ -86,7 +85,7 @@ def generation(request):
         user_sex = Calculator.SEX_H
 
     needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
-    print(str(needs))
+    Config.update_needs(needs, nb_days)
     # """ Here is an example of a matrix containing (nb_days x 5) meals """
     # planning = generate_planning(nb_days, nb_meals, nb_dishes)
 
