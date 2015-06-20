@@ -23,7 +23,7 @@
 </div>
 <div class="modal-body">
     <form class="form-horizontal" id="sign-in-form" action="{% url 'sign_in' %}" method="POST">
-        <div class="modal-body">
+
             {% if form.errors %}
                 <p style="color: red;">
                     {{ form.error_messages }}
@@ -31,7 +31,7 @@
             {% endif %}
             {% csrf_token %}
             {{ form.as_table }}
-        </div>
+
         <div class="control-group">
             <div class="controls text-right">
                 <button type="submit" class="btn btn-primary">Se connecter</button>
