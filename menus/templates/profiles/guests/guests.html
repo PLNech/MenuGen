@@ -1,6 +1,9 @@
 {% extends '_base.html' %}
 
-{% block css %}{% endblock %}
+{% load staticfiles %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap_overrides/modal.css' %}" />
+{% endblock %}
 
 {% block content %}
     <div class="col-lg-12">
@@ -17,7 +20,7 @@
                 <div class="main-box-body clearfix">
                     <div class="table-responsive">
                         <table class="table user-list table-hover">
-                            {% include "profiles/guests/guest.html" with profile=user.profile%}
+                            {% include "profiles/guests/guest.html" with profile=user_profile%}
                         </table>
                     </div>
                 </div>
@@ -47,7 +50,7 @@
                                 <tbody>
                                 {% for profile in guests %}
                                     <div class="profile">
-                                    {% include "profiles/guests/guest.html" with profile=profile%}
+                                        {% include "profiles/guests/guest.html" with profile=profile%}
                                     </div>
                                 {% endfor %}
                                 </tbody>
@@ -57,11 +60,11 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="profil-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="vertical-alignment-helper">
-            <div class="modal-dialog vertical-align-center modal-md">
-                <div class="modal-content">
+        <div class="modal fade" id="profile-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center modal-lg">
+                    <div class="modal-content">
+                    </div>
                 </div>
             </div>
         </div>
@@ -70,22 +73,25 @@
 
 {% block js %}
     <script>
-        $('a .info').on('click', function() {
-            console.log("djasbdjasbck");
-            $('#profile-modal').removeData("bs.modal").find(".modal-content").html('{% url 'profile_infos' %}');
-
+{#        $('.user-list').on('click', 'a', function() {#}
 {#            $.ajax({#}
 {#                url: $(this).attr('href'),#}
+{#                data: $(this).serialize(),#}
 {#                context: this,#}
 {#                success: function(data, status) {#}
-{#                    $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);#}
+                    {#                    $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data);#}
+{#                    $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data);#}
+                    {#                    $('#content-wrapper').fadeOut( 100 , function() {#}
+                    {#                        $(this).html( data);#}
+                    {#                        }).fadeIn( 1000 );#}
+                    {#                    $('#content-wrapper').html(data);#}
 {#                }#}
 {#            });#}
-            return false;
-        });
-
-        $(document).on("hidden.bs.modal", function (e) {
-            $(e.target).removeData("bs.modal").find(".modal-content").empty();
-        });
+{#            return false;#}
+{#        });#}
+{##}
+{#        $(document).on("hidden.bs.modal", function (e) {#}
+{#            $(e.target).removeData("bs.modal").find(".modal-content").empty();#}
+{#        });#}
     </script>
 {% endblock %}

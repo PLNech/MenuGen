@@ -1,33 +1,42 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render
+from menus.models import Profile
 
 __author__ = 'kiyoakimenager'
 
 @login_required
-def profiles(request):
-    guests = []
-    guest_1 = {
-        'username': 'Kevin',
-        'imc': 20.2
-    }
-    guest_2 = {
-        'username': 'Paul louis',
-        'imc': 18
-    }
-    guest_3 = {
-        'username': 'Guillaume',
-        'imc': 25
-    }
-    guests.append(guest_1)
-    guests.append(guest_2)
-    guests.append(guest_3)
-    return render(request, 'profiles/guests/guests.html', {'guests': guests})
+def index(request):
+    # p1 = Profile()
+    # p2 = Profile()
+    # p3 = Profile()
 
+    user = request.user
+    # user.profile_set.add(p1, p2, p3)
+    user_profile = user.profile_set.get(is_owner_profile__exact=True)
+    user_guests = user.profile_set.exclude(is_owner_profile__exact=True)
+
+    return render(request, 'profiles/guests/guests.html', {
+        'user_profile': user_profile,
+        'guests': user_guests
+    })
 
 @login_required
-def profile_infos(request):
-    return render(request, 'profiles/guests/guest_infos.html')
+def detail(request, profile_id):
+    p = Profile.objects.get(id__exact=profile_id)
+    return render(request, 'profiles/guests/guest_detail.html', {
+        'profile': p
+    })
+
+@login_required
+def edit(request, profile_id):
+    print(profile_id)
+    return render(request, 'profiles/guests/guest_edit.html')
+
+@login_required
+def remove(request, profile_id):
+    print(profile_id)
+    return render(request, 'profiles/guests/guest_remove.html')
 
 
 def update_physio(request):
