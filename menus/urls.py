@@ -57,6 +57,7 @@ urlpatterns += patterns(
 
     url(r'^profiles$', 'index', name='profiles'),
 
+    url(r'^profiles/new', 'new', name='profile_create'),
     url(r'^profiles/(?P<profile_id>[0-9]+)/detail$', 'detail', name='profile_detail'),
     url(r'^profiles/(?P<profile_id>[0-9]+)/edit$', 'edit', name='profile_edit'),
     url(r'^profiles/(?P<profile_id>[0-9]+)/remove$', 'remove', name='profile_remove'),
