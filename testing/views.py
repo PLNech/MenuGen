@@ -12,7 +12,7 @@ def recipes(request):
         recipe = Recipe(request.POST['recipe_url'])
     else:
         recipe = random_recipe()
-    #recipe.save_screenshot()
+    recipe.save_screenshot()
     matched_ingredients = save_recipe(recipe)
 
     com_saved = False

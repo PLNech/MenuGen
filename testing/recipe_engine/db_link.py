@@ -1,10 +1,23 @@
 from menus.models import Recipe, Ingredient
+from Levenshtein import distance
+
+def get_closest(parsed_ingredient, matching):
+    """
+    :param parsed_ingredient:
+    :param matching: matching ingredients
+    :return: the closest matching using Levenshtein's distance
+    """
+    scores = {}
+    for m in matching:
+        scores[distance(parsed_ingredient, m.name)] = m
+    return scores[sorted(scores.keys())[0]]
+
 
 def get_matching_ingredient(parsed_ingredient):
     matching = Ingredient.objects.filter(name=parsed_ingredient)
     if not matching:
         matching = Ingredient.objects.filter(name__icontains=parsed_ingredient)
-    return matching[0] if matching else None
+    return get_closest(parsed_ingredient, matching) if matching else None
 
 def get_ease(parsed_ease):
     ease = {
@@ -55,12 +68,11 @@ def save_recipe(recipe):
     #   above steps with every word in the string from longest to shortest
     matched_ingredients = {}
     for i in recipe.ingredients:
+        if not i:
+            continue
         ingredient = get_matching_ingredient(i.name)
         if not ingredient:
-            print(i.name)
-            print("------")
             for word in reversed(sorted(i.name.split(" "), key=len)):
-                print(word)
                 ingredient = get_matching_ingredient(word)
                 if ingredient:
                     break
