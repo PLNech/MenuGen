@@ -13,7 +13,7 @@ def recipes(request):
     else:
         recipe = random_recipe()
     #recipe.save_screenshot()
-    #save_recipe(recipe)
+    matched_ingredients = save_recipe(recipe)
 
     com_saved = False
     if 'new_comment' in request.POST and request.POST['new_comment']:
@@ -26,6 +26,7 @@ def recipes(request):
 
     return render(request, 'recipes.html', {
         'recipe': recipe,
+        'matched_ingredients': matched_ingredients,
         'com_saved': com_saved,
         'comments': comments
     })

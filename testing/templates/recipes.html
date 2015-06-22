@@ -7,7 +7,7 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="{% url 'testing.views.index' %}">Testing: Recipes (scraping and ingredient text mining)</a>
+        <a class="navbar-brand" href="{% url 'testing.views.index' %}">Testing: Recipes</a>
       </div>
     </div>
   </nav>
@@ -33,6 +33,7 @@
   <ul class="nav nav-tabs">
     <li class="active"> <a href="#infos" data-toggle="tab">General infos</a> </li>
     <li> <a href="#ingredients" data-toggle="tab">Ingredients</a> </li>
+    <li> <a href="#matched_ingredients" data-toggle="tab">Matched ingredients</a> </li>
   </ul>
 
   <div class="row col-md-6 pull-left tab-content">
@@ -107,7 +108,23 @@
         {% endfor %}
       </tbody>
     </table>
+
+      <table class="table table-striped tab-pane active" id="matched_ingredients">
+          <tbody>
+          <tr>
+              <th>Parsed</th>
+              <th>Matched</th>
+          </tr>
+          {% for parsed, matched in matched_ingredients.items %}
+          <tr>
+              <td>{{ parsed }}</td>
+              <td>{{ matched }}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+      </table>
   </div>
+
 
   <div class="row col-md-6 pull-right">
     <p><img class="img-thumbnail" src="{% static 'screen.png' %}" alt="no screenshot found"/></p>

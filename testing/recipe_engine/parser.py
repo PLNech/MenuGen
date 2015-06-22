@@ -10,6 +10,8 @@ class Ingredient:
         self.unit = None
         self.quantity = None
 
+        s = s.replace("0g", "0 g")
+
         word2num = {
                 "un demi" : 1/2,
                 "trois-quarts" : 3/4, "trois quarts" : 3/4, "3 quart" : 3/4,
@@ -63,7 +65,7 @@ class Ingredient:
         for w in useless:
             s = s.replace(" " + w, "")
 
-        # step 4: parse delicately
+        # step 4: parse
         after_quantity = False
         in_unit = False
         for word in s.split(" "):
