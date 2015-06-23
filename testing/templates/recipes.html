@@ -18,6 +18,13 @@
 
   <div class="row">
     <div class="col-sm-12">
+      <div class="col-sm-1 pull-right">
+        <form class="form-horizontal" action="{% url 'testing.views.recipes' %}" method="POST">
+            <input type="hidden" name="recipe_url" value="{{ recipe.url }}"/>
+            {% csrf_token %}
+            <button class="btn btn-default pull-right" type="submit">Reload</button>
+        </form>
+      </div>
       <a class="btn btn-default pull-right" href="{% url 'testing.views.recipes' %}">Random recipe</a>
       <form class="form-horizontal col-sm-7 pull-right" action="{% url 'testing.views.recipes' %}" method="POST">
         <label for="url-input" class="col-sm-6 control-label">Specific url:</label>
@@ -109,7 +116,7 @@
       </tbody>
     </table>
 
-      <table class="table table-striped tab-pane active" id="matched_ingredients">
+      <table class="table table-striped tab-pane" id="matched_ingredients">
           <tbody>
           <tr>
               <th>Parsed</th>
@@ -129,7 +136,21 @@
   <div class="row col-md-6 pull-right">
     <p><img class="img-thumbnail" src="{% static 'screen.png' %}" alt="no screenshot found"/></p>
   </div>
-  
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-1 pull-right">
+                <form class="form-horizontal" action="{% url 'testing.views.recipes' %}" method="POST">
+                    <input type="hidden" name="recipe_url" value="{{ recipe.url }}"/>
+                    <input type="hidden" name="save" value="go"/>
+                    {% csrf_token %}
+                    <button class="btn btn-default pull-right" type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
   <ul class="nav nav-tabs col-sm-12">
     <li class="active"> <a href="#new-comment" data-toggle="tab">New comment</a> </li>

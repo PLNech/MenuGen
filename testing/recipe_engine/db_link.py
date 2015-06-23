@@ -37,8 +37,39 @@ def get_ease(parsed_ease):
             return 3
         return 2
 
+def get_matching_ingredients(parsed_ingredients, recipe=None):
+    """
+    :param parsed_ingredients: the ingredients parsed from a marmiton recipe
+    :param recipe: the recipe to link to the ingredients
+    :return:matching ingredients from the database
+    """
+    # attempts in order:
+    #   perfect match
+    #   containing the string
+    #   above steps with every word in the string from longest to shortest
+    matched_ingredients = {}
+    for i in parsed_ingredients:
+        if not i:
+            continue
+        ingredient = get_matching_ingredient(i.name)
+        if not ingredient:
+            for word in reversed(sorted(i.name.split(" "), key=len)):
+                ingredient = get_matching_ingredient(word)
+                if ingredient:
+                    break
+
+        if ingredient:
+            if recipe:
+                recipe.ingredients.add(ingredient)
+            matched_ingredients[i.name] = ingredient.name
+        else:
+            matched_ingredients[i.name] = "<No match found>"
+
+    return matched_ingredients
+
 def save_recipe(recipe):
     """
+    Save the recipe into the database
     :param recipe:the recipe scraped from marmiton
     :return: the ingredients matched
     """
@@ -61,25 +92,5 @@ def save_recipe(recipe):
     r.origin_url = recipe.url
     r.save()
 
-    # Link with ingredients
-    # attempts in order:
-    #   perfect match
-    #   containing the string
-    #   above steps with every word in the string from longest to shortest
-    matched_ingredients = {}
-    for i in recipe.ingredients:
-        if not i:
-            continue
-        ingredient = get_matching_ingredient(i.name)
-        if not ingredient:
-            for word in reversed(sorted(i.name.split(" "), key=len)):
-                ingredient = get_matching_ingredient(word)
-                if ingredient:
-                    break
-        if ingredient:
-            r.ingredients.add(ingredient)
-            matched_ingredients[i.name] = ingredient.name
-        else:
-            matched_ingredients[i.name] = "[Not found]"
+    get_matching_ingredients(recipe.ingredients, r)
 
-    return matched_ingredients
