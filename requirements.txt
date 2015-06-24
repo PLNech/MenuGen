@@ -5,3 +5,4 @@ progressbar2==2.7.3
 numpy
 requests
 beautifulsoup4
+python-levenshtein==0.12.0
