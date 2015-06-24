@@ -25,11 +25,9 @@
             <div class="main-box-body clearfix">
                 <form class="form-horizontal" name="physiology" action="{% url 'physiology' %}" method="POST">
                     <div class="form-group">
-                        <label for="username" class="col-sm-2 control-label">Nom du profil</label>
-
-                        <div class="col-sm-5">
-                            <input type="text" class="form-control" id="username" name="username"
-                                   placeholder="Nom du profil">
+                        <label for="name" class="col-sm-2 control-label">Nom du profil</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Nom du profil" value="{{ physio.name }}">
                         </div>
                     </div>
                     <br>
@@ -39,22 +37,18 @@
 
                         <div class="col-sm-2">
                             <select class="form-control" id="sex" name="sex">
-                                <option value="man">Homme</option>
-                                <option value="woman">Femme</option>
+                                <option value="0" {% if physio.sex == 0 %}selected="selected"{% endif %}>Homme</option>
+                                <option value="1" {% if physio.sex == 1 %}selected="selected"{% endif %}>Femme</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="age" class="col-sm-2 control-label">Age</label>
+                        <label for="birthday" class="col-sm-2 control-label">Age</label>
 
                         <div class="col-sm-2">
                             <div class="input-group">
-                                <select class="form-control" id="age" name="age">
-                                    {% for i in 6|range_to:150 %}
-                                        <option>{{ i }}</option>
-                                    {% endfor %}
-                                </select>
-                                <span class="input-group-addon" id="age">ans</span>
+                                <input type="text" class="form-control" id="birthday" name="birthday" placeholder="Age" value="{{ physio.birthday }}">
+                                <span class="input-group-addon"> ans</span>
                             </div>
                         </div>
                     </div>
@@ -63,12 +57,7 @@
 
                         <div class="col-sm-2">
                             <div class="input-group">
-                                <select class="selectpicker form-control" id="weight" name="weight"
-                                        aria-describedby="weight-addon">
-                                    {% for i in 30|range_to:150 %}
-                                        <option>{{ i }}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="text" class="form-control" id="weight" name="weight" placeholder="Poids" value="{{ physio.weight }}">
                                 <span class="input-group-addon" id="weight">kg</span>
                             </div>
                         </div>
@@ -78,12 +67,18 @@
 
                         <div class="col-sm-2">
                             <div class="input-group">
-                                <select class="form-control" id="height" name="height">
-                                    {% for i in 10|stepped_range_to:25 %}
-                                        <option>{{ i }}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="text" class="form-control" id="height" name="height" placeholder="Taille" value="{{ physio.height }}">
                                 <span class="input-group-addon" id="weight">m</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="height" class="col-sm-2 control-label">Activité</label>
+
+                        <div class="col-sm-2">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="activity" name="activity" placeholder="Activité" value="{{ physio.activity }}">
+                                <span class="input-group-addon" id="activity"> ?</span>
                             </div>
                         </div>
                     </div>
@@ -126,22 +121,29 @@
                 }
             });
         }
-        ;
 
+        $('#name').on('change', function (e) {
+            var data_dico = {name: $("#name").val()};
+            update_physio(data_dico);
+        });
         $('#sex').on('change', function (e) {
             var data_dico = {sex: $('select#sex option:selected').val()};
             update_physio(data_dico);
         });
-        $('#age').on('change', function (e) {
-            var data_dico = {age: $("select#age option:selected").val()};
+        $('#birthday').on('change', function (e) {
+            var data_dico = {birthday: $("#birthday").val()};
             update_physio(data_dico);
         });
         $('#height').on('change', function (e) {
-            var data_dico = {height: $("select#height option:selected").val()};
+            var data_dico = {height: $("#height").val()};
             update_physio(data_dico);
         });
         $('#weight').on('change', function (e) {
-            var data_dico = {weight: $("select#weight option:selected").val()};
+            var data_dico = {weight: $("#weight").val()};
+            update_physio(data_dico);
+        });
+        $('#activity').on('change', function (e) {
+            var data_dico = {activity: $("#activity").val()};
             update_physio(data_dico);
         });
 
