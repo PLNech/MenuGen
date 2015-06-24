@@ -55,10 +55,14 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     'menus.views.profiles.profiles_views',
 
-    url(r'^friends$', 'friends', name='friends'),
-    url(r'^profile_infos$', 'profile_infos', name='profile_infos'),
+    url(r'^profiles$', 'index', name='profiles'),
+
+    url(r'^profiles/new', 'new', name='profile_create'),
+    url(r'^profiles/(?P<profile_id>[0-9]+)/detail$', 'detail', name='profile_detail'),
+    url(r'^profiles/(?P<profile_id>[0-9]+)/edit$', 'edit', name='profile_edit'),
+    url(r'^profiles/(?P<profile_id>[0-9]+)/remove$', 'remove', name='profile_remove'),
+
     url(r'^update_physio$', 'update_physio', name='update_physio'),
-    # url(r'^update_gen_criteria', 'update_gen_criteria'),
     url(r'^update_tastes', 'update_tastes', name='update_tastes'),
     url(r'^physiology$', 'physiology', name='physiology'),
     url(r'^regimes$', 'regimes', name='regimes'),

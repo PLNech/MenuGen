@@ -1,33 +1,62 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from menus.models import Profile
 
 __author__ = 'kiyoakimenager'
 
 @login_required
-def friends(request):
-    guests = []
-    guest_1 = {
-        'username': 'Kevin',
-        'imc': 20.2
-    }
-    guest_2 = {
-        'username': 'Paul louis',
-        'imc': 18
-    }
-    guest_3 = {
-        'username': 'Guillaume',
-        'imc': 25
-    }
-    guests.append(guest_1)
-    guests.append(guest_2)
-    guests.append(guest_3)
-    return render(request, 'profiles/guests/guests.html', {'guests': guests})
+def index(request):
 
+    user = request.user
+    user_profile = user.profile_set.filter(is_owner_profile__exact=True).first()
+    user_guests = user.profile_set.exclude(is_owner_profile__exact=True)
+
+    return render(request, 'profiles/guests/guests.html', {
+        'user_profile': user_profile,
+        'guests': user_guests,
+        'count': len(user_guests)
+    })
 
 @login_required
-def profile_infos(request):
-    return render(request, 'profiles/guests/guest_infos.html')
+def new(request):
+    p = Profile()
+    user = request.user
+    user.profile_set.add(p)
+
+    return redirect('profiles')
+
+@login_required
+def detail(request, profile_id):
+    p = Profile.objects.get(id__exact=profile_id)
+    return render(request, 'profiles/guests/guest_detail.html', {
+        'profile': p
+    })
+
+@login_required
+def edit(request, profile_id):
+    print(profile_id)
+    return render(request, 'profiles/guests/guest_edit.html')
+
+@login_required
+def remove(request, profile_id):
+    user = request.user
+    p = Profile.objects.get(id__exact=profile_id)
+    if p.is_owner_profile is True:
+        if p.owner_id == user.id:
+            """ Here we are trying to remove the user's profile
+            -> Should just be reseted.
+            """
+            pass
+        else:
+            """ Here we are trying to remove a profile owned by another user.
+                -> This profile should just be dettached from the current account but kept in db.
+             """
+    else:
+        p.delete()
+
+    # return render(request, 'profiles/guests/guest_remove.html')
+    return redirect('profiles')
 
 
 def update_physio(request):
