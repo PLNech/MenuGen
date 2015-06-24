@@ -68,7 +68,7 @@ def update_physio(request):
         return HttpResponseNotAllowed(['POST'])
 
     if request.user.is_authenticated():
-        p = request.user.owner
+        p = request.user.account.profile
         if 'name' in request.POST:
             p.name = int(request.POST['sex'])
         if 'sex' in request.POST:
@@ -123,7 +123,7 @@ def update_tastes(request):
 def physiology(request):
 
     if request.user.is_authenticated():
-        physio = request.user.owner
+        physio = request.user.account.profile
 
     else:
         physio = {
