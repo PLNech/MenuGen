@@ -60,7 +60,7 @@
                     location.href = '{% url 'profiles' %}';
                 },
                 error:  function(data, status) {
-                    $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data.responseText);
+                    $('#auth-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);
                 }
             });
             return false;
