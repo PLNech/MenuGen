@@ -99,7 +99,6 @@ def update_tastes(request):
 
 def physiology(request):
     if request.method == 'POST':
-        username = request.POST['username']
         sex = request.POST['sex']
         height = request.POST['height']
         weight = request.POST['weight']
