@@ -20,7 +20,7 @@
                 <div class="main-box-body clearfix">
                     <div class="table-responsive">
                         <table class="table user-list table-hover">
-                            {% include "profiles/guests/guest.html" with profile=user_profile%}
+                            {% include "profiles/guests/guest.html" with profile=user_profile default=1%}
                         </table>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                 <div id="content-header" class="clearfix">
                     <div class="pull-left">
                         <ol class="breadcrumb"><p></p></ol>
-                        <h1>Mes convives ({{ count }}) </h1>
+                        <h1>Mes convives ({{ guests_nb }}) </h1>
                     </div>
                     <div class="pull-right hidden-xs">
                         <a class="btn btn-primary btn-sm" href="{% url 'profile_create' %}" role="button">

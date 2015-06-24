@@ -27,10 +27,14 @@ ACTIVITY = (
     (3, 'Tout le temps'),
 )
 
+class Account(models.Model):
+    user = models.OneToOneField(User)
+    profile = models.OneToOneField('Profile')
+    guests = models.ManyToManyField('Profile', related_name='guests')
+    friends = models.ManyToManyField(User, related_name='friends')
+    menus = models.ManyToManyField('Menu')
 
 class Profile(models.Model):
-    owner = models.ForeignKey(User)
-    is_owner_profile = models.BooleanField(default=False)
     name = models.CharField(max_length=64, default='Sans nom')
     birthday = models.DateField(blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
@@ -45,6 +49,23 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# class Profile(models.Model):
+#    name = models.CharField(max_length=64)
+#    birthday = models.DateField()
+#    weight = models.IntegerField()
+#    height = models.IntegerField()
+#    sex = models.IntegerField(choices=SEX)
+#    activity = models.IntegerField(choices=ACTIVITY)
+#    picture = StdImageField(upload_to='media/images/profiles')
+#
+#    unlikes = models.ManyToManyField('Ingredient')
+#    unlikes_family = models.ManyToManyField('IngredientFamily')
+#    diets = models.ManyToManyField('Diet')
+#
+#    def __str__(self):
+#        return self.name
 
 
 class Recipe(models.Model):
@@ -126,7 +147,6 @@ class Menu(models.Model):
     people_n = models.IntegerField()
     price = models.IntegerField(choices=PRICE)
     difficulty = models.IntegerField(choices=EASE)
-    owner = models.ForeignKey(User)
     # FIXME : missing order/planning relationship (will do it soon) - kevin
     recipes = models.ManyToManyField('Recipe')
 

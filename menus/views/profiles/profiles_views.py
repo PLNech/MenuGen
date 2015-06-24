@@ -8,27 +8,32 @@ __author__ = 'kiyoakimenager'
 @login_required
 def index(request):
 
-    user = request.user
-    user_profile = user.profile_set.filter(is_owner_profile__exact=True).first()
-    user_guests = user.profile_set.exclude(is_owner_profile__exact=True)
+    account = request.user.account
+    profile = account.profile
+    guests = account.guests.all()
+    guests_nb = guests.count()
 
     return render(request, 'profiles/guests/guests.html', {
-        'user_profile': user_profile,
-        'guests': user_guests,
-        'count': len(user_guests)
+        'user_profile': profile,
+        'guests': guests,
+        'guests_nb': guests_nb,
+
     })
 
 @login_required
 def new(request):
-    p = Profile()
-    user = request.user
-    user.profile_set.add(p)
+    profile = Profile()
+    profile.save()
+    account = request.user.account
+    account.guests.add(profile)
 
     return redirect('profiles')
 
 @login_required
 def detail(request, profile_id):
-    p = Profile.objects.get(id__exact=profile_id)
+    account = request.user.account
+    p = account.guests.get(id__exact=profile_id)
+    # p = Profile.objects.get(id__exact=profile_id)
     return render(request, 'profiles/guests/guest_detail.html', {
         'profile': p
     })
@@ -40,23 +45,20 @@ def edit(request, profile_id):
 
 @login_required
 def remove(request, profile_id):
-    user = request.user
-    p = Profile.objects.get(id__exact=profile_id)
-    if p.is_owner_profile is True:
-        if p.owner_id == user.id:
-            """ Here we are trying to remove the user's profile
-            -> Should just be reseted.
-            """
-            pass
-        else:
-            """ Here we are trying to remove a profile owned by another user.
-                -> This profile should just be dettached from the current account but kept in db.
-             """
+    account = request.user.account
+    if request.method == 'GET':
+        return redirect('profiles')
     else:
-        p.delete()
+        try:
+            p = account.guests.get(id__exact=profile_id)
+            p.delete()
+        except Profile.DoesNotExist:
+            print("Trying to remove default profile")
 
-    # return render(request, 'profiles/guests/guest_remove.html')
+    # return render(request, 'profiles/guests/remove.html')
     return redirect('profiles')
+
+
 
 
 def update_physio(request):

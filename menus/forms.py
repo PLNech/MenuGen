@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from menus.models import Profile
+from menus.models import Profile, Account
 
 __author__ = 'kiyoakimenager'
 
@@ -75,6 +75,11 @@ class RegistrationForm(UserCreationForm):
 
         if commit:
             self.user_cache.save()
-            profile = Profile(is_owner_profile=True)
-            profile.owner = self.user_cache
+            profile = Profile()
             profile.save()
+            # profile.owner = self.user_cache
+
+            account = Account()
+            account.profile = profile
+            account.user = self.user_cache
+            account.save()
