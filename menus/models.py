@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from stdimage.models import StdImageField
 
 EASE = (
@@ -46,6 +47,8 @@ class Profile(models.Model):
     unlikes = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
     diets = models.ManyToManyField('Diet')
+
+    modified = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
