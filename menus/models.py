@@ -51,23 +51,6 @@ class Profile(models.Model):
         return self.name
 
 
-# class Profile(models.Model):
-#    name = models.CharField(max_length=64)
-#    birthday = models.DateField()
-#    weight = models.IntegerField()
-#    height = models.IntegerField()
-#    sex = models.IntegerField(choices=SEX)
-#    activity = models.IntegerField(choices=ACTIVITY)
-#    picture = StdImageField(upload_to='media/images/profiles')
-#
-#    unlikes = models.ManyToManyField('Ingredient')
-#    unlikes_family = models.ManyToManyField('IngredientFamily')
-#    diets = models.ManyToManyField('Diet')
-#
-#    def __str__(self):
-#        return self.name
-
-
 class Recipe(models.Model):
     name = models.CharField(max_length=128)
     picture = StdImageField(upload_to='media/images/recipe')

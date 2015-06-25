@@ -1,64 +1,93 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
+from menus.forms import ProfileForm
 from menus.models import Profile
 
 __author__ = 'kiyoakimenager'
 
+
 @login_required
 def index(request):
-
     account = request.user.account
     profile = account.profile
     guests = account.guests.all()
     guests_nb = guests.count()
 
-    return render(request, 'profiles/guests/guests.html', {
+    return render(request, 'profiles/guests/index.html', {
         'user_profile': profile,
         'guests': guests,
         'guests_nb': guests_nb,
 
     })
 
+
 @login_required
 def new(request):
-    profile = Profile()
-    profile.save()
-    account = request.user.account
-    account.guests.add(profile)
+    if request.method == 'GET':
+        form = ProfileForm
+        return render(request, 'profiles/guests/new_modal.html', {'form': form})
+    else:
+        form = ProfileForm(data=request.POST)
+        if form.is_valid():
+            profile = form.profile_cache
+            profile.save()
+            account = request.user.account
+            account.guests.add(profile)
+            return render(request, 'profiles/guests/guest.html', {
+                'profile': profile
+            })
+        print(form)
+        return HttpResponse(content=render(request, 'profiles/guests/new_modal.html', {'form': form}),
+                            content_type='text/html; charset=utf-8',
+                            status=form.error_code)
 
-    return redirect('profiles')
 
 @login_required
 def detail(request, profile_id):
     account = request.user.account
     p = account.guests.get(id__exact=profile_id)
-    # p = Profile.objects.get(id__exact=profile_id)
-    return render(request, 'profiles/guests/guest_detail.html', {
+    return render(request, 'profiles/guests/detail.html', {
         'profile': p
     })
+
 
 @login_required
 def edit(request, profile_id):
     print(profile_id)
-    return render(request, 'profiles/guests/guest_edit.html')
+    return render(request, 'profiles/guests/edit.html')
+
 
 @login_required
 def remove(request, profile_id):
     account = request.user.account
+    p = account.guests.filter(id__exact=profile_id).first()
     if request.method == 'GET':
-        return redirect('profiles')
+        if p is None:
+            p = account.profile
+            title = 'Réinitialisation de votre profile'
+            message = 'Etes vous certain de vouloir réinitialiser ce profile ?'
+            action = 'Réinitialiser'
+        else:
+            title = 'Suppression du profile ' + p.name
+            message = 'Etes vous certain de vouloir supprimer ce profile ?'
+            action = 'Supprimer'
+
+        return render(request, 'profiles/guests/remove_modal.html', {
+            'profile': p,
+            'title': title,
+            'message': message,
+            'action': action
+        })
     else:
-        try:
-            p = account.guests.get(id__exact=profile_id)
+        if p is None:
+            p = account.profile.id
+            # Reset user default profile
+            pass
+        else:
             p.delete()
-        except Profile.DoesNotExist:
-            print("Trying to remove default profile")
 
-    # return render(request, 'profiles/guests/remove.html')
     return redirect('profiles')
-
-
 
 
 def update_physio(request):
@@ -121,7 +150,6 @@ def update_tastes(request):
 
 
 def physiology(request):
-
     if request.user.is_authenticated():
         physio = request.user.account.profile
 
@@ -136,7 +164,7 @@ def physiology(request):
         }
 
     return render(request, 'profiles/physiology.html', {
-        'physio':   physio,
+        'physio': physio,
     })
 
 

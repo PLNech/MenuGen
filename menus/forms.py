@@ -77,9 +77,37 @@ class RegistrationForm(UserCreationForm):
             self.user_cache.save()
             profile = Profile()
             profile.save()
-            # profile.owner = self.user_cache
-
             account = Account()
             account.profile = profile
             account.user = self.user_cache
             account.save()
+
+class ProfileForm(forms.Form):
+    name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom du profil'}),
+        label='Nom du profil')
+
+    profile_cache = None
+    error_messages = ""
+    error_code = 400
+
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super(ProfileForm, self).clean()
+        name = cleaned_data.get("name")
+
+        if name:
+            self.profile_cache = Profile(name=name)
+        else:
+            self.profile_cache = Profile()
+
+        if self.profile_cache is None:
+            self.error_messages = "Le profile n'a put être créée"
+            self.error_code = 403
+            raise forms.ValidationError("Profile création failed")
+
+        return cleaned_data

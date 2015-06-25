@@ -1,6 +1,6 @@
 {% load staticfiles %}
 
-<tr class="edit">
+<tr id="profile-{{ profile.id }}">
     <td>
         <img src='{% static 'img/guests/avatar_man.jpg' %}' alt="">
         <a href="#" class="user-link">{{ profile.name }}</a>
@@ -9,11 +9,11 @@
         <span class="label label-default">{{ profile.imc }}</span>
     </td>
     <td style="width: 20%;">
-        <a class="detail table-link"
-           href="{% url 'profile_detail' profile.id %}"
+        <a href="{% url 'profile_detail' profile.id %}"
            role="button"
            data-toggle="modal"
-           data-target="#profile-modal">
+           data-target="#profile-modal"
+           class="detail table-link">
                                                     <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>
                                                     <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
@@ -28,7 +28,11 @@
         </a>
 
         </form>
-        <a href="{% url 'profile_remove' profile.id %}" class="table-link danger">
+        <a href="{% url 'profile_remove' profile.id %}"
+           role="button"
+           data-toggle="modal"
+           data-target="#profile-modal"
+           class="table-link danger">
                                                     <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>
                                                     {% if default %}
