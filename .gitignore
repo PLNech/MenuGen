@@ -9,3 +9,4 @@ __pycache__/
 algorithms/img/
 testing/static/screen.png
 wheelhouse/
+node_modules

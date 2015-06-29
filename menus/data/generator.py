@@ -140,43 +140,49 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
     :type  menu: model.menu.menu.Menu
     """
 
-    # TODO: Use recipe.category to place appropriate meals
+    # TODO: Handle variable structure of meals (not only starter-main-dessert)
+    # TODO: Variable meal nutritional objective
+
     nb_dishes = len(menu.genes)
     nb_dishes_per_meal = 3
-    nb_meals = nb_meals_per_day * nb_days * nb_dishes_per_meal
+    nb_slots = nb_dishes_per_meal * nb_meals_per_day * nb_days
 
     remaining_dishes = nb_dishes
-    remaining_slots = nb_meals
+    remaining_slots = nb_slots
 
     print("Generating a planning : %d days x %d x 3 = %d from a %d long list." %
-          (nb_days, nb_meals_per_day, nb_meals, nb_dishes))
+          (nb_days, nb_meals_per_day, nb_slots, nb_dishes))
 
     planning = []
+    planning_str = ""
     random.shuffle(menu.genes)
     should_break = False
     for j in range(nb_meals_per_day):
         if should_break:
             break
         daily_planning = []
+        planning_str += "["
         for i in range(nb_days):
-            remaining_dishes -= nb_dishes_per_meal
-            remaining_slots -= nb_dishes_per_meal
-            if remaining_dishes < 0 or remaining_slots < 0:
+            if remaining_dishes - nb_dishes_per_meal < 0 or remaining_slots - nb_dishes_per_meal < 0:
                 print("I had to break the loop : %d dishes left <-> %d slots left." %
                       (remaining_dishes, remaining_slots))
                 should_break = True
                 break
+            remaining_dishes -= nb_dishes_per_meal
+            remaining_slots -= nb_dishes_per_meal
+
             dish = menu.genes.pop()
             dish2 = menu.genes.pop()
             dish3 = menu.genes.pop()
             menu_item = {'starter': dish, 'main_course': dish2, 'dessert': dish3}
+            planning_str += '(%s, %s, %s)\t' % (str(dish), str(dish2), str(dish3))
             daily_planning.append(menu_item)
         planning.append(daily_planning)
-
+        planning_str += "]\n"
+    print(planning_str)
     return planning
 
 def generate_planning(nb_days, nb_meals_per_day, nb_dishes):
-    # TODO : Handle variable structure of meals (not only starter-main-dessert)
     planning = []
     for j in range(nb_meals_per_day):
         daily_planning = []
