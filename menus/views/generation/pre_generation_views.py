@@ -1,7 +1,6 @@
 from django.http import HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render
 
-__author__ = 'kiyoakimenager'
 
 def generate(request):
     return render(request, 'menus/generate/generate.html',

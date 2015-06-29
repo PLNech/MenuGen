@@ -1,0 +1,49 @@
+{% load staticfiles %}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">
+        {{ title }}
+    </h4>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" id="profile-form" action="{% url 'profile_remove' profile.id %}" method="POST">
+        {% csrf_token %}
+        <div class="alert alert-danger">
+            {{ message }}
+            <p>Cette action aura pour conséquence la perte des données liées a ce profile.</p>
+        </div>
+        <div class="control-group">
+            <div class="controls text-right">
+                <button type="submit" class="btn btn-primary">{{ action }}</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% block js %}
+    <script>
+            $('.modal-body').on('submit', '#profile-form', function() {
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: this.action,
+                    data: $(this).serialize(),
+                    context: this,
+                    success: function(data, status) {
+                        var selector = $("table#guests tr#profile-" + "{{ profile.id }}");
+                        selector.addClass("danger");
+                        selector.fadeOut(700, function() {
+                            $(this).fadeOut();
+                        });
+                        $('#profile-modal').modal('hide');
+                    },
+                    error:  function(data, status) {
+                        $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);
+                    }
+                });
+                return false;
+            });
+            $(document).on("hidden.bs.modal", function (e) {
+                $(e.target).removeData("bs.modal").find(".modal-content").empty();
+            });
+    </script>
+{% endblock %}

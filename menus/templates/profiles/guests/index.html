@@ -20,7 +20,7 @@
                 <div class="main-box-body clearfix">
                     <div class="table-responsive">
                         <table class="table user-list table-hover">
-                            {% include "profiles/guests/guest.html" with profile=user_profile%}
+                            {% include "profiles/guests/guest.html" with profile=user_profile default=1%}
                         </table>
                     </div>
                 </div>
@@ -32,10 +32,15 @@
                 <div id="content-header" class="clearfix">
                     <div class="pull-left">
                         <ol class="breadcrumb"><p></p></ol>
-                        <h1>Mes convives ({{ count }}) </h1>
+                        <h1>Mes convives ({{ guests_nb }}) </h1>
                     </div>
-                    <div class="pull-right hidden-xs">
-                        <a class="btn btn-primary btn-sm" href="{% url 'profile_create' %}" role="button">
+                    <div class="add-profile pull-right hidden-xs">
+                        <a href="{% url 'profile_new' %}"
+                           role="button"
+                           data-toggle="modal"
+                           data-target="#profile-modal"
+                           class="btn btn-primary btn-sm">
+{#                        <a class="btn btn-primary btn-sm" href="{% url 'profile_new' %}" role="button">#}
                             <i class="fa fa-plus-circle fa-lg"></i>
                             Nouveau profil
                         </a>
@@ -44,14 +49,12 @@
                 <div class="main-box">
                     <div class="main-box-body clearfix">
                         <div class="table-responsive">
-                            <table class="table user-list table-hover">
+                            <table id="guests" class="table user-list table-hover">
                                 <thead>
                                 </thead>
                                 <tbody>
                                 {% for profile in guests %}
-                                    <div class="profile">
-                                        {% include "profiles/guests/guest.html" with profile=profile%}
-                                    </div>
+                                    {% include "profiles/guests/guest.html" with profile=profile%}
                                 {% endfor %}
                                 </tbody>
                             </table>
@@ -73,25 +76,20 @@
 
 {% block js %}
     <script>
-{#        $('.user-list').on('click', 'a', function() {#}
-{#            $.ajax({#}
-{#                url: $(this).attr('href'),#}
-{#                data: $(this).serialize(),#}
-{#                context: this,#}
-{#                success: function(data, status) {#}
-                    {#                    $('#signInUpModal').removeData("bs.modal").find(".modal-content").html(data);#}
-{#                    $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data);#}
-                    {#                    $('#content-wrapper').fadeOut( 100 , function() {#}
-                    {#                        $(this).html( data);#}
-                    {#                        }).fadeIn( 1000 );#}
-                    {#                    $('#content-wrapper').html(data);#}
-{#                }#}
+{#            $('.add-profile').on('click', 'a', function() {#}
+{#                $.ajax({#}
+{#                    url: $(this).attr('href'),#}
+{#                    data: $(this).serialize(),#}
+{#                    context: this,#}
+{#                    success: function(data, status) {#}
+{#                        var guests_last = "table#guests";#}
+{#                        $(guests_last).find('tbody:last').append(data);#}
+{#                    },#}
+{#                    error:  function(data, status) {#}
+{#                        location.href = '{% url 'profiles' %}';#}
+{#                    }#}
+{#                });#}
+{#                return false;#}
 {#            });#}
-{#            return false;#}
-{#        });#}
-{##}
-{#        $(document).on("hidden.bs.modal", function (e) {#}
-{#            $(e.target).removeData("bs.modal").find(".modal-content").empty();#}
-{#        });#}
     </script>
 {% endblock %}

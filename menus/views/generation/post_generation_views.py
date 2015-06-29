@@ -31,7 +31,11 @@ def generation(request):
     nb_meals = 3  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
     nb_dishes = 3  # TODO: Determine appropriate amount for meals ?
 
-    user_exercise = Calculator.EXERCISE_MODERATE  # TODO: Get exercise of user
+    if 'activity' in request.session:
+        user_exercise = request.session['exercise']
+    else:
+        user_exercise = Calculator.EXERCISE_MODERATE
+
     if 'age' in request.session:
         user_age = int(request.session['age'])
     else:

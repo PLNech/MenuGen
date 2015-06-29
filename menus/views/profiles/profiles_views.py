@@ -1,61 +1,94 @@
+import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
+from menus.algorithms.dietetics import Calculator
+from menus.forms import ProfileForm
 from menus.models import Profile
 
 __author__ = 'kiyoakimenager'
 
+
 @login_required
 def index(request):
+    account = request.user.account
+    profile = account.profile
+    guests = account.guests.all()
+    guests_nb = guests.count()
 
-    user = request.user
-    user_profile = user.profile_set.filter(is_owner_profile__exact=True).first()
-    user_guests = user.profile_set.exclude(is_owner_profile__exact=True)
+    return render(request, 'profiles/guests/index.html', {
+        'user_profile': profile,
+        'guests': guests,
+        'guests_nb': guests_nb,
 
-    return render(request, 'profiles/guests/guests.html', {
-        'user_profile': user_profile,
-        'guests': user_guests,
-        'count': len(user_guests)
     })
+
 
 @login_required
 def new(request):
-    p = Profile()
-    user = request.user
-    user.profile_set.add(p)
+    if request.method == 'GET':
+        form = ProfileForm
+        return render(request, 'profiles/guests/new_modal.html', {'form': form})
+    else:
+        form = ProfileForm(data=request.POST)
+        if form.is_valid():
+            profile = form.profile_cache
+            profile.save()
+            account = request.user.account
+            account.guests.add(profile)
+            return render(request, 'profiles/guests/guest.html', {
+                'profile': profile
+            })
+        print(form)
+        return HttpResponse(content=render(request, 'profiles/guests/new_modal.html', {'form': form}),
+                            content_type='text/html; charset=utf-8',
+                            status=form.error_code)
 
-    return redirect('profiles')
 
 @login_required
 def detail(request, profile_id):
-    p = Profile.objects.get(id__exact=profile_id)
-    return render(request, 'profiles/guests/guest_detail.html', {
+    account = request.user.account
+    p = account.guests.get(id__exact=profile_id)
+    return render(request, 'profiles/guests/detail.html', {
         'profile': p
     })
+
 
 @login_required
 def edit(request, profile_id):
     print(profile_id)
-    return render(request, 'profiles/guests/guest_edit.html')
+    return render(request, 'profiles/guests/edit.html')
+
 
 @login_required
 def remove(request, profile_id):
-    user = request.user
-    p = Profile.objects.get(id__exact=profile_id)
-    if p.is_owner_profile is True:
-        if p.owner_id == user.id:
-            """ Here we are trying to remove the user's profile
-            -> Should just be reseted.
-            """
+    account = request.user.account
+    p = account.guests.filter(id__exact=profile_id).first()
+    if request.method == 'GET':
+        if p is None:
+            p = account.profile
+            title = 'Réinitialisation de votre profile'
+            message = 'Etes vous certain de vouloir réinitialiser ce profile ?'
+            action = 'Réinitialiser'
+        else:
+            title = 'Suppression du profile ' + p.name
+            message = 'Etes vous certain de vouloir supprimer ce profile ?'
+            action = 'Supprimer'
+
+        return render(request, 'profiles/guests/remove_modal.html', {
+            'profile': p,
+            'title': title,
+            'message': message,
+            'action': action
+        })
+    else:
+        if p is None:
+            p = account.profile.id
+            # Reset user default profile
             pass
         else:
-            """ Here we are trying to remove a profile owned by another user.
-                -> This profile should just be dettached from the current account but kept in db.
-             """
-    else:
-        p.delete()
+            p.delete()
 
-    # return render(request, 'profiles/guests/guest_remove.html')
     return redirect('profiles')
 
 
@@ -65,15 +98,58 @@ def update_physio(request):
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    if 'sex' in request.POST:
-        request.session['sex'] = request.POST.get('sex')
-    if 'age' in request.POST:
-        request.session['age'] = request.POST.get('age')
-    if 'height' in request.POST:
-        request.session['height'] = request.POST.get('height')
-    if 'weight' in request.POST:
-        request.session['weight'] = request.POST.get('weight')
+    today = datetime.date.today()
 
+    height = request.POST.get('height')
+    weight = request.POST.get('weight')
+    activity = request.POST.get('activity')
+    sex = int(request.POST.get('sex', 0))
+    if request.user.is_authenticated():
+        p = request.user.account.profile
+        if 'name' in request.POST:
+            p.name = sex
+        if 'sex' in request.POST:
+            p.sex = sex
+        if 'birthday' in request.POST:
+            p.birthday = request.POST['birthday']
+        if 'height' in request.POST:
+            p.height = height
+        if 'weight' in request.POST:
+            p.weight = weight
+        if 'activity' in request.POST:
+            p.activity = activity
+        p.save()
+        request.session['age'] = today.year - p.birthday.year - ((today.month, today.day) <
+                                                                    (p.birthday.month, p.birthday.day))
+        request.session['height'] = p.height
+        request.session['weight'] = p.weight
+        request.session['sex'] = p.sex
+        request.session['exercise'] = p.activity
+
+    else:
+        if 'name' in request.POST:
+            request.session['name'] = request.POST['name']
+        if 'age' in request.POST:
+            request.session['age'] = request.POST['age']
+        if 'sex' in request.POST:
+            request.session['sex'] = sex
+        if 'height' in request.POST:
+            request.session['height'] = height
+        if 'weight' in request.POST:
+            request.session['weight'] = weight
+        if 'activity' in request.POST:
+            request.session['exercise'] = activity
+
+        request.session['height'] = height
+        request.session['weight'] = weight
+        request.session['sex'] = sex
+        request.session['exercise'] = Calculator.EXERCISE_MODERATE
+
+    print("Saved:")
+    print(request.session.get('sex'))
+    print(request.session.get('weight'))
+    print(request.session.get('height'))
+    print(request.session.get('age'))
     return HttpResponse('ok')
 
 
@@ -98,21 +174,29 @@ def update_tastes(request):
 
 
 def physiology(request):
-    if request.method == 'POST':
-        sex = request.POST['sex']
-        height = request.POST['height']
-        weight = request.POST['weight']
+    if request.user.is_authenticated():
+        physio = request.user.account.profile
+
     else:
-        """ TODO:
-        - Use current_physio in template to pre-fill profiles information.
-        - Add ranges for to fill the select tag in template (refer to ages ?) """
-        return render(request, 'profiles/physiology.html', {'current_physio': request.session})
+        physio = {
+            'name': request.session['name'] if 'name' in request.session else "",
+            'sex': request.session.get('sex'),
+            'birthday': request.session['birthday'] if 'birthday' in request.session else "",
+            'height': request.session.get('height'),
+            'weight': request.session.get('weight'),
+            'activity': request.session.get('activity') if 'activity' in request.session else "",
+        }
+
+    return render(request, 'profiles/physiology.html', {
+        'physio': physio,
+    })
 
 
 def regimes(request):
     health_regimes_list = []
     value_regimes_list = []
     nutrients_regimes_st = []
+
     regime_sans_sel = {
         'name': 'Hyposodé (sans sel)',
         'desc': "Régime pour restreindre le plus possible les apports en sel dans l'alimentation."
@@ -144,9 +228,11 @@ def regimes(request):
     value_regimes_list.append(regime_vegetarien)
     value_regimes_list.append(regime_vegetalien)
     value_regimes_list.append(regime_halal)
-    return render(request, 'profiles/regimes.html',
-                  {'health_regimes_list': health_regimes_list,
-                   'value_regimes_list': value_regimes_list})
+
+    return render(request, 'profiles/regimes.html', {
+        'health_regimes_list': health_regimes_list,
+        'value_regimes_list': value_regimes_list
+    })
 
 
 def tastes(request):

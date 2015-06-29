@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from stdimage.models import StdImageField
@@ -28,9 +30,15 @@ ACTIVITY = (
 )
 
 
+class Account(models.Model):
+    user = models.OneToOneField(User)
+    profile = models.OneToOneField('Profile')
+    guests = models.ManyToManyField('Profile', related_name='guests')
+    friends = models.ManyToManyField(User, related_name='friends')
+    menus = models.ManyToManyField('Menu')
+
+
 class Profile(models.Model):
-    owner = models.ForeignKey(User)
-    is_owner_profile = models.BooleanField(default=False)
     name = models.CharField(max_length=64, default='Sans nom')
     birthday = models.DateField(blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
@@ -126,7 +134,6 @@ class Menu(models.Model):
     people_n = models.IntegerField()
     price = models.IntegerField(choices=PRICE)
     difficulty = models.IntegerField(choices=EASE)
-    owner = models.ForeignKey(User)
     # FIXME : missing order/planning relationship (will do it soon) - kevin
     recipes = models.ManyToManyField('Recipe')
 
