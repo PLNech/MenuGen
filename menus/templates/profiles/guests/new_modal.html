@@ -37,9 +37,9 @@
                 data: $(this).serialize(),
                 context: this,
                 success: function(data, status) {
-                    var guests_last = "table#guests";
-                    $(guests_last).find('tbody:last').prepend(data);
                     $('#profile-modal').modal('hide');
+                    var guests_table = $("table#guests");
+                    guests_table.find('tbody:first').prepend(data);
                 },
                 error:  function(data, status) {
                     $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);

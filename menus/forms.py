@@ -82,6 +82,7 @@ class RegistrationForm(UserCreationForm):
             account.user = self.user_cache
             account.save()
 
+
 class ProfileForm(forms.Form):
     name = forms.CharField(
         max_length=30,

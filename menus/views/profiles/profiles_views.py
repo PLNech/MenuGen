@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from menus.forms import ProfileForm
-from menus.models import Profile
 
 __author__ = 'kiyoakimenager'
 
@@ -11,7 +10,7 @@ __author__ = 'kiyoakimenager'
 def index(request):
     account = request.user.account
     profile = account.profile
-    guests = account.guests.all()
+    guests = account.guests.order_by('modified').reverse()
     guests_nb = guests.count()
 
     return render(request, 'profiles/guests/index.html', {
@@ -37,7 +36,7 @@ def new(request):
             return render(request, 'profiles/guests/guest.html', {
                 'profile': profile
             })
-        print(form)
+
         return HttpResponse(content=render(request, 'profiles/guests/new_modal.html', {'form': form}),
                             content_type='text/html; charset=utf-8',
                             status=form.error_code)

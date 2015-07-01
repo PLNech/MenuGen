@@ -31,10 +31,11 @@
                     success: function(data, status) {
                         var selector = $("table#guests tr#profile-" + "{{ profile.id }}");
                         selector.addClass("danger");
+                        $('#profile-modal').modal('hide');
                         selector.fadeOut(700, function() {
                             $(this).fadeOut();
                         });
-                        $('#profile-modal').modal('hide');
+
                     },
                     error:  function(data, status) {
                         $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);
