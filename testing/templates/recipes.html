@@ -7,7 +7,7 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="{% url 'testing.views.index' %}">Testing: Recipes</a>
+        <a class="navbar-brand" href="{% url 'testing.views.index' %}">Testing/Recipes</a>
       </div>
     </div>
   </nav>
@@ -120,12 +120,15 @@
           <tbody>
           <tr>
               <th>Parsed</th>
-              <th>Matched</th>
+              <th>Matched OpenFoodFacts</th>
+              <th>Matched Ciqual</th>
           </tr>
           {% for parsed, matched in matched_ingredients.items %}
           <tr>
               <td>{{ parsed }}</td>
-              <td>{{ matched }}</td>
+              {% for m in matched %}
+                <td>{{ m }}</td>
+              {% endfor %}
           </tr>
           {% endfor %}
           </tbody>
