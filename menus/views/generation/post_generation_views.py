@@ -4,7 +4,7 @@ from django.shortcuts import render
 from menus.algorithms.dietetics import Calculator
 from menus.algorithms.run import run_standard
 from menus.algorithms.utils.config import Config
-from menus.data.generator import generate_planning
+from menus.data.generator import generate_planning_from_list
 from menus.models import Recipe
 
 __author__ = 'kiyoakimenager'
@@ -28,10 +28,14 @@ def generation(request):
     """ Use the days number if exists """
     if 'nb_days' in request.session:
         nb_days = int(request.session['nb_days'])
-    nb_meals = 5  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
+    nb_meals = 3  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
     nb_dishes = 3  # TODO: Determine appropriate amount for meals ?
 
-    user_exercise = Calculator.EXERCISE_MODERATE  # TODO: Get exercise of user
+    if 'activity' in request.session:
+        user_exercise = request.session['exercise']
+    else:
+        user_exercise = Calculator.EXERCISE_MODERATE
+
     if 'age' in request.session:
         user_age = int(request.session['age'])
     else:
@@ -52,17 +56,15 @@ def generation(request):
     else:
         user_sex = Calculator.SEX_H
 
-    # needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
+    needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
 
     # """ Here is an example of a matrix containing (nb_days x 5) meals """
-    planning = generate_planning(nb_days, nb_meals, nb_dishes)
+    # planning = generate_planning(nb_days, nb_meals, nb_dishes)
 
     Config.parameters[Config.KEY_MAX_DISHES] = nb_days * nb_meals * nb_dishes
+    Config.update_needs(needs, nb_days)
     menu = run_standard(None, time.ctime())
-    menu_str = ""
-    for g in menu.genes:
-        menu_str += g.name + "\n"
-    print("Result planning:" + menu_str)
+    planning = generate_planning_from_list(nb_days, nb_meals, menu)
 
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 

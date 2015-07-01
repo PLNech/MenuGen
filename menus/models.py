@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -28,12 +30,14 @@ ACTIVITY = (
     (3, 'Tout le temps'),
 )
 
+
 class Account(models.Model):
     user = models.OneToOneField(User)
     profile = models.OneToOneField('Profile')
     guests = models.ManyToManyField('Profile', related_name='guests')
     friends = models.ManyToManyField(User, related_name='friends')
     menus = models.ManyToManyField('Menu')
+
 
 class Profile(models.Model):
     name = models.CharField(max_length=64, default='Sans nom')

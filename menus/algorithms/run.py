@@ -14,12 +14,12 @@ stats = StatKeeper
 
 
 def run(run_name, init_fittest=None):
-    '''
+    """
 
     :type run_name: str
     :type init_fittest: menus.algorithms.model.individual.Individual
     :rtype: menus.algorithms.model.individual.Individual
-    '''
+    """
     # New run
     manager = MenuManager.get()
     nb_dishes = len(manager.dishes)

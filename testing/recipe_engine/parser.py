@@ -115,3 +115,6 @@ class Ingredient:
 
         if self.name == self.unit:
             self.unit = None
+
+        # step 5: clean
+        self.name = self.name.replace("d'", "")

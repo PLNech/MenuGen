@@ -1,6 +1,8 @@
+import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
+from menus.algorithms.dietetics import Calculator
 from menus.forms import ProfileForm
 
 __author__ = 'kiyoakimenager'
@@ -95,36 +97,58 @@ def update_physio(request):
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
 
+    today = datetime.date.today()
+
+    height = request.POST.get('height')
+    weight = request.POST.get('weight')
+    activity = request.POST.get('activity')
+    sex = int(request.POST.get('sex', 0))
     if request.user.is_authenticated():
         p = request.user.account.profile
         if 'name' in request.POST:
-            p.name = int(request.POST['sex'])
+            p.name = sex
         if 'sex' in request.POST:
-            p.sex = int(request.POST['sex'])
+            p.sex = sex
         if 'birthday' in request.POST:
             p.birthday = request.POST['birthday']
         if 'height' in request.POST:
-            p.height = request.POST['height']
+            p.height = height
         if 'weight' in request.POST:
-            p.weight = request.POST['weight']
+            p.weight = weight
         if 'activity' in request.POST:
-            p.activity = request.POST['activity']
+            p.activity = activity
         p.save()
+        request.session['age'] = today.year - p.birthday.year - ((today.month, today.day) <
+                                                                    (p.birthday.month, p.birthday.day))
+        request.session['height'] = p.height
+        request.session['weight'] = p.weight
+        request.session['sex'] = p.sex
+        request.session['exercise'] = p.activity
 
     else:
         if 'name' in request.POST:
             request.session['name'] = request.POST['name']
+        if 'age' in request.POST:
+            request.session['age'] = request.POST['age']
         if 'sex' in request.POST:
-            request.session['sex'] = int(request.POST['sex'])
-        if 'birthday' in request.POST:
-            request.session['birthday'] = request.POST['birthday']
+            request.session['sex'] = sex
         if 'height' in request.POST:
-            request.session['height'] = request.POST['height']
+            request.session['height'] = height
         if 'weight' in request.POST:
-            request.session['weight'] = request.POST['weight']
+            request.session['weight'] = weight
         if 'activity' in request.POST:
-            request.session['activity'] = request.POST['activity']
+            request.session['exercise'] = activity
 
+        request.session['height'] = height
+        request.session['weight'] = weight
+        request.session['sex'] = sex
+        request.session['exercise'] = Calculator.EXERCISE_MODERATE
+
+    print("Saved:")
+    print(request.session.get('sex'))
+    print(request.session.get('weight'))
+    print(request.session.get('height'))
+    print(request.session.get('age'))
     return HttpResponse('ok')
 
 

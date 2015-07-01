@@ -214,7 +214,7 @@
 
         // AJAX for posting
         function update_pre_generation(data_dico) {
-            console.log("sanity check"); // sanity check TODO KEVIN : Log meaningful things or stop logging
+            console.log("sanity check"); // sanity check TODO Kyo : Log meaningful things or stop logging
             $.ajax({
                 url : '{% url 'update_gen_criteria' %}', // the endpoint
                 type : "POST", // http method
@@ -226,11 +226,11 @@
                 },
 
                 // handle a non-successful response
-                error: function (xhr, errmsg, err) { //TODO KEVIN Display err, or at least remove parameter
+                error: function (xhr, errmsg, err) { //TODO Kyo Display err, or at least remove parameter
                     $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
                             " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
                     console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                    // TODO KEVIN : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
+                    // TODO Kyo : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
                 }
             });
         }
