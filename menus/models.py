@@ -92,8 +92,6 @@ class Diet(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=32)
-    picture = StdImageField(upload_to='media/images/ingredient')
-    description = models.TextField(default="")
     # country =  #  FIXME : use it for local menu generation
     # season?
     family = models.ForeignKey('IngredientFamily')
@@ -126,7 +124,8 @@ class IngredientFamily(models.Model):
 
 
 class Nutriment(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=128)
+    unit_per_100g = models.CharField(max_length=32)
 
     def __str__(self):
         return self.name
