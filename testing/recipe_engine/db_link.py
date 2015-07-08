@@ -1,6 +1,5 @@
-from menus.models import Recipe, Ingredient
+from menus.models import Recipe, Ingredient, RecipeToIngredient
 from Levenshtein import distance
-import testing.models
 
 def get_closest(parsed_ingredient, matching):
     """
@@ -14,29 +13,16 @@ def get_closest(parsed_ingredient, matching):
     return scores[sorted(scores.keys())[0]]
 
 
-def get_matching_ingredient(parsed_ingredient, ciqual=False):
+def get_matching_ingredient(parsed_ingredient):
     if not parsed_ingredient:
         return None
-    if ciqual:
-        matching = testing.models.Ingredient.objects.filter(name=parsed_ingredient)
-    else:
-        matching = Ingredient.objects.filter(name=parsed_ingredient)
+    matching = Ingredient.objects.filter(name=parsed_ingredient)
     if not matching and parsed_ingredient.endswith('s'):
-        if ciqual:
-            matching = testing.models.Ingredient.objects.filter(name=parsed_ingredient[:-1])
-        else:
-            matching = Ingredient.objects.filter(name=parsed_ingredient[:-1])
+        matching = Ingredient.objects.filter(name=parsed_ingredient[:-1])
+    if not matching and parsed_ingredient.endswith('s'):
+        matching = Ingredient.objects.filter(name__icontains=parsed_ingredient[:-1])
     if not matching:
-        if not matching and parsed_ingredient.endswith('s'):
-            if ciqual:
-                matching = testing.models.Ingredient.objects.filter(name__icontains=parsed_ingredient[:-1])
-            else:
-                matching = Ingredient.objects.filter(name__icontains=parsed_ingredient[:-1])
-        if not matching:
-            if ciqual:
-                matching = testing.models.Ingredient.objects.filter(name__icontains=parsed_ingredient)
-            else:
-                matching = Ingredient.objects.filter(name__icontains=parsed_ingredient)
+        matching = Ingredient.objects.filter(name__icontains=parsed_ingredient)
     return get_closest(parsed_ingredient, matching) if matching else None
 
 def get_ease(parsed_ease):
@@ -57,10 +43,9 @@ def get_ease(parsed_ease):
             return 3
         return 2
 
-def get_matching_ingredients(parsed_ingredients, recipe=None):
+def get_matching_ingredients(parsed_ingredients):
     """
     :param parsed_ingredients: the ingredients parsed from a marmiton recipe
-    :param recipe: the recipe to link to the ingredients
     :return:matching ingredients from the database
     """
     # attempts in order:
@@ -78,36 +63,9 @@ def get_matching_ingredients(parsed_ingredients, recipe=None):
                 if ingredient:
                     break
 
-        if ingredient:
-            if recipe:
-                recipe.ingredients.add(ingredient)
-            matched_ingredients[i.name] = ingredient.name
-        else:
-            matched_ingredients[i.name] = "<None>"
+        matched_ingredients[i] = ingredient if ingredient else None
 
     return matched_ingredients
-
-def get_matching_ciqual_ingredients(parsed_ingredients):
-    matched_ingredients = {}
-    for i in parsed_ingredients:
-        if not i:
-            continue
-        ingredient = get_matching_ingredient(i.name, True)
-        if not ingredient:
-            for word in reversed(sorted(i.name.split(" "), key=len)):
-                ingredient = get_matching_ingredient(word, True)
-                if ingredient:
-                    break
-
-        if ingredient:
-            matched_ingredients[i.name] = ingredient.name
-        else:
-            matched_ingredients[i.name] = "<None>"
-
-    return matched_ingredients
-
-def link_ingredients(recipe, ingredients):
-    get_matching_ingredients(ingredients, recipe)
 
 def save_recipe(recipe):
     """
@@ -132,7 +90,16 @@ def save_recipe(recipe):
     r.detail = recipe.remarks
     r.drink = recipe.drink
     r.origin_url = recipe.url
+    r.category = recipe.meal_type
     r.save()
 
-    link_ingredients(r, recipe.ingredients)
-
+    # link to ingredients
+    matching = get_matching_ingredients(recipe.ingredients)
+    for parsed, matched in matching:
+        rtoi = RecipeToIngredient(
+            recipe=r,
+            ingredient=matched,
+            quantity=parsed.quantity,
+            unit=parsed.unit
+        )
+        rtoi.save()

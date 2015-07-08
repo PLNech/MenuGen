@@ -120,15 +120,12 @@
           <tbody>
           <tr>
               <th>Parsed</th>
-              <th>Matched OpenFoodFacts</th>
-              <th>Matched Ciqual</th>
+              <th>Matched</th>
           </tr>
           {% for parsed, matched in matched_ingredients.items %}
           <tr>
-              <td>{{ parsed }}</td>
-              {% for m in matched %}
-                <td>{{ m }}</td>
-              {% endfor %}
+              <td>{{ parsed.name }}</td>
+              <td>{{ matched.name }}</td>
           </tr>
           {% endfor %}
           </tbody>
