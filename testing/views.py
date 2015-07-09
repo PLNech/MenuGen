@@ -14,7 +14,7 @@ def recipes(request):
             save_recipe(recipe)
     else:
         recipe = random_recipe()
-    #recipe.save_screenshot()
+    recipe.save_screenshot()
     matched_off = get_matching_ingredients(recipe.ingredients)
     matched_ciqual = get_matching_ciqual_ingredients(recipe.ingredients)
     matched_ingredients = {}
