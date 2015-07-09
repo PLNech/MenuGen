@@ -15,9 +15,8 @@ def recipes(request):
             save_recipe(recipe)
     else:
         recipe = random_recipe()
-    recipe.save_screenshot()
+    #recipe.save_screenshot()
     screenshot = settings.MEDIA_ROOT + '/screen.jpg'
-    print("SCREEN: %s" % screenshot)
     matched_ingredients = get_matching_ingredients(recipe.ingredients)
 
     com_saved = False

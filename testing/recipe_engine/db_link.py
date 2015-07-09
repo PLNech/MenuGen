@@ -51,14 +51,20 @@ def get_matching_ingredients(parsed_ingredients):
     # attempts in order:
     #   perfect match
     #   containing the string
-    #   above steps with every word in the string from longest to shortest
+    #   above steps with every word in the string
     matched_ingredients = {}
     for i in parsed_ingredients:
         if not i or not i.name:
             continue
         ingredient = get_matching_ingredient(i.name)
         if not ingredient:
-            for word in reversed(sorted(i.name.split(" "), key=len)):
+            words = i.name.split(" ")
+            if len(words) > 1:
+                ingredient = get_matching_ingredient(words[0] + " " + words[1])
+        if not ingredient and len(words) > 2:
+            ingredient = get_matching_ingredient(words[0] + " " + words[1] + words[2])
+        if not ingredient:
+            for word in i.name.split(" "):
                 ingredient = get_matching_ingredient(word)
                 if ingredient:
                     break

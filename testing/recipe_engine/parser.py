@@ -11,6 +11,20 @@ class Ingredient:
         self.quantity = None
 
         s = s.replace("0g", "0 g")
+        if s.endswith("."):
+            s = s[:-1]
+
+        ingredsHelper = {
+                "lait": "lait entier",
+                "eau": "eau de source, embouteillée (aliment moyen)",
+                "poire": "poire belle hélène",
+                "poires": "poire belle hélène",
+                "œuf": "oeuf",
+                "pommes terre" : "pomme de terre, cuite à l'eau",
+                "lardons" : "lardon fumé, cuit",
+                "lard" : "lardon fumé, cuit",
+                "échalotes": "échalote, crue"
+        }
 
         word2num = {
                 "un demi" : 1/2,
@@ -38,32 +52,33 @@ class Ingredient:
                 "kilogramme" : "kg", "kilogrammes" : "kg", "kilo" : "kg", "kilos" : "kg",
                 "litre" : "l",
                 "cuillères à soupe" : "cuillère à soupe", "cuillerée" : "cuillère à soupe",
-                "cuillères à café" : "cuillère à café",
+                "cuillères": "cuillère à café", "cuillères à café" : "cuillère à café",
                 "verres" : "verre",
                 "tranches" : "tranche",
                 "gousses" : "gousse",
                 "boîtes": "boîte", "boites": "boîte"
         }
 
-        units = [ "mg", "g", "cg", "kg", "l", "cl", "cuillère à soupe", "cuillère à café", "verre", "tranche" , "gousse", "boîte" ]
+        units = [ "mg", "g", "cg", "kg", "l", "cl", "cuillère à soupe", "cuillère à café", "verre", "tranche" , "gousse", "boîte", "pot" ]
         
-        useless = [ "de", "branches", "feuilles" ]
+        useless = [ "de", "branches", "feuilles", "liquide", "grains", "blancs", "grosses", "gros", "petites", "petite", "tiède", "cuisses", "morceau", "bâton", "séchée", "bûche", "belles", "filets" ]
 
-        # step 1: numerize
+        # step 1: remove useless words
+        for w in useless:
+            s = s.replace(" " + w, "")
+
+        # step 2: numerize
         for key, val in word2num.items():
             s = s.replace(" " + key + " ", " " + str(val) + " ")
             if s.startswith(key + " ") or s.endswith(" " + key):
                 s = s.replace(key, str(val))
 
-        # step 2: unify units
+        # step 3: unify units
         for key, val in word2unit.items():
             s = s.replace(" " + key + " ", " " + val + " ")
             if s.startswith(key + " ") or s.endswith(" " + key):
                 s = s.replace(key, val)
-
-        # step 3: remove useless words
-        for w in useless:
-            s = s.replace(" " + w, "")
+        s = s.replace("gr ", " g ")
 
         # step 4: parse
         after_quantity = False
@@ -117,4 +132,10 @@ class Ingredient:
             self.unit = None
 
         # step 5: clean
-        self.name = self.name.replace("d'", "")
+        if self.name:
+            self.name = self.name.replace("d'", "")
+
+        # step 6: optimize name for ingredient matching
+        if self.name:
+            for key, val in ingredsHelper.items():
+                self.name = self.name.replace(key, str(val))

@@ -7,6 +7,6 @@
 migrations/
 __pycache__/
 algorithms/img/
-testing/static/screen.png
+media/screen.jpg
 wheelhouse/
 node_modules

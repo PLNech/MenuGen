@@ -61,8 +61,8 @@ class Profile(models.Model):
 class RecipeToIngredient(models.Model):
     recipe = models.ForeignKey('Recipe')
     ingredient = models.ForeignKey('Ingredient')
-    quantity = models.FloatField()
-    unit = models.CharField(max_length=128)
+    quantity = models.FloatField(blank=True, null=True, default=None)
+    unit = models.CharField(max_length=128, blank=True, null=True, default=None)
 
 
 class Recipe(models.Model):
