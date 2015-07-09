@@ -56,7 +56,8 @@ def detail(request, profile_id):
 @login_required
 def edit(request, profile_id):
     print(profile_id)
-    return render(request, 'profiles/guests/edit.html')
+    # return render(request, 'profiles/guests/edit.html')
+    return redirect('physiology')
 
 
 @login_required
