@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.conf import settings
 
 from testing.models import Comment
 from testing.recipe_engine.scraper import random_recipe, Recipe
@@ -14,7 +15,9 @@ def recipes(request):
             save_recipe(recipe)
     else:
         recipe = random_recipe()
-    #recipe.save_screenshot()
+    recipe.save_screenshot()
+    screenshot = settings.MEDIA_ROOT + '/screen.jpg'
+    print("SCREEN: %s" % screenshot)
     matched_ingredients = get_matching_ingredients(recipe.ingredients)
 
     com_saved = False
@@ -23,11 +26,11 @@ def recipes(request):
             com = Comment(url=request.POST['com_url'], text=request.POST['new_comment'])
             com.save()
             com_saved = True
-
     comments = Comment.objects.all()
 
     return render(request, 'recipes.html', {
         'recipe': recipe,
+        'screenshot': screenshot,
         'matched_ingredients': matched_ingredients,
         'com_saved': com_saved,
         'comments': comments

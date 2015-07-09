@@ -95,11 +95,12 @@ def save_recipe(recipe):
 
     # link to ingredients
     matching = get_matching_ingredients(recipe.ingredients)
-    for parsed, matched in matching:
-        rtoi = RecipeToIngredient(
-            recipe=r,
-            ingredient=matched,
-            quantity=parsed.quantity,
-            unit=parsed.unit
-        )
-        rtoi.save()
+    for parsed, matched in matching.items():
+        if matched:
+            rtoi = RecipeToIngredient(
+                recipe=r,
+                ingredient=matched,
+                quantity=parsed.quantity,
+                unit=parsed.unit
+            )
+            rtoi.save()

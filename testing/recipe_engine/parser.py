@@ -47,7 +47,7 @@ class Ingredient:
 
         units = [ "mg", "g", "cg", "kg", "l", "cl", "cuillère à soupe", "cuillère à café", "verre", "tranche" , "gousse", "boîte" ]
         
-        useless = [ "de" ]
+        useless = [ "de", "branches", "feuilles" ]
 
         # step 1: numerize
         for key, val in word2num.items():
