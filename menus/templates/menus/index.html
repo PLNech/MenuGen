@@ -1,5 +1,48 @@
 {% extends '_base.html' %}
+{% load staticfiles %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href='{% static 'calendar/fullcalendar.css' %}' />
+    <link rel="stylesheet" type="text/css" href='{% static 'calendar/fullcalendar.print.css' %}' />
+{% endblock %}
 
 {% block content %}
     <h2>Menus</h2>
+    <div class="col-md-3 hidden-xs hidden-sm">
+        <div class="main-box" id="external-events">
+            <header class="main-box-header clearfix">
+                <h2>Mes menus</h2>
+            </header>
+            <div class="main-box-body clearfix">
+
+                {% for menu in menus %}
+                    <div class="external-event label-primary ui-draggable" data-eventclass="label-primary" style="position: relative; z-index: auto; left: 0px; top: 0px;">{{ menu.name }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="main-box">
+            <div class="main-box-body clearfix">
+                <div id="calendar" class="fc fc-ltr fc-unthemed"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'calendar/lib/jquery-ui.custom.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'calendar/lib/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'calendar/fullcalendar.min.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+
+            // page is now ready, initialize the calendar...
+
+            $('#calendar').fullCalendar({
+                // put your options and callbacks here
+            })
+
+        });
+
+    </script>
 {% endblock %}

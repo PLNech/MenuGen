@@ -1,0 +1,54 @@
+{% load staticfiles %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href='{% static 'bootstrap_overrides/form_errors.css' %}' />
+{% endblock %}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="myModalLabel">
+        Sauvegarde du menu
+    </h4>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" id="menu_new-form" action="{% url 'menu_new' %}" method="POST">
+            {% if form.errors %}
+                <p class="danger">
+                    {{ form.error_messages }}
+                </p>
+            {% endif %}
+            {% csrf_token %}
+            {{ form.as_table }}
+        </br>
+        <div class="control-group">
+            <div class="controls text-right">
+                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% block js %}
+    <script>
+{#        $('.modal-body').on('submit', '#menu_new-form', function() {#}
+{#            $.ajax({#}
+{#                is_allowed: false,#}
+{#                type: $(this).attr('method'),#}
+{#                url: this.action,#}
+{#                data: $(this).serialize(),#}
+{#                context: this,#}
+{#                success: function(data, status) {#}
+{#                    $('#auth-modal').modal('hide');#}
+{#                    var guests_table = $("table#guests");#}
+{#                    guests_table.find('tbody:first').prepend(data);#}
+{#                },#}
+{#                error:  function(data, status) {#}
+{#                    $('#auth-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);#}
+{#                }#}
+{#            });#}
+{#            return false;#}
+{#        });#}
+{#        $(document).on("hidden.bs.modal", function (e) {#}
+{#            $(e.target).removeData("bs.modal").find(".modal-content").empty();#}
+{#        });#}
+    </script>
+{% endblock %}

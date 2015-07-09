@@ -6,7 +6,6 @@ urlpatterns = patterns(
     url(r'^$', 'landing', name='landing'),
     url(r'^home$', 'home', name='home'),
 
-    url(r'^menus$', 'menus', name='menus'),
     url(r'^statistics$', 'statistics', name='statistics'),
     url(r'^account$', 'account', name='account'),
 )
@@ -67,4 +66,14 @@ urlpatterns += patterns(
     url(r'^physiology$', 'physiology', name='physiology'),
     url(r'^regimes$', 'regimes', name='regimes'),
     url(r'^tastes$', 'tastes', name='tastes'),
+)
+
+"""
+    Profiles
+"""
+urlpatterns += patterns(
+    'menus.views.menus.menus_views',
+
+    url(r'^menus$', 'menus', name='menus'),
+    url(r'^menus/new', 'new', name='menu_new'),
 )

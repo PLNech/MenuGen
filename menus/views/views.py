@@ -15,11 +15,6 @@ def landing(request):
 def home(request):
     return render(request, 'menus/home.html', {})
 
-
-@login_required
-def menus(request):
-    return render(request, 'menus/menus.html', {})
-
 @login_required
 def statistics(request):
     return render(request, 'menus/statistics.html', {})
