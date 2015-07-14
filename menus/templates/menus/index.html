@@ -90,8 +90,9 @@
                     // assign it the date that was reported
                     copiedEventObject.start = date;
                     copiedEventObject.allDay = allDay;
+                    // assign the end date. Calculated based on the start date + menu's duration in days * 24(nb hours in a day).
                     var end = new Date(copiedEventObject.start);
-                    copiedEventObject.end = end.setHours(end.getHours() + (copiedEventObject.durationInDay * 24)); //<==== here should be added the number of days of the menus
+                    copiedEventObject.end = end.setHours(end.getHours() + (copiedEventObject.durationInDay * 24));
                     // render the event on the calendar
                     // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                     $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
