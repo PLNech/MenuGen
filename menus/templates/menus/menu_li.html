@@ -1,1 +1,13 @@
-<div class="external-event label-primary ui-draggable" data-eventclass="label-primary" style="position: relative; z-index: auto; left: 0px; top: 0px;">{{ menu.name }}</div>
+<tr id="menu-{{ menu.id }}" class="hvr-shadow-radial">
+    <td class="text-center">
+        <a href="#">{{ menu.name }}</a>
+    </td>
+    <td style="width: 20%;">
+        <div class="external-event hvr-bubble-float-left">
+            <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                <i class="fa fa-book fa-stack-1x fa-inverse"></i>
+            </span>
+        </div>
+    </td>
+</tr>

@@ -12,13 +12,13 @@
 <div class="modal-body">
     <form class="form-horizontal" id="sign-in-form" action="{% url 'sign_in' %}" method="POST">
 
-            {% if form.errors %}
-                <p class="danger">
-                    {{ form.error_messages }}
-                </p>
-            {% endif %}
-            {% csrf_token %}
-            {{ form.as_table }}
+        {% if form.errors %}
+            <p class="danger">
+                {{ form.error_messages }}
+            </p>
+        {% endif %}
+        {% csrf_token %}
+        {{ form.as_table }}
 
         <div class="control-group">
             <div class="controls text-right">
