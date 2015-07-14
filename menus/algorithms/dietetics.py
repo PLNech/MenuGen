@@ -1,3 +1,6 @@
+import datetime
+from dateutil.relativedelta import relativedelta
+
 __author__ = 'PLNech'
 
 
@@ -47,6 +50,12 @@ class Calculator:
         return calories * (min_percentage + max_percentage) / 2
 
     @staticmethod
+    def estimate_needs_profile(profile):
+        print('birthday:', profile.birthday)
+        age = relativedelta(datetime.date.today(), profile.birthday).years
+        return Calculator.estimate_needs(age, profile.height, profile.weight, profile.sex, profile.activity)
+
+    @staticmethod
     def estimate_needs(age, size, weight, sex, exercise):
         """
         Return a DieteticsNeeds object describing the calculated needs
@@ -80,6 +89,12 @@ class Calculator:
 
         return DieteticsNeeds(calories, proteins_g, carbohydrates_g, fats_g)
 
+    @staticmethod
+    def age_from_date(date):
+        today = datetime.date.today()
+        return today.year - date.birthday.year - ((today.month, today.day) <
+                                                  (date.birthday.month, date.birthday.day))
+
 
 class DieteticsNeeds:
     # FIXME Use min and max objectives
@@ -92,6 +107,21 @@ class DieteticsNeeds:
     def __str__(self):
         return "%d kcal, %d g fats, %d g carbs, %d g proteins" % \
                (self.calories, self.grams_fats, self.grams_carbohydrates, self.grams_proteins)
+
+    def __add__(self, other):
+        d = DieteticsNeeds(0, 0, 0, 0)
+        d.calories = self.calories + other.calories
+        d.grams_fats = self.grams_fats + other.grams_fats
+        d.grams_proteins = self.grams_proteins + other.grams_proteins
+        d.grams_carbohydrates = self.grams_carbohydrates + other.grams_carbohydrates
+        return d
+
+    def __iadd__(self, other):
+        self.calories += other.calories
+        self.grams_fats += other.grams_fats
+        self.grams_proteins += other.grams_proteins
+        self.grams_carbohydrates += other.grams_carbohydrates
+        return self
 
 
 if __name__ == "__main__":

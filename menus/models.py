@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -19,15 +17,21 @@ PRICE = (
 )
 
 SEX = (
-    (0, 'Homme'),
-    (1, 'Femme'),
+    ('man', 'Homme'),
+    ('woman', 'Femme'),
 )
 
 ACTIVITY = (
-    (0, 'Jamais'),
-    (1, 'De temps en temps'),
-    (2, 'Souvent'),
-    (3, 'Tout le temps'),
+    ('low', 'Sédentaire'),
+    ('light', 'Légère'),
+    ('moderate', 'Modérée'),
+    ('active', 'Régulière'),
+    ('extreme', 'Intense'),
+)
+
+MEAL = (
+    (0, 'midi'),
+    (1, 'soir'),
 )
 
 
@@ -44,8 +48,8 @@ class Profile(models.Model):
     birthday = models.DateField(blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
     height = models.FloatField(blank=True, null=True)
-    sex = models.IntegerField(choices=SEX, blank=True, null=True)
-    activity = models.IntegerField(choices=ACTIVITY, blank=True, null=True)
+    sex = models.CharField(max_length=16, choices=SEX, blank=True, null=True)
+    activity = models.CharField(max_length=16, choices=ACTIVITY, blank=True, null=True)
     picture = StdImageField(upload_to='media/images/profiles')
 
     unlikes = models.ManyToManyField('Ingredient')
@@ -56,6 +60,13 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.name
+
+    def likes(self, dish):
+        for d in self.unlikes_dishes.all():
+            if d.name == dish.name:
+                return False
+                # TODO: Use unlikes ingredients
+        return True
 
 
 class RecipeToIngredient(models.Model):
@@ -140,11 +151,24 @@ class Nutriment(models.Model):
 
 class Menu(models.Model):
     name = models.CharField(max_length=32)
-    people_n = models.IntegerField()
     price = models.IntegerField(choices=PRICE)
     difficulty = models.IntegerField(choices=EASE)
-    # FIXME : missing order/planning relationship (will do it soon) - kevin
-    recipes = models.ManyToManyField('Recipe')
+    nb_people = models.IntegerField()
+    profiles = models.ManyToManyField('Profile')
 
     def __str__(self):
         return self.name
+
+
+class Meal(models.Model):
+    menu = models.ForeignKey('Menu')
+    day = models.IntegerField()
+    type = models.IntegerField(choices=MEAL)
+    starter = models.ForeignKey('Recipe', related_name='starter')
+    main_course = models.ForeignKey('Recipe', related_name='main_course')
+    dessert = models.ForeignKey('Recipe', related_name='dessert')
+
+# class Calendar(models.Model):
+#
+#     def __str__(self):
+#         return self.name

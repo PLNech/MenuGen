@@ -34,7 +34,7 @@ class Config:
 
         # Amounts
         KEY_RUN_NUMBER: 1,  # Number of runs
-        KEY_NB_GENERATION: 10,  # Number of generations
+        KEY_NB_GENERATION: 1,  # Number of generations
 
         # Algorithm parameters
         KEY_ELITISM: True,
@@ -47,7 +47,7 @@ class Config:
         KEY_GRID_SIZE: 200,  # Size of the city position grid
 
         # Menu-related parameters
-        KEY_NB_DISHES: 10,  # Number of dishes to choose between
+        KEY_NB_DISHES: 50,  # Number of dishes to choose between
         KEY_MAX_DISHES: 7 * 5 * 3,  # Maximum dishes per weekly menu
         KEY_MAX_DISH_CALORIES: 250,  # Maximum amount of calories in a dish
         KEY_MAX_DISH_FATS: 100,  # Maximum amount of grams of fat in a dish
@@ -69,7 +69,7 @@ class Config:
     draw_all = False  # Should we draw all steps of each run?
 
     print_each_run = False  # Should we print results for each run?
-    print_generation = False  # Should we print details of each generation?
+    print_generation = True  # Should we print details of each generation?
     print_population = False  # Should we print the generated population?
     print_selection = False  # Should we print the selection of individuals?
     print_crossover = False  # Should we print the crossover of individuals?

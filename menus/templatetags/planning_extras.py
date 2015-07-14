@@ -2,7 +2,7 @@ from django import template
 
 register = template.Library()
 
-DAY_SLOT = ['Matin', 'Collation', 'Déjeuner', 'Collation', 'Dîner']
+DAY_SLOT = ['Déjeuner', 'Dîner']
 
 
 @register.filter(name='meal_slot_name')

@@ -8,36 +8,29 @@
 
 {% block content %}
     <h2>Menus</h2>
-        </br>
+    <div class="main-box clearfix">
         <div class="col-md-3 hidden-xs hidden-sm">
-            <div class="main-box">
             <header class="main-box-header"></header>
             </br>
-            <div class="main-box-body clearfix">
-                <div id='external-events'>
-                    <div class="table">
-                        <table id="menus" class="table user-list table-hover">
-                            <thead>
-                            </thead>
-                            <tbody>
-                            {% for menu in menus %}
-                                {% include "menus/menu_li.html" with menu=menu%}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="main-box-body">
+                <table id="external-events" class="table user-list table-hover">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    {% for menu in menus %}
+                        {% include "menus/menu_li.html" with menu=menu%}
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-        </div>
         <div class="col-md-9">
-        <div class="main-box">
             </br>
-            <div class="main-box-body clearfix">
+            <div class="main-box-body">
                 <div id="calendar"></div>
             </div>
         </div>
-        </div>
+    </div>
 
 
 {% endblock %}
@@ -56,8 +49,11 @@
 
                 // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
                 // it doesn't need to have a start or end
+                console.log();
                 var eventObject = {
-                    title: $.trim($(this).text()) // use the element's text as the event title
+                    title: $(this).find("input[name='title']").val(), // use the hidden input name to get the menu's title value
+                    allDay: true,
+                    durationInDay: $(this).find("input[name='duration']").val()
                 };
 
                 // store the Event Object in the DOM element so we can get to it later
@@ -69,7 +65,6 @@
                     revert: true,      // will cause the event to go back to its
                     revertDuration: 0  //  original position after the drag
                 });
-
             });
 
 
@@ -95,7 +90,9 @@
                     // assign it the date that was reported
                     copiedEventObject.start = date;
                     copiedEventObject.allDay = allDay;
-
+                    // assign the end date. Calculated based on the start date + menu's duration in days * 24(nb hours in a day).
+                    var end = new Date(copiedEventObject.start);
+                    copiedEventObject.end = end.setHours(end.getHours() + (copiedEventObject.durationInDay * 24));
                     // render the event on the calendar
                     // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                     $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);

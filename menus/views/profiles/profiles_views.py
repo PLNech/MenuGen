@@ -1,10 +1,8 @@
-import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from menus.algorithms.dietetics import Calculator
 from menus.forms import ProfileForm
-import menugen.defaults as default
 
 
 @login_required
@@ -119,9 +117,6 @@ def update_physio(request):
         elif activity:
             p.activity = activity
         p.save()
-
-        # today = datetime.date.today()
-        # request.session['age'] = today.year - p.birthday.year - ((today.month, today.day) < (p.birthday.month, p.birthday.day))
 
     else:
         if name:
