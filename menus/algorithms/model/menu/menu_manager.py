@@ -1,4 +1,5 @@
 import inspect
+from menus.algorithms import adapter
 
 from menus.models import Recipe
 
@@ -80,7 +81,7 @@ class MenuManager(Manager):
         shuffle(recipes)
         for i in range(nb_dishes):
             recipe = recipes[i]
-            dish = Dish(recipe.name, recipe.id)  # TODO: Link with nutritional information
+            dish = adapter.recipe2dish(recipe)  # TODO: Link with nutritional information
             self.add_item(dish, profile)
             if Config.print_manager:
                 print("Dish %s." % dish)
