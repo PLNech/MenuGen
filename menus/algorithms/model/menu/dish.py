@@ -8,7 +8,7 @@ from menus.algorithms.utils.comparable import Comparable
 
 
 class Dish(Comparable):
-    def __init__(self, name=None, calories=None, fats=None, carbohydrates=None, proteins=None):
+    def __init__(self, name=None,  id=None, calories=None, fats=None, carbohydrates=None, proteins=None):
         self.max_calories = Config.parameters[Config.KEY_MAX_DISH_CALORIES]
         self.max_fats = Config.parameters[Config.KEY_MAX_DISH_FATS]
         self.max_carbohydrates = Config.parameters[Config.KEY_MAX_DISH_CARBOHYDRATES]
@@ -20,6 +20,7 @@ class Dish(Comparable):
         self.fats = fats if fats is not None else random.randint(0, self.max_fats)
 
         self.name = name if name is not None else Config.dish_names[random.randrange(0, len(Config.dish_names))]
+        self.recipe_id = id
 
     def __str__(self):
         format_name = "{:13s}"

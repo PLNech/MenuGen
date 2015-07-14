@@ -57,31 +57,12 @@ def replace_if_none(var, default):
 
 
 def generation_meal_details(request, starter_id, main_course_id, dessert_id):
-    """ Here should be load a meal from db according to the given ids
+    """ Here should be loaded a meal from db according to the given ids
     A meal is composed of a starter, a main course and a dessert """
-    starter = Recipe()
-    starter.id = starter_id
-    starter.name = "Entrée"
-    starter.prep_time = 5
-    starter.cook_time = 10
-    starter.difficulty = 2
-    starter.price = 2
 
-    main = Recipe()
-    main.id = main_course_id
-    main.name = "Plat principal"
-    main.prep_time = 5
-    main.cook_time = 20
-    main.difficulty = 3
-    main.price = 3
-
-    dessert = Recipe()
-    dessert.id = dessert_id
-    dessert.name = "Dessert"
-    dessert.prep_time = 5
-    dessert.cook_time = 0
-    dessert.difficulty = 2
-    dessert.price = 2
+    starter = Recipe.objects.get(pk=starter_id)
+    main = Recipe.objects.get(pk=main_course_id)
+    dessert = Recipe.objects.get(pk=dessert_id)
 
     meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
     return render(request, 'menus/generation/meal_details.html', {'meal': meal})

@@ -80,7 +80,7 @@ class MenuManager(Manager):
         shuffle(recipes)
         for i in range(nb_dishes):
             recipe = recipes[i]
-            dish = Dish(recipe.name)  # TODO: Link with nutritional information
+            dish = Dish(recipe.name, recipe.id)  # TODO: Link with nutritional information
             self.add_item(dish, profile)
             if Config.print_manager:
                 print("Dish %s." % dish)
