@@ -18,3 +18,9 @@
     margin: 0 auto;
     pointer-events: all;
 }
+.modal-content a {
+    color: white;
+}
+.modal-content a:hover {
+    color: white;
+}

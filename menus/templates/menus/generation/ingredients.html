@@ -1,0 +1,18 @@
+<div class="panel-group" id="accordion{{ id }}" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading{{ id }}">
+            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion{{ id }}" href="#collapseOne{{ id }}" aria-expanded="false" aria-controls="collapseOne{{ id }}">
+                    Ingrédients
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne{{ id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ id }}">
+            <div class="panel-body">
+                {% for i in recipe.ingredients.all %}
+                    <div class="row">{{ i.name }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
