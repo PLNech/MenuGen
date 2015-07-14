@@ -1,10 +1,11 @@
 import inspect
+from menus.algorithms import adapter
 
 from menus.models import Recipe
 
 __author__ = 'PLNech'
 
-from random import randrange
+from random import randrange, shuffle
 import threading
 
 from menus.algorithms.utils.printer import Printer
@@ -61,30 +62,39 @@ class MenuManager(Manager):
         for i in range(nb_dishes):
             dish = Dish()
             gen_name = dish.name
+
+            if not self.add_item(dish):
+                i -= 1
+                continue
+
             if gen_name in self.names_count:
                 self.names_count[gen_name] += 1
                 dish.name += "(%d)" % self.names_count[gen_name]
             else:
                 self.names_count[gen_name] = 1
-            # dish.name = dish.name + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-            self.add_item(dish)
+
             if Config.print_manager:
                 print("Dish %s." % dish)
 
-    def init_from_db(self, nb_dishes):
+    def init_from_db(self, nb_dishes, profile=None):
         recipes = list(Recipe.objects.all()[:nb_dishes])
+        shuffle(recipes)
         for i in range(nb_dishes):
             recipe = recipes[i]
-            dish = Dish(recipe.name)  # TODO: Link with nutritional information
-            self.add_item(dish)
+            dish = adapter.recipe2dish(recipe)  # TODO: Link with nutritional information
+            self.add_item(dish, profile)
             if Config.print_manager:
                 print("Dish %s." % dish)
 
     def reset(self):
         self.dishes = []
 
-    def add_item(self, dish):
-        self.dishes.append(dish)
+    def add_item(self, dish, profile=None):
+        if profile and not profile.likes(dish):
+            return False
+        else:
+            self.dishes.append(dish)
+            return True
 
     def get_item(self, index):
         return self.dishes[index]

@@ -30,10 +30,8 @@ urlpatterns += patterns(
     'menus.views.generation.post_generation_views',
 
     url(r'^generation$', 'generation', name='generation'),
-    url(r'^generation/meal_details$', 'generation_meal_details',
-        {'starter_id': 0,
-         'main_course_id': 1,
-         'dessert_id': 2},
+    url(r'^generation/meal_details/(?P<starter_id>\d+)-(?P<main_course_id>\d+)-(?P<dessert_id>\d+)$',
+        'generation_meal_details',
         name='generation_meal_details'),
 )
 

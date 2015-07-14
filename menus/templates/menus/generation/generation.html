@@ -63,7 +63,7 @@
 
                                     <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
                                         <a data-toggle="modal"
-                                           href="{% url 'generation_meal_details'%}"
+                                           href="{% url 'generation_meal_details' starter_id=meal.starter.id main_course_id=meal.main_course.id dessert_id=meal.dessert.id %}"
                                            data-target="#mealDetailsModal">
                                             DETAILS
                                         </a>
