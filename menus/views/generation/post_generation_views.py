@@ -1,6 +1,6 @@
 import time
-import menugen.defaults as defaults
 
+import menugen.defaults as defaults
 from django.shortcuts import render
 from menus.algorithms.dietetics import Calculator
 from menus.algorithms.run import run_standard
@@ -33,9 +33,10 @@ def generation(request):
     user_exercise = replace_if_none(request.session.get('exercise'), defaults.EXERCISE)
     user_age = int(replace_if_none(request.session.get('age'), defaults.AGE))
     user_weight = int(replace_if_none(request.session.get('weight'), defaults.WEIGHT))
-    user_height = int(float(replace_if_none(request.session.get('height'), defaults.HEIGHT) * 100))
-    user_sex = replace_if_none(request.session.get('sex'), defaults.SEX)
-
+    replaced_height = int(replace_if_none(request.session.get('height'), defaults.HEIGHT))
+    user_height = int(float(replaced_height * 100))
+    user_sex = request.session.get('sex')
+    user_sex = Calculator.SEX_F if user_sex is 1 else Calculator.SEX_H
 
     needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
 
@@ -54,6 +55,7 @@ def replace_if_none(var, default):
     if var is None:
         var = default
     return var
+
 
 def generation_meal_details(request, starter_id, main_course_id, dessert_id):
     """ Here should be load a meal from db according to the given ids
