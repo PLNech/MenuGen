@@ -4,7 +4,7 @@ from menus.models import Recipe
 
 __author__ = 'PLNech'
 
-from random import randrange
+from random import randrange, shuffle
 import threading
 
 from menus.algorithms.utils.printer import Printer
@@ -71,19 +71,20 @@ class MenuManager(Manager):
             if Config.print_manager:
                 print("Dish %s." % dish)
 
-    def init_from_db(self, nb_dishes):
+    def init_from_db(self, nb_dishes, profile=None):
         recipes = list(Recipe.objects.all()[:nb_dishes])
+        shuffle(recipes)
         for i in range(nb_dishes):
             recipe = recipes[i]
             dish = Dish(recipe.name)  # TODO: Link with nutritional information
-            self.add_item(dish)
+            self.add_item(dish, profile)
             if Config.print_manager:
                 print("Dish %s." % dish)
 
     def reset(self):
         self.dishes = []
 
-    def add_item(self, dish):
+    def add_item(self, dish, profile=None):
         self.dishes.append(dish)
 
     def get_item(self, index):

@@ -50,12 +50,20 @@ class Profile(models.Model):
 
     unlikes = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
+    unlikes_dishes = models.ManyToManyField('Recipe')
     diets = models.ManyToManyField('Diet')
 
     modified = models.DateTimeField(default=timezone.now())
 
     def __str__(self):
         return self.name
+
+    def likes(self, dish):
+        for d in self.unlikes_dishes.all():
+            if d.name == dish.name:
+                return False
+            # TODO: Use unlikes ingredients
+        return True
 
 
 class RecipeToIngredient(models.Model):
