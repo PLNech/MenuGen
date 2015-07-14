@@ -43,7 +43,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=64, default='Sans nom')
     birthday = models.DateField(blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
-    height = models.IntegerField(blank=True, null=True)
+    height = models.FloatField(blank=True, null=True)
     sex = models.IntegerField(choices=SEX, blank=True, null=True)
     activity = models.IntegerField(choices=ACTIVITY, blank=True, null=True)
     picture = StdImageField(upload_to='media/images/profiles')

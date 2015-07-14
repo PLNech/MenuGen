@@ -1,6 +1,7 @@
 {% extends '_base.html' %}
 {% load staticfiles %}
 {% load utils_extras %}
+{% load l10n %}
 
 {% block content %}
     <div class="col-lg-12">
@@ -36,6 +37,8 @@
                         <label for="sex" class="col-sm-2 control-label">Sexe</label>
 
                         <div class="col-sm-2">
+                            <i class="fa fa-female fa-3x"></i>
+                            <i class="fa fa-male fa-3x"></i>
                             <select class="form-control" id="sex" name="sex">
                                 <option value="0" {% if physio.sex == 0 %}selected="selected"{% endif %}>Homme</option>
                                 <option value="1" {% if physio.sex == 1 %}selected="selected"{% endif %}>Femme</option>
@@ -43,42 +46,49 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="birthday" class="col-sm-2 control-label">Age</label>
+                        <label for="birthday" class="col-sm-2 control-label">Date de naissance</label>
 
                         <div class="col-sm-2">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="birthday" name="birthday" placeholder="Age" value="{{ physio.birthday }}">
-                                <span class="input-group-addon"> ans</span>
+                                <input type="text" class="form-control" value="{{ physio.birthday }}" id="birthday" name="birthday" >
+                                {% comment %}<input type="text" class="form-control" id="birthday" name="birthday" placeholder="Age" value="{{ physio.birthday }}">{% endcomment %}
                             </div>
                         </div>
                     </div>
+                    {{ physio.weight }}
                     <div class="form-group">
                         <label for="weight" class="col-sm-2 control-label">Poids</label>
-
                         <div class="col-sm-2">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="weight" name="weight" placeholder="Poids" value="{{ physio.weight }}">
-                                <span class="input-group-addon" id="weight">kg</span>
+                                <input id="weight" name="weight" type="text"/><br/>
+                                {% comment %}
+                                <input id="weight" name="weight" class="form-control" data-slider-id='weight' type="text" data-slider-min="0" data-slider-max="120" data-slider-step="5" data-slider-value="{{ physio.weight }}" />
+{% endcomment %}
+                                {% comment %}<input type="text" class="form-control" id="weight" name="weight" placeholder="Poids" value="{{ physio.weight }}">
+                                <span class="input-group-addon" id="weight">kg</span>{% endcomment %}
                             </div>
                         </div>
                     </div>
+                    {{ physio.height | unlocalize }}
                     <div class="form-group">
                         <label for="height" class="col-sm-2 control-label">Taille</label>
 
                         <div class="col-sm-2">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="height" name="height" placeholder="Taille" value="{{ physio.height }}">
-                                <span class="input-group-addon" id="weight">m</span>
+                                <input id="height" name="height" type="text"/><br/>
+                                {#                                <input type="text" class="form-control" id="height" name="height" placeholder="Taille" value="{{ physio.height }}"> #}
+                                {% comment %}
+                                <input class="form-control" id="height" name="height" data-slider-id='height' data-slider-orientation="vertical" type="text" data-slider-min="0.5" data-slider-max="2.3" data-slider-step="0.1" data-slider-value="{{ physio.height | unlocalize }}" />
+{% endcomment %}
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="height" class="col-sm-2 control-label">Activité</label>
-
+                        <label for="activity" class="col-sm-2 control-label">Activité</label>
                         <div class="col-sm-2">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="activity" name="activity" placeholder="Activité" value="{{ physio.activity }}">
-                                <span class="input-group-addon" id="activity"> ?</span>
+                                <input class="form-control" id="activity" name="activity" data-slider-id='activity' type="text" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" />
+                                {#                                <input id="activity" name="activity" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="{{ physio.activity }}" />#}
                             </div>
                         </div>
                     </div>
@@ -98,10 +108,8 @@
             });
         });
 
-
         // AJAX for posting
         function update_physio(data_dico) {
-            console.log("sanity check"); // sanity check TODO Kyo : Log meaningful things or stop logging
             $.ajax({
                 url : '{% url 'update_physio' %}', // the endpoint
                 type : "POST", // http method
@@ -121,6 +129,52 @@
                 }
             });
         }
+    </script>
+
+    {% comment %} SLIDERS {% endcomment %}
+    <script src="{% static 'bootstrap-slider/bootstrap-slider.min.js' %}"></script>
+    <script>
+        var activity_slider = $('#activity').slider({
+            formatter: function(value) {
+                return 'Activité ' + value;
+            }
+        });
+        var height_slider = $('#height').slider({
+            min: 0.5,
+            max: 2.3,
+            value: {{ physio.height | unlocalize }},
+            step: 0.1,
+            focus: true,
+            orientation: 'vertical',
+            reversed : true,
+            formatter: function(value) {
+                return 'Taille : ' + value + 'm';
+            }
+        });
+        height_slider.on('change', function (e) {
+            var data_dico = {height: height_slider.slider('getValue') };
+            update_physio(data_dico);
+        });
+
+        var weight_slider = $('#weight').slider({
+            min: 40,
+            max: 120,
+            value: {{ physio.weight }},
+            step: 5,
+            focus: true,
+            formatter: function(value) {
+                return 'Poid: ' + value + 'kg';
+            }
+        });
+        weight_slider.on('change', function (e) {
+            var data_dico = {weight: weight_slider.slider('getValue') };
+            update_physio(data_dico);
+        });
+
+    </script>
+
+
+    <script>
 
         $('#name').on('change', function (e) {
             var data_dico = {name: $("#name").val()};
@@ -130,22 +184,41 @@
             var data_dico = {sex: $('select#sex option:selected').val()};
             update_physio(data_dico);
         });
+        {% comment %}$('#height').on('change', function (e) {
+            var data_dico = {height: $("#height").slider('getValue')};
+            update_physio(data_dico);
+        });
+        $('#weight').slider().on('slide', function (e) {
+            var data_dico = {weight: weight_slider.slider('getValue')};
+            update_physio(data_dico);
+        });
+        $('#activity').on('change', function (e) {
+            var data_dico = {activity: $("#activity").slider('getValue')};
+            update_physio(data_dico);
+        });{% endcomment %}
+
+    </script>
+
+    {% comment %} DATEPICKERS {% endcomment %}
+    <script src="{% static 'datepicker/js/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'datepicker/js/bootstrap-datepicker.fr.js' %}" charset="UTF-8"></script>
+    <script>
+        $(function(){
+            $('#birthday').datepicker({
+                language: 'fr',
+                format: 'dd-mm-yyyy',
+                weekStart: 1,
+                viewMode: 'years'
+            })
+        });
         $('#birthday').on('change', function (e) {
             var data_dico = {birthday: $("#birthday").val()};
             update_physio(data_dico);
         });
-        $('#height').on('change', function (e) {
-            var data_dico = {height: $("#height").val()};
-            update_physio(data_dico);
-        });
-        $('#weight').on('change', function (e) {
-            var data_dico = {weight: $("#weight").val()};
-            update_physio(data_dico);
-        });
-        $('#activity').on('change', function (e) {
-            var data_dico = {activity: $("#activity").val()};
-            update_physio(data_dico);
-        });
-
     </script>
-{% endblock %}
+{% endblock js %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'bootstrap-slider/bootstrap-slider.min.css' %}">
+    <link rel="stylesheet" href="{% static 'datepicker/css/datepicker.css' %}">
+{% endblock css %}

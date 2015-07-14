@@ -97,59 +97,46 @@ def update_physio(request):
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    today = datetime.date.today()
-
     height = request.POST.get('height')
     weight = request.POST.get('weight')
     activity = request.POST.get('activity')
-    sex = int(request.POST.get('sex'))
+    sex = request.POST.get('sex')
+    birthday = request.POST.get('birthday')
+    name = request.POST.get('name')
 
     if request.user.is_authenticated():
         p = request.user.account.profile
-        if 'name' in request.POST:
-            p.name = sex
-        if 'sex' in request.POST:
+        if name:
+            p.name = name
+        elif sex:
             p.sex = sex
-        if 'birthday' in request.POST:
-            p.birthday = request.POST['birthday']
-        if 'height' in request.POST:
+        elif birthday:
+            p.birthday = birthday
+        elif height:
             p.height = height
-        if 'weight' in request.POST:
+        elif weight:
             p.weight = weight
-        if 'activity' in request.POST:
+        elif activity:
             p.activity = activity
         p.save()
-        request.session['age'] = today.year - p.birthday.year - ((today.month, today.day) <
-                                                                    (p.birthday.month, p.birthday.day))
-        request.session['height'] = p.height
-        request.session['weight'] = p.weight
-        request.session['sex'] = p.sex
-        request.session['exercise'] = p.activity
+
+        # today = datetime.date.today()
+        # request.session['age'] = today.year - p.birthday.year - ((today.month, today.day) < (p.birthday.month, p.birthday.day))
 
     else:
-        if 'name' in request.POST:
-            request.session['name'] = request.POST['name']
-        if 'age' in request.POST:
-            request.session['age'] = request.POST['age']
-        if 'sex' in request.POST:
+        if name:
+            request.session['name'] = name
+        elif birthday:
+            request.session['birthday'] = birthday
+        elif sex:
             request.session['sex'] = sex
-        if 'height' in request.POST:
+        elif height:
             request.session['height'] = height
-        if 'weight' in request.POST:
+        elif weight:
             request.session['weight'] = weight
-        if 'activity' in request.POST:
-            request.session['exercise'] = activity
+        elif activity:
+            request.session['activity'] = activity
 
-        request.session['height'] = height
-        request.session['weight'] = weight
-        request.session['sex'] = sex
-        request.session['exercise'] = Calculator.EXERCISE_MODERATE
-
-    print("Saved:")
-    print(request.session.get('sex'))
-    print(request.session.get('weight'))
-    print(request.session.get('height'))
-    print(request.session.get('age'))
     return HttpResponse('ok')
 
 
@@ -180,11 +167,11 @@ def physiology(request):
     else:
         physio = {
             'name': request.session['name'] if 'name' in request.session else "",
-            'sex': request.session.get('sex'),
+            'sex': request.session.get('sex') if 'sex' in request.session else default.SEX,
             'birthday': request.session['birthday'] if 'birthday' in request.session else "",
-            'height': request.session.get('height'),
-            'weight': request.session.get('weight'),
-            'activity': request.session.get('activity') if 'activity' in request.session else "",
+            'height': request.session.get('height') if 'height' in request.session else default.HEIGHT,
+            'weight': request.session.get('weight') if 'weight' in request.session else default.WEIGHT,
+            'activity': request.session.get('activity') if 'activity' in request.session else default.EXERCISE,
         }
 
     return render(request, 'profiles/physiology.html', {
