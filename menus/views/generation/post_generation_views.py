@@ -1,13 +1,12 @@
 import time
 
+import menugen.defaults as defaults
 from django.shortcuts import render
 from menus.algorithms.dietetics import Calculator
 from menus.algorithms.run import run_standard
 from menus.algorithms.utils.config import Config
 from menus.data.generator import generate_planning_from_list
 from menus.models import Recipe
-
-__author__ = 'kiyoakimenager'
 
 
 def generation(request):
@@ -31,30 +30,12 @@ def generation(request):
     nb_meals = 3  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
     nb_dishes = 3  # TODO: Determine appropriate amount for meals ?
 
-    if 'activity' in request.session:
-        user_exercise = request.session['exercise']
-    else:
-        user_exercise = Calculator.EXERCISE_MODERATE
-
-    if 'age' in request.session:
-        user_age = int(request.session['age'])
-    else:
-        user_age = 20
-
-    if 'height' in request.session:
-        user_height = int(float(request.session['height']) * 100)
-    else:
-        user_height = 180
-
-    if 'weight' in request.session:
-        user_weight = int(request.session['weight'])
-    else:
-        user_weight = 75
-
-    if 'sex' in request.session:
-        user_sex = request.session['sex']
-    else:
-        user_sex = Calculator.SEX_H
+    user_exercise = replace_if_none(request.session.get('exercise'), defaults.EXERCISE)
+    user_age = int(replace_if_none(request.session.get('age'), defaults.AGE))
+    user_weight = int(replace_if_none(request.session.get('weight'), defaults.WEIGHT))
+    user_height = int(float(int(replace_if_none(request.session.get('height'), defaults.HEIGHT)) * 100))
+    user_sex = request.session.get('sex')
+    user_sex = Calculator.SEX_F if user_sex is 1 else Calculator.SEX_H
 
     needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
 
@@ -67,6 +48,12 @@ def generation(request):
     planning = generate_planning_from_list(nb_days, nb_meals, menu)
 
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
+
+
+def replace_if_none(var, default):
+    if var is None:
+        var = default
+    return var
 
 
 def generation_meal_details(request, starter_id, main_course_id, dessert_id):
