@@ -1,3 +1,5 @@
+from menus.algorithms import adapter
+
 __author__ = 'PLNech'
 
 import random
@@ -174,9 +176,9 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
             dish = menu.genes.pop()
             dish2 = menu.genes.pop()
             dish3 = menu.genes.pop()
-            menu_item = {'starter': Recipe.objects.get(id=dish.recipe_id),
-                         'main_course': Recipe.objects.get(id=dish2.recipe_id),
-                         'dessert': Recipe.objects.get(id=dish3.recipe_id)}
+            menu_item = {'starter': adapter.dish2recipe(dish),
+                         'main_course': adapter.dish2recipe(dish2),
+                         'dessert': adapter.dish2recipe(dish3)}
             planning_str += '(%s, %s, %s)\t' % (str(dish), str(dish2), str(dish3))
             daily_planning.append(menu_item)
         planning.append(daily_planning)
