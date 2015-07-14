@@ -47,7 +47,7 @@ class Config:
         KEY_GRID_SIZE: 200,  # Size of the city position grid
 
         # Menu-related parameters
-        KEY_NB_DISHES: 10,  # Number of dishes to choose between
+        KEY_NB_DISHES: 50,  # Number of dishes to choose between
         KEY_MAX_DISHES: 7 * 5 * 3,  # Maximum dishes per weekly menu
         KEY_MAX_DISH_CALORIES: 250,  # Maximum amount of calories in a dish
         KEY_MAX_DISH_FATS: 100,  # Maximum amount of grams of fat in a dish
