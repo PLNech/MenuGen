@@ -4,6 +4,9 @@ from menus.models import IngredientFamily, Ingredient, IngredientNutriment, Nutr
 
 
 class Command(BaseCommand):
+    """
+    Fill database with ingredients/nutriments with the openfoodfacts.org data
+    """
     help = ''
 
     def handle(self, *args, **options):

@@ -19,7 +19,7 @@ var webshot = function(url, w, h) {
         } else {
             window.setTimeout(function() {
                 page.clipRect = { top: 170, left: 0, width: w, height: h }
-                f = 'testing/static/screen.png'
+                f = 'media/screen.jpg'
                 page.evaluate(function() {
                     if ('transparent' === document.defaultView.getComputedStyle(document.body).getPropertyValue('background-color')) {
                         document.body.style.backgroundColor = '#fff';

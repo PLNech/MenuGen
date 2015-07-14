@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from menus.models import Profile, Account
+from menus.models import Profile, Account, Menu
 
 __author__ = 'kiyoakimenager'
 
@@ -110,5 +110,36 @@ class ProfileForm(forms.Form):
             self.error_messages = "Le profile n'a put être créée"
             self.error_code = 403
             raise forms.ValidationError("Profile création failed")
+
+        return cleaned_data
+
+
+class MenuForm(forms.Form):
+    name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom du du menu'}),
+        label='Nom du menu')
+
+    menu_cache = None
+    error_messages = ""
+    error_code = 400
+
+    class Meta:
+        model = Menu
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super(MenuForm, self).clean()
+        name = cleaned_data.get("name")
+
+        if name:
+            self.menu_cache = Menu(name=name)
+        else:
+            self.menu_cache = Menu()
+
+        if self.menu_cache is None:
+            self.error_messages = "Le menu n'a put être créée"
+            self.error_code = 403
+            raise forms.ValidationError("Menu création failed")
 
         return cleaned_data
