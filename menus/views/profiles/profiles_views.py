@@ -4,8 +4,7 @@ from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from menus.algorithms.dietetics import Calculator
 from menus.forms import ProfileForm
-
-__author__ = 'kiyoakimenager'
+import menugen.defaults as default
 
 
 @login_required
