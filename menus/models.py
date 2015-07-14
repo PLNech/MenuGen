@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -19,21 +17,23 @@ PRICE = (
 )
 
 SEX = (
-    (0, 'Homme'),
-    (1, 'Femme'),
+    ('man', 'Homme'),
+    ('woman', 'Femme'),
 )
 
 ACTIVITY = (
-    (0, 'Jamais'),
-    (1, 'De temps en temps'),
-    (2, 'Souvent'),
-    (3, 'Tout le temps'),
+    ('low', 'Sédentaire'),
+    ('light', 'Légère'),
+    ('moderate', 'Modérée'),
+    ('active', 'Régulière'),
+    ('extreme', 'Intense'),
 )
 
 MEAL = (
     (0, 'midi'),
     (1, 'soir'),
 )
+
 
 class Account(models.Model):
     user = models.OneToOneField(User)
@@ -48,13 +48,12 @@ class Profile(models.Model):
     birthday = models.DateField(blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
     height = models.IntegerField(blank=True, null=True)
-    sex = models.IntegerField(choices=SEX, blank=True, null=True)
-    activity = models.IntegerField(choices=ACTIVITY, blank=True, null=True)
+    sex = models.CharField(max_length=16, choices=SEX, blank=True, null=True)
+    activity = models.CharField(max_length=16, choices=ACTIVITY, blank=True, null=True)
     picture = StdImageField(upload_to='media/images/profiles')
 
     unlikes = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
-    unlikes_dishes = models.ManyToManyField('Recipe')
     diets = models.ManyToManyField('Diet')
 
     modified = models.DateTimeField(default=timezone.now())
@@ -66,7 +65,7 @@ class Profile(models.Model):
         for d in self.unlikes_dishes.all():
             if d.name == dish.name:
                 return False
-            # TODO: Use unlikes ingredients
+                # TODO: Use unlikes ingredients
         return True
 
 
@@ -168,7 +167,6 @@ class Meal(models.Model):
     starter = models.ForeignKey('Recipe', related_name='starter')
     main_course = models.ForeignKey('Recipe', related_name='main_course')
     dessert = models.ForeignKey('Recipe', related_name='dessert')
-
 
 # class Calendar(models.Model):
 #

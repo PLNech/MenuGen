@@ -1,10 +1,8 @@
-import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from menus.algorithms.dietetics import Calculator
 from menus.forms import ProfileForm
-import menugen.defaults as default
 
 
 @login_required
@@ -97,8 +95,6 @@ def update_physio(request):
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    today = datetime.date.today()
-
     height = request.POST.get('height')
     weight = request.POST.get('weight')
     activity = request.POST.get('activity')
@@ -119,8 +115,7 @@ def update_physio(request):
         if 'activity' in request.POST:
             p.activity = activity
         p.save()
-        request.session['age'] = today.year - p.birthday.year - ((today.month, today.day) <
-                                                                    (p.birthday.month, p.birthday.day))
+        request.session['age'] = Calculator.age_from_date(p)
         request.session['height'] = p.height
         request.session['weight'] = p.weight
         request.session['sex'] = p.sex

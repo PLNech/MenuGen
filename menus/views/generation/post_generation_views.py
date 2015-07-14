@@ -1,3 +1,5 @@
+import datetime
+from functools import reduce
 import time
 
 import menugen.defaults as defaults
@@ -6,7 +8,7 @@ from menus.algorithms.dietetics import Calculator
 from menus.algorithms.run import run_standard
 from menus.algorithms.utils.config import Config
 from menus.data.generator import generate_planning_from_list
-from menus.models import Recipe
+from menus.models import Recipe, Profile
 
 
 def generation(request):
@@ -29,16 +31,20 @@ def generation(request):
         nb_days = int(request.session['nb_days'])
     nb_meals = 3  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
     nb_dishes = 3  # TODO: Determine appropriate amount for meals ?
+    today = datetime.date.today()
 
     user_exercise = replace_if_none(request.session.get('exercise'), defaults.EXERCISE)
     user_age = int(replace_if_none(request.session.get('age'), defaults.AGE))
     user_weight = int(replace_if_none(request.session.get('weight'), defaults.WEIGHT))
     user_height = int(float(int(replace_if_none(request.session.get('height'), defaults.HEIGHT)) * 100))
-    user_sex = request.session.get('sex')
-    user_sex = Calculator.SEX_F if user_sex is 1 else Calculator.SEX_H
-
-    needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
-
+    user_sex = Calculator.SEX_F if request.session.get('sex') is 1 else Calculator.SEX_H
+    user_birthday = datetime.date(year=today.year - user_age, month=today.month, day=today.day)
+    profile = Profile(weight=user_weight, height=user_height, birthday=user_birthday, sex=user_sex, activity=user_exercise)
+    profile_list = [profile, Profile(weight=100, height=200, birthday=datetime.date(1928, 2, 10),
+                                     sex=defaults.SEX, activity=defaults.EXERCISE)]
+    needs_list = [Calculator.estimate_needs_profile(profile) for profile in profile_list]
+    needs = reduce(lambda x,y: x+y, needs_list)
+    print("Final needs:", needs)
     # """ Here is an example of a matrix containing (nb_days x 5) meals """
     # planning = generate_planning(nb_days, nb_meals, nb_dishes)
 

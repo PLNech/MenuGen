@@ -34,7 +34,7 @@ class Config:
 
         # Amounts
         KEY_RUN_NUMBER: 1,  # Number of runs
-        KEY_NB_GENERATION: 10,  # Number of generations
+        KEY_NB_GENERATION: 1,  # Number of generations
 
         # Algorithm parameters
         KEY_ELITISM: True,
@@ -69,7 +69,7 @@ class Config:
     draw_all = False  # Should we draw all steps of each run?
 
     print_each_run = False  # Should we print results for each run?
-    print_generation = False  # Should we print details of each generation?
+    print_generation = True  # Should we print details of each generation?
     print_population = False  # Should we print the generated population?
     print_selection = False  # Should we print the selection of individuals?
     print_crossover = False  # Should we print the crossover of individuals?
