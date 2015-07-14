@@ -233,7 +233,7 @@ def evolve(population):
     return next_state
 
 
-def setup():  # FIXMEu
+def setup():  # FIXME
     algorithm_func['selection'] = tournament_selection
     algorithm_func['crossover'] = crossover_random
     algorithm_func['mutation'] = mutate_random

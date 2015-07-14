@@ -1,5 +1,6 @@
 import inspect
-import time
+
+from menus.models import Recipe
 
 __author__ = 'PLNech'
 
@@ -15,7 +16,6 @@ _local = threading.local()
 
 
 class MenuManager(Manager):
-
     @staticmethod
     def get():
         caller = inspect.getouterframes(inspect.currentframe(), 2)[1][3]
@@ -36,13 +36,13 @@ class MenuManager(Manager):
                     caller))
                 print(_local.MenuManager.print_items())
         elif Config.print_manager:
-                items = _local.MenuManager.count()
-                print("Returning cached MenuManager with %d items <%s.%s object at %s> [%s]" % (
-                    items,
-                    _local.MenuManager.__class__.__module__,
-                    _local.MenuManager.__class__.__name__,
-                    hex(id(_local.MenuManager)),
-                    caller))
+            items = _local.MenuManager.count()
+            print("Returning cached MenuManager with %d items <%s.%s object at %s> [%s]" % (
+                items,
+                _local.MenuManager.__class__.__module__,
+                _local.MenuManager.__class__.__name__,
+                hex(id(_local.MenuManager)),
+                caller))
 
         return _local.MenuManager
 
@@ -53,6 +53,11 @@ class MenuManager(Manager):
     def init(self):
         nb_dishes = Config.parameters[Config.KEY_NB_DISHES]
         self.reset()
+        self.init_from_db(nb_dishes)
+        if Config.print_manager:
+            print("Initialised MenuManager with %i dishes." % len(self.dishes))
+
+    def init_from_config(self, nb_dishes):
         for i in range(nb_dishes):
             dish = Dish()
             gen_name = dish.name
@@ -63,11 +68,17 @@ class MenuManager(Manager):
                 self.names_count[gen_name] = 1
             # dish.name = dish.name + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
             self.add_item(dish)
-
             if Config.print_manager:
                 print("Dish %s." % dish)
-        if Config.print_manager:
-            print("Initialised MenuManager with %i dishes." % len(self.dishes))
+
+    def init_from_db(self, nb_dishes):
+        recipes = list(Recipe.objects.all()[:nb_dishes])
+        for i in range(nb_dishes):
+            recipe = recipes[i]
+            dish = Dish(recipe.name)  # TODO: Link with nutritional information
+            self.add_item(dish)
+            if Config.print_manager:
+                print("Dish %s." % dish)
 
     def reset(self):
         self.dishes = []
