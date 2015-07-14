@@ -26,4 +26,4 @@ def recipe2dish(recipe):
         # ing_prot = nutriments.get(ingredient=ingredient, nutriment=Nutriment.objects.get(name="Prot")).quantity
         # ing_fat = nutriments.get(ingredient=ingredient, nutriment=Nutriment.objects.get(name="Lipides")).quantity
         # ing_carb = nutriments.get(ingredient=ingredient, nutriment=Nutriment.objects.get(name="Glucides")).quantity
-        print("Ingredient %s: %f cal, %f prot, %f fat, %f carb." % (dish.name, ing_cal, ing_prot, ing_fat, ing_carb))
+        # print("Ingredient %s: %f cal, %f prot, %f fat, %f carb." % (dish.name, ing_cal, ing_prot, ing_fat, ing_carb))
