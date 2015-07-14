@@ -1,4 +1,5 @@
 import time
+import menugen.defaults as defaults
 
 from django.shortcuts import render
 from menus.algorithms.dietetics import Calculator
@@ -6,8 +7,6 @@ from menus.algorithms.run import run_standard
 from menus.algorithms.utils.config import Config
 from menus.data.generator import generate_planning_from_list
 from menus.models import Recipe
-
-__author__ = 'kiyoakimenager'
 
 
 def generation(request):
@@ -31,11 +30,13 @@ def generation(request):
     nb_meals = 3  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
     nb_dishes = 3  # TODO: Determine appropriate amount for meals ?
 
-    user_exercise = request.session.get('exercise')
-    user_age = int(request.session.get('age'))
-    user_height = int(float(request.session.get('height') * 100))
-    user_weight = int(request.session.get('weight'))
-    user_sex = request.session.get('sex')
+    user_exercise = replace_if_none(request.session.get('exercise'), defaults.EXERCISE)
+    user_age = int(replace_if_none(request.session.get('age'), defaults.AGE))
+    user_weight = int(replace_if_none(request.session.get('weight'), defaults.WEIGHT))
+    user_height = int(float(replace_if_none(request.session.get('height'), defaults.HEIGHT) * 100))
+    user_sex = replace_if_none(request.session.get('sex'), defaults.SEX)
+
+
     needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
 
     # """ Here is an example of a matrix containing (nb_days x 5) meals """
@@ -48,6 +49,11 @@ def generation(request):
 
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 
+
+def replace_if_none(var, default):
+    if var is None:
+        var = default
+    return var
 
 def generation_meal_details(request, starter_id, main_course_id, dessert_id):
     """ Here should be load a meal from db according to the given ids
