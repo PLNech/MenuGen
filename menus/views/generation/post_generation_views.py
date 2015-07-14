@@ -29,8 +29,8 @@ def generation(request):
     """ Use the days number if exists """
     if 'nb_days' in request.session:
         nb_days = int(request.session['nb_days'])
-    nb_meals = 3  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
-    nb_dishes = 3  # TODO: Determine appropriate amount for meals ?
+    nb_meals = 2  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
+    nb_dishes = 3
     today = datetime.date.today()
 
     user_exercise = replace_if_none(request.session.get('exercise'), defaults.EXERCISE)

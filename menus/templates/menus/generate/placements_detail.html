@@ -1,28 +1,19 @@
 <header class="main-box-header clearfix">Vue détaillée - Nombre de repas</header>
 <div class="row">
     <table class="table">
-        <tr>
-            <th>Matin</th>
-            {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..." checked></td>
+    <thead>
+    <tr>
+        <th>Repas</th>
+        {% for i in days_range %}
+                <th>Jour {{i}}</th>
             {% endfor %}
-        </tr>
-        <tr>
-            <th>Collation</th>
-            {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..."></td>
-            {% endfor %}
-        </tr>
+        <th>Tous</th>
+    </tr>
+    </thead>
         <tr>
             <th>Déjeuner</th>
             {% for i in days_range %}
                 <td><input type="checkbox" aria-label="..." checked></td>
-            {% endfor %}
-        </tr>
-        <tr>
-            <th>Collation</th>
-            {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..."></td>
             {% endfor %}
         </tr>
         <tr>
