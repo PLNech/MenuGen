@@ -31,11 +31,11 @@ def generation(request):
     nb_meals = 3  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
     nb_dishes = 3  # TODO: Determine appropriate amount for meals ?
 
-    user_exercise = request.session.get('exercise', Calculator.EXERCISE_MODERATE)
-    user_age = int(request.session.get('age', 20))
-    user_height = int(float(request.session.get('height', 1.8) * 100))
-    user_weight = int(request.session.get('weight', 75))
-    user_sex = request.session.get('sex', Calculator.SEX_H)
+    user_exercise = request.session.get('exercise')
+    user_age = int(request.session.get('age'))
+    user_height = int(float(request.session.get('height') * 100))
+    user_weight = int(request.session.get('weight'))
+    user_sex = request.session.get('sex')
     needs = Calculator.estimate_needs(user_age, user_height, user_weight, user_sex, user_exercise)
 
     # """ Here is an example of a matrix containing (nb_days x 5) meals """
