@@ -99,10 +99,11 @@ def update_physio(request):
 
     today = datetime.date.today()
 
-    height = request.POST.get('height')
-    weight = request.POST.get('weight')
-    activity = request.POST.get('activity')
-    sex = int(request.POST.get('sex', 0))
+    height = request.POST.get('height', default.HEIGHT)
+    weight = request.POST.get('weight', default.WEIGHT)
+    activity = request.POST.get('activity', default.EXERCISE)
+    sex = int(request.POST.get('sex', default.SEX))
+
     if request.user.is_authenticated():
         p = request.user.account.profile
         if 'name' in request.POST:
