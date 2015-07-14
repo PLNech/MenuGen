@@ -55,6 +55,7 @@ class Profile(models.Model):
 
     unlikes = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
+    unlikes_recipe = models.ManyToManyField("Recipe")
     diets = models.ManyToManyField('Diet')
 
     modified = models.DateTimeField(default=timezone.now())
