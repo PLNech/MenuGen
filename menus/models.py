@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from stdimage.models import StdImageField
+import menugen.defaults as default
 
 EASE = (
     (0, 'Très facile'),
@@ -45,15 +46,16 @@ class Account(models.Model):
 
 class Profile(models.Model):
     name = models.CharField(max_length=64, default='Sans nom')
-    birthday = models.DateField(blank=True, null=True)
-    weight = models.IntegerField(blank=True, null=True)
-    height = models.FloatField(blank=True, null=True)
-    sex = models.CharField(max_length=16, choices=SEX, blank=True, null=True)
-    activity = models.CharField(max_length=16, choices=ACTIVITY, blank=True, null=True)
+    birthday = models.DateField(blank=True, null=True, auto_now_add=True)
+    weight = models.IntegerField(blank=True, null=True, default=default.WEIGHT)
+    height = models.FloatField(blank=True, null=True, default=default.HEIGHT)
+    sex = models.CharField(max_length=16, choices=SEX, blank=True, null=True, default=default.SEX)
+    activity = models.CharField(max_length=16, choices=ACTIVITY, blank=True, null=True, default=default.ACTIVITY)
     picture = StdImageField(upload_to='media/images/profiles')
 
     unlikes = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
+    unlikes_recipe = models.ManyToManyField("Recipe")
     diets = models.ManyToManyField('Diet')
 
     modified = models.DateTimeField(default=timezone.now())

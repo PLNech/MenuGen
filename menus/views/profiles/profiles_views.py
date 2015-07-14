@@ -1,8 +1,10 @@
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from menus.algorithms.dietetics import Calculator
 from menus.forms import ProfileForm
+import menugen.defaults as default
 
 
 @login_required
@@ -109,13 +111,14 @@ def update_physio(request):
         elif sex:
             p.sex = sex
         elif birthday:
-            p.birthday = birthday
+            p.birthday = datetime.strptime(birthday, '%d-%m-%Y') if len(birthday) else datetime.now()
         elif height:
             p.height = height
         elif weight:
             p.weight = weight
         elif activity:
-            p.activity = activity
+            pass
+            # p.activity = activity  # TODO
         p.save()
 
     else:
@@ -157,7 +160,15 @@ def update_tastes(request):
 
 def physiology(request):
     if request.user.is_authenticated():
-        physio = request.user.account.profile
+        p = request.user.account.profile
+        physio = {
+            'name': p.name,
+            'sex': p.sex,
+            'birthday': p.birthday.strftime('%d-%m-%Y'),
+            'height': p.height,
+            'weight': p.weight,
+            'activity': p.activity,
+        }
 
     else:
         physio = {
@@ -166,7 +177,7 @@ def physiology(request):
             'birthday': request.session['birthday'] if 'birthday' in request.session else "",
             'height': request.session.get('height') if 'height' in request.session else default.HEIGHT,
             'weight': request.session.get('weight') if 'weight' in request.session else default.WEIGHT,
-            'activity': request.session.get('activity') if 'activity' in request.session else default.EXERCISE,
+            'activity': request.session.get('activity') if 'activity' in request.session else default.ACTIVITY,
         }
 
     return render(request, 'profiles/physiology.html', {

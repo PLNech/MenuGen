@@ -72,3 +72,9 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
 
     meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
     return render(request, 'menus/generation/meal_details.html', {'meal': meal})
+
+def unlike_recipe_message(request, recipe_name):
+    """ Message after unliking a recipe """
+    return render(request, 'menus/generation/unlike_recipe_popup.html', {
+        'recipe_name': recipe_name
+    })
