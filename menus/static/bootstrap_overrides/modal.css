@@ -20,7 +20,9 @@
 }
 .modal-content a {
     color: white;
+    text-decoration: none;
 }
 .modal-content a:hover {
     color: white;
 }
+

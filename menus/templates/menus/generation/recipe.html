@@ -1,6 +1,39 @@
 <h5>{{ recipe.name }}</h5>
+<button type="button" class="btn btn-danger btn-xs">
+    <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+</button>
+
 <hr>
-<p>Temps de préparation : {{ recipe.prep_time }}</p>
-<p>Temps de cuisson : {{ recipe.cook_time }}</p>
-<p>Difficulté : {{ recipe.difficulty }}</p>
-<p>Prix : {{ recipe.price }}</p>
+
+{% if recipe.prep_time != 0 %}
+    <p>Temps de préparation : {{ recipe.prep_time }} minutes</p>
+{% else %}
+    <p>Temps de préparation : aucun</p>
+{% endif %}
+{% if recipe.cook_time != 0 %}
+    <p>Temps de cuisson : {{ recipe.cook_time }} minutes</p>
+{% else %}
+    <p>Temps de cuisson : aucun</p>
+{% endif %}
+
+<p>
+    Difficulté :
+    {% for i in "*****" %}
+        {% if forloop.counter0 > recipe.difficulty %}
+            <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+        {% else %}
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+        {% endif %}
+    {% endfor %}
+</p>
+
+<p>
+    Prix :
+    {% for i in "****" %}
+        {% if forloop.counter0 > recipe.price %}
+            <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+        {% else %}
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+        {% endif %}
+    {% endfor %}
+</p>
