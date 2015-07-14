@@ -30,6 +30,10 @@ ACTIVITY = (
     (3, 'Tout le temps'),
 )
 
+MEAL = (
+    (0, 'midi'),
+    (1, 'soir'),
+)
 
 class Account(models.Model):
     user = models.OneToOneField(User)
@@ -148,11 +152,25 @@ class Nutriment(models.Model):
 
 class Menu(models.Model):
     name = models.CharField(max_length=32)
-    people_n = models.IntegerField()
     price = models.IntegerField(choices=PRICE)
     difficulty = models.IntegerField(choices=EASE)
-    # FIXME : missing order/planning relationship (will do it soon) - kevin
-    recipes = models.ManyToManyField('Recipe')
+    nb_people = models.IntegerField()
+    profiles = models.ManyToManyField('Profile')
 
     def __str__(self):
         return self.name
+
+
+class Meal(models.Model):
+    menu = models.ForeignKey('Menu')
+    day = models.IntegerField()
+    type = models.IntegerField(choices=MEAL)
+    starter = models.ForeignKey('Recipe', related_name='starter')
+    main_course = models.ForeignKey('Recipe', related_name='main_course')
+    dessert = models.ForeignKey('Recipe', related_name='dessert')
+
+
+# class Calendar(models.Model):
+#
+#     def __str__(self):
+#         return self.name
