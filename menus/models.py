@@ -58,6 +58,13 @@ class Profile(models.Model):
         return self.name
 
 
+class RecipeToIngredient(models.Model):
+    recipe = models.ForeignKey('Recipe')
+    ingredient = models.ForeignKey('Ingredient')
+    quantity = models.FloatField(blank=True, null=True, default=None)
+    unit = models.CharField(max_length=128, blank=True, null=True, default=None)
+
+
 class Recipe(models.Model):
     name = models.CharField(max_length=128)
     picture = StdImageField(upload_to='media/images/recipe')
@@ -71,7 +78,7 @@ class Recipe(models.Model):
     drink = models.TextField(blank=True, null=True)
     origin_url = models.URLField()
 
-    ingredients = models.ManyToManyField('Ingredient')
+    ingredients = models.ManyToManyField('Ingredient', through=RecipeToIngredient)
     category = models.CharField(default="Plat", max_length=128)
 
     def __str__(self):

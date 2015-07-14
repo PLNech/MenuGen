@@ -4,8 +4,7 @@ from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from menus.algorithms.dietetics import Calculator
 from menus.forms import ProfileForm
-
-__author__ = 'kiyoakimenager'
+import menugen.defaults as default
 
 
 @login_required
@@ -103,7 +102,8 @@ def update_physio(request):
     height = request.POST.get('height')
     weight = request.POST.get('weight')
     activity = request.POST.get('activity')
-    sex = int(request.POST.get('sex', 0))
+    sex = int(request.POST.get('sex'))
+
     if request.user.is_authenticated():
         p = request.user.account.profile
         if 'name' in request.POST:
