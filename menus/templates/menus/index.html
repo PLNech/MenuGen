@@ -8,12 +8,12 @@
 
 {% block content %}
     <h2>Menus</h2>
-
-    <div class="main-box">
-        <div class="main-box-body clearfix">
         </br>
-            <div class="col-md-3 hidden-xs hidden-sm">
-                <header class="main-box-header"></header>
+        <div class="col-md-3 hidden-xs hidden-sm">
+            <div class="main-box">
+            <header class="main-box-header"></header>
+            </br>
+            <div class="main-box-body clearfix">
                 <div id='external-events'>
                     <div class="table">
                         <table id="menus" class="table user-list table-hover">
@@ -28,11 +28,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-9">
+        </div>
+        </div>
+        <div class="col-md-9">
+        <div class="main-box">
+            </br>
+            <div class="main-box-body clearfix">
                 <div id="calendar"></div>
             </div>
         </div>
-    </div>
+        </div>
+
+
 {% endblock %}
 
 {% block js %}
