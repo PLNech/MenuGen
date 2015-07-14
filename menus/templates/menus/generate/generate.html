@@ -20,7 +20,7 @@
                     </a>
                 {% endif %}
                 <a href="{% url 'generation' %}" class="btn btn-primary" id="generate-button">
-                        Générer <i class="fa fa-angle-double-right"></i>
+                    Générer <i class="fa fa-angle-double-right"></i>
                 </a>
             </div>
         </div>
@@ -80,38 +80,44 @@
                                 <label for="nb_days" class="col-sm-3 control-label">Pour</label>
 
                                 <div class="col-sm-4">
-                                    <div class="input-group">
-
+                                    <div id="nbDays-input-group" class="input-group has-success">
                                         <select class="form-control" id="nb_days" name="nb_days"
                                                 aria-describedby="day-unit-addon">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7" selected>7</option>
-                                            <option value="8">8</option>
+                                            <option value="1">1 jour</option>
+                                            <option value="2">2 jours</option>
+                                            <option value="3">3 jours</option>
+                                            <option value="4" selected>4 jours</option>
+                                            <option value="5">5 jours</option>
+                                            <option value="6">6 jours</option>
+                                            <option value="7">7 jours</option>
+                                            <option value="8">8 jours</option>
                                         </select>
-                                        <span class="input-group-addon" id="day-unit-addon">jours</span>
                                     </div>
                                 </div>
-                                <div class="col-md-5 text-right">
-                                    <a id="placements-detail-ajax" href="{% url 'generate_placements_detail'%}" class="btn btn-success" type="button">Détails &raquo;</a>
+                                <div class="col-sm-1 col-sm-offset-3">
+                                    <button id="placements-detail-ajax" href="{% url 'generate_placements_detail'%}" class="btn btn-success" type="button">
+                                        <i class="fa fa-table"></i>
+                                    </button>
                                 </div>
                             </div>
+
+
                             <br>
                             <hr>
                             <div class="form-group">
-                                <label for="profils" class="col-sm-3 control-label">Convives</label>
-
-                                <div class="col-sm-9">
-                                    <div class="input-group">
-                                        <input type="text" id="profils" name="profils" class="form-control" value="MOI"
-                                               disabled>
-                                         <span class="input-group-btn">
-                                            <a id="select-profils-ajax" href="{% url 'generate_select_profile' %}" class="btn btn-success" type="button">Ajouter &raquo;</a>
-                                         </span>
+                                <div class="row">
+                                    <div class="col-sm-9 col-sm-offset-2">
+                                        <div id="profile-input-group" class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-users"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="maskedSsn">
+                                            <span class="input-group-btn">
+                                                <button id="select-profils-ajax" href="{% url 'generate_select_profile' %}" class="btn btn-success" type="button">
+                                                    <i class="fa fa-user-plus"></i>
+                                                </button>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -124,10 +130,8 @@
 
             <div class="col-md-6">
                 <div class="main-box clearfix">
-                    <div class="main-box-body clearfix">
-                        <div id="contextual-container">
-                            {% include 'menus/generate/placements_detail.html' with days_range=days_range %}
-                        </div>
+                    <div id="contextual-container">
+                        {% include 'menus/generate/placements_detail.html' with days_range=days_range %}
                     </div>
                 </div>
             </div>
@@ -170,7 +174,7 @@
 {% endblock %}
 
 {% block js %}
-     <script>
+    <script>
         $("#loader").hide();
         $("#generate-button").click(function(){
             $("#generate").hide();
@@ -187,6 +191,8 @@
                 $('#contextual-container').fadeOut('fast', function () {
                     $('#contextual-container').load(lien, function () {
                         $('#contextual-container').fadeIn('fast');
+                        $('#nbDays-input-group').removeClass('has-success');
+                        $('#profile-input-group').addClass('has-success');
                     });
                 });
                 e.preventDefault()
@@ -197,6 +203,9 @@
                 $('#contextual-container').fadeOut('fast', function () {
                     $('#contextual-container').load(lien, {nb_days: data}, function () {
                         $('#contextual-container').fadeIn('fast');
+                        $('#profile-input-group').removeClass('has-success');
+                        $('#nbDays-input-group').addClass('has-success');
+
                     });
                 });
                 e.preventDefault()

@@ -1,37 +1,77 @@
 <header class="main-box-header clearfix">Vue détaillée - Nombre de repas</header>
-<div class="row">
-    <table class="table">
-        <tr>
-            <th>Matin</th>
+<div class="main-box-body clearfix">
+    <div class="row">
+        <table class="table">
+            <thead>
+            <td></td>
             {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..." checked></td>
+                <td>Jour {{ forloop.counter }}</td>
             {% endfor %}
-        </tr>
-        <tr>
-            <th>Collation</th>
-            {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..."></td>
-            {% endfor %}
-        </tr>
-        <tr>
-            <th>Déjeuner</th>
-            {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..." checked></td>
-            {% endfor %}
-        </tr>
-        <tr>
-            <th>Collation</th>
-            {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..."></td>
-            {% endfor %}
-        </tr>
-        <tr>
-            <th>Dîner</th>
-            {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..." checked></td>
-            {% endfor %}
-        </tr>
-
-    </table>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Déjeuner</th>
+                {% for i in days_range %}
+                    <td id="lunches">
+                        <div class="checkbox-nice">
+                            <input class="lunch" type="checkbox" id="m-checkbox-lunch-{{ i }}" value={{ i }} checked>
+                            <label for="m-checkbox-mid-{{ i }}"></label>
+                        </div>
+                    </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Dîner</th>
+                {% for i in days_range %}
+                    <td class="dinners">
+                        <div class="checkbox-nice">
+                            <input class="dinner" type="checkbox" id="m-checkbox-dinner-{{ i }}" value={{ i }} checked>
+                            <label for="m-checkbox-dinner-{{ i }}"></label>
+                        </div>
+                    </td>
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+{% block js %}
+    <script>
+        $(document).ready( function() {
+            function update_pre_generation(data_dico) {
+                $.ajax({
+                    url : '{% url 'update_gen_criteria' %}', // the endpoint
+                    type : "POST", // http method
+                    data : data_dico, // data sent with the post request
+                    // handle a successful response
+                    success: function (json) {
+                        console.log(json); // log the returned json to the console
+                        console.log("success"); // another sanity check
+                    },
 
+                    // handle a non-successful response
+                    error: function (xhr, errmsg, err) { //TODO Kyo Display err, or at least remove parameter
+                        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                        // TODO Kyo : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
+                    }
+                });
+            };
+
+            var cols = document.querySelectorAll('#lunches .lunch');
+            [].forEach.call(cols, function (col, i) {
+                col.on('click', function () {
+                var data_dico = {day: i, meal: 'dinner'};
+                update_pre_generation(data_dico);
+            });
+            var cols = document.querySelectorAll('#dinners .dinner');
+            [].forEach.call(cols, function (col, i) {
+                col.on('click', function () {
+                var data_dico = {day: i, meal: 'dinner'};
+                update_pre_generation(data_dico);
+            });
+            });
+        });
+    </script>
+{% endblock %}

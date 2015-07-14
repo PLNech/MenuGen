@@ -8,7 +8,9 @@ def generate(request):
 
 
 def generate_select_profile(request):
-    return render(request, 'menus/generate/select_profile.html', {})
+    user = request.user
+    guests = user.account.guests.all()
+    return render(request, 'menus/generate/select_profile.html', {'profiles': guests})
 
 
 def generate_placements_detail(request):
@@ -29,5 +31,6 @@ def update_gen_criteria(request):
         request.session['difficulty'] = request.POST.get('difficulty')
     if 'nb_days' in request.POST:
         request.session['nb_days'] = request.POST.get('nb_days')
+
     print(request.session.items())
     return HttpResponse('ok')

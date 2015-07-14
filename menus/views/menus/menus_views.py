@@ -15,15 +15,14 @@ def menus(request):
     return render(request, 'menus/index.html', {
         'menus': user_menus,
         'menus_nb': menus_nb,
-
     })
-    #
-    # menus = []
-    # menu_0 = Menu(name="Mon menu vacance")
-    # menu_1 = Menu(name="Mon menu travail")
-    # menus.append(menu_0)
-    # menus.append(menu_1)
-    # return render(request, 'menus/index.html', {'menus': menus})
+#
+# menus = []
+# menu_0 = Menu(name="Mon menu vacance")
+# menu_1 = Menu(name="Mon menu travail")
+# menus.append(menu_0)
+# menus.append(menu_1)
+# return render(request, 'menus/index.html', {'menus': menus})
 
 
 @login_required
