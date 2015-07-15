@@ -1,4 +1,5 @@
 import datetime
+from django.contrib.auth.decorators import login_required
 from functools import reduce
 import time
 
@@ -73,8 +74,12 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
     meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
     return render(request, 'menus/generation/meal_details.html', {'meal': meal})
 
-def unlike_recipe_message(request, recipe_name):
+@login_required
+def unlike_recipe_message(request, recipe_id):
     """ Message after unliking a recipe """
+    recipe = Recipe.objects.get(id=recipe_id)
+    profile = request.user.account.profile;
+    profile.unlikes_recipe.add(recipe);
     return render(request, 'menus/generation/unlike_recipe_popup.html', {
-        'recipe_name': recipe_name
+        'recipe_name': recipe.name
     })

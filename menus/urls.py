@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, url
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = patterns(
     'menus.views.views',
@@ -33,6 +34,7 @@ urlpatterns += patterns(
     url(r'^generation/meal_details/(?P<starter_id>\d+)-(?P<main_course_id>\d+)-(?P<dessert_id>\d+)$',
         'generation_meal_details',
         name='generation_meal_details'),
+    url(r'^generation/unlike_recipe/(?P<recipe_id>\d+)$', 'unlike_recipe_message', name='unlike_recipe_message'),
 )
 
 """
