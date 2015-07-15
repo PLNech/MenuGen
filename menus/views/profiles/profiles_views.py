@@ -8,17 +8,22 @@ from menus.models import Recipe, Ingredient
 
 
 @login_required
-def index(request):
+def index(request, ajax=False):
     account = request.user.account
     profile = account.profile
     guests = account.guests.order_by('modified').reverse()
     guests_nb = guests.count()
 
+    if ajax:
+        return {
+            'user_profile': profile,
+            'guests':       guests,
+            'guests_nb':    guests_nb,
+        }
     return render(request, 'profiles/guests/index.html', {
-        'user_profile': profile,
-        'guests': guests,
-        'guests_nb': guests_nb,
-
+        'user_profile':     profile,
+        'guests':           guests,
+        'guests_nb':        guests_nb,
     })
 
 
@@ -238,11 +243,15 @@ def regimes(request, ajax=False):
 
 def profile(request):
     r = regimes(request, True)
+    g = index(request, True)
 
     return render(request, 'profiles/_base.html', {
-        'physio': physiology(request, True),
-        'health_regimes_list': r['health_regimes_list'],
-        'value_regimes_list': r['value_regimes_list']
+        'physio':               physiology(request, True),
+        'health_regimes_list':  r['health_regimes_list'],
+        'value_regimes_list':   r['value_regimes_list'],
+        'user_profile':         g['user_profile'],
+        'guests':               g['guests'],
+        'guests_nb':            g['guests_nb'],
     })
 
 
@@ -256,6 +265,7 @@ def tastes(request):
         'unlikes_ingredients' : unlikes_ingredients,
     })
 
+
 def relike_recipe(request, recipe_id):
     profile = request.user.account.profile;
     recipe = Recipe.objects.get(id=recipe_id)
@@ -266,6 +276,7 @@ def relike_recipe(request, recipe_id):
         'unlikes_recipes' : unlikes_recipes,
         'unlikes_ingredients' : unlikes_ingredients,
     })
+
 
 def relike_ingredient(request, ingredient_id):
     profile = request.user.account.profile;

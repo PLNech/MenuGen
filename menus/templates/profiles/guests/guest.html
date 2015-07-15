@@ -1,46 +1,12 @@
 {% load staticfiles %}
 
-<tr id="profile-{{ profile.id }}">
-    <td>
-        <img src='{% static 'img/guests/avatar_man.jpg' %}' alt="">
-        <a href="#" class="user-link">{{ profile.name }}</a>
-    </td>
-    <td class="text-center">
-        <span class="label label-default">{{ profile.modified }}</span>
-    </td>
-    <td style="width: 20%;">
-        <a href="{% url 'profile_detail' profile.id %}"
-           role="button"
-           data-toggle="modal"
-           data-target="#profile-modal"
-           class="detail table-link">
-                                                    <span class="fa-stack">
-                                                    <i class="fa fa-square fa-stack-2x"></i>
-                                                    <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
-                                                    </span>
-        </a>
-        <form>
-        <a href="{% url 'profile_edit' profile.id %}" class="table-link">
-                                                    <span class="fa-stack">
-                                                    <i class="fa fa-square fa-stack-2x"></i>
-                                                    <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
-                                                    </span>
-        </a>
-
-        </form>
-        <a href="{% url 'profile_remove' profile.id %}"
-           role="button"
-           data-toggle="modal"
-           data-target="#profile-modal"
-           class="table-link danger">
-                                                    <span class="fa-stack">
-                                                    <i class="fa fa-square fa-stack-2x"></i>
-                                                    {% if default %}
-                                                        <i class="fa fa-refresh fa-stack-1x fa-inverse"></i>
-                                                    {% else %}
-                                                        <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
-                                                    {% endif %}
-                                                    </span>
-        </a>
-    </td>
-</tr>
+<li>
+    <a href="#">
+        <span class="img">
+            <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
+        </span>
+        <span class="product clearfix">
+            <span class="name">{{ profile.name }}</span>
+        </span>
+    </a>
+</li>
