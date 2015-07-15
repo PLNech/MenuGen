@@ -118,7 +118,7 @@ def update_physio(request):
             p.weight = weight
         elif activity:
             pass
-            # p.activity = activity
+            # p.activity = activity  # TODO
         p.save()
 
     else:
@@ -160,7 +160,15 @@ def update_tastes(request):
 
 def physiology(request):
     if request.user.is_authenticated():
-        physio = request.user.account.profile
+        p = request.user.account.profile
+        physio = {
+            'name': p.name,
+            'sex': p.sex,
+            'birthday': p.birthday.strftime('%d-%m-%Y'),
+            'height': p.height,
+            'weight': p.weight,
+            'activity': p.activity,
+        }
 
     else:
         physio = {
