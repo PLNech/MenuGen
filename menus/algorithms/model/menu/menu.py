@@ -70,15 +70,21 @@ class Menu(Individual):  # TODO Document!
         if self.fitness != 0:
             return self.fitness
         if objectives is None:
-            objective_calories = Config.parameters[Config.KEY_MAX_DISH_CALORIES]
-            objective_proteins = Config.parameters[Config.KEY_MAX_DISH_PROTEINS]
-            objective_carbohydrates = Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES]
-            objective_fats = Config.parameters[Config.KEY_OBJECTIVE_FATS]
+            objective_calories = Config.parameters[Config.KEY_OBJECTIVE_CALORIES]
+            obj_proteins_min = Config.parameters[Config.KEY_OBJECTIVE_PROTEINS_MIN]
+            obj_proteins_max = Config.parameters[Config.KEY_OBJECTIVE_PROTEINS_MAX]
+            obj_carbs_min = Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES_MIN]
+            obj_carbs_max = Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES_MAX]
+            obj_fats_min = Config.parameters[Config.KEY_OBJECTIVE_FATS_MIN]
+            obj_fats_max = Config.parameters[Config.KEY_OBJECTIVE_FATS_MAX]
         else:
             objective_calories = objectives.calories
-            objective_proteins = objectives.grams_proteins
-            objective_carbohydrates = objectives.grams_carbohydrates
-            objective_fats = objectives.grams_fats
+            obj_proteins_min = objectives.proteins_min
+            obj_proteins_max = objectives.proteins_max
+            obj_carbs_min = Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES_MIN]
+            obj_carbs_max = Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES_MAX]
+            obj_fats_min = Config.parameters[Config.KEY_OBJECTIVE_FATS_MIN]
+            obj_fats_max = Config.parameters[Config.KEY_OBJECTIVE_FATS_MAX]
 
         accu_calories = 0
         accu_proteins = 0
@@ -96,13 +102,13 @@ class Menu(Individual):  # TODO Document!
         self.fats = accu_fats
 
         self.fitness_calories = self.nutrient_fitness(accu_calories, objective_calories)
-        self.fitness_proteins = self.nutrient_fitness(accu_proteins, objective_proteins)
-        self.fitness_carbohydrates = self.nutrient_fitness(accu_carbs, objective_carbohydrates)
-        self.fitness_fats = self.nutrient_fitness(accu_fats, objective_fats)
-
-        # Global fitness is 40% calories, 20% proteins, 20% carbohydrates and 20% fats
-        self.fitness = (self.fitness_calories * 2 +
-                        self.fitness_proteins + self.fitness_carbohydrates + self.fitness_fats) / 5
+        self.fitness_proteins = self.nutrient_fitness_range(accu_proteins, obj_proteins_min, obj_proteins_max)
+        self.fitness_carbohydrates = self.nutrient_fitness_range(accu_carbs, obj_carbs_min, obj_carbs_max)
+        self.fitness_fats = self.nutrient_fitness_range(accu_fats, obj_fats_min, obj_fats_max)
+        self.fitness = (1 + self.fitness_proteins + self.fitness_carbohydrates + self.fitness_fats) / 4 \
+                       * self.fitness_calories
+        print("Fitness: %i prot, %i carb, %i fats, %f cal -> %f total." % (self.fitness_proteins, self.fitness_carbohydrates,
+                                                  self.fitness_fats, self.fitness_calories, self.fitness))
         return self.fitness
 
     def print_score(self):
@@ -151,7 +157,7 @@ class Menu(Individual):  # TODO Document!
                 # (accu_calories, len(self.genes)))
 
     @staticmethod
-    def nutrient_fitness(quantity, objective):  # TODO Note range of recommendations for finest fitness
+    def nutrient_fitness(quantity, objective):
         oversize = objective * Config.parameters[Config.KEY_OVERWEIGHT_FACTOR]
         if quantity <= objective:
             fitness = quantity / objective
@@ -162,6 +168,12 @@ class Menu(Individual):  # TODO Document!
         else:
             fitness = 0
         return fitness
+
+    @staticmethod
+    def nutrient_fitness_range(quantity, objective_min, objective_max):
+        if objective_min <= quantity <= objective_max:
+            return 1
+        return 0
 
     def print_short(self):
         str_array = []

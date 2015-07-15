@@ -21,7 +21,7 @@ class Command(BaseCommand):
             fields = f.readline().rstrip("\n").split(separator)
             for i in range(4, 60):
                 name = fields[i]
-                unit_per_100g = name.split(" ")[2][1:-6]
+                unit_per_100g = name.split(" ")[-1][1:-6]
                 name = " ".join(name.split(" ")[1:-1])
                 nutriment = Nutriment(name=name, unit_per_100g=unit_per_100g)
                 nutriment.save()
