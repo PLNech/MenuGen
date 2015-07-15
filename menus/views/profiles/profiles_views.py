@@ -117,8 +117,7 @@ def update_physio(request):
         elif weight:
             p.weight = weight
         elif activity:
-            pass
-            # p.activity = activity  # TODO
+            p.activity = activity
         p.save()
 
     else:
