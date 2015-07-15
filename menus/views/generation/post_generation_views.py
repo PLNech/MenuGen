@@ -30,7 +30,7 @@ def generation(request):
     """ Use the days number if exists """
     if 'nb_days' in request.session:
         nb_days = int(request.session['nb_days'])
-    nb_meals = 2  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
+    nb_meals = 2
     nb_dishes = 3
     today = datetime.date.today()
 
