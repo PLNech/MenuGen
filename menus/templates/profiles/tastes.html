@@ -44,13 +44,16 @@
             <div class="main-box clearfix">
                 <header class="main-box-header clearfix">Recettes que je n'aime pas</header>
                 <div class="main-box-body clearfix">
-                    <ul id="disliked-recipes" class="list-group">
-                        {% for recipe in unlikes_recipes %}
-                            <li>
-                                {{ recipe.name }}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    <input type="text" class="form-control" id="filter-recipes" placeholder="filtrer">
+                    <table class="table table-striped">
+                        <tbody>
+                            {% for recipe in unlikes_recipes %}
+                                <tr class="clickable-row" data-url="{% url 'relike_recipe' recipe_id=recipe.id %}" title="J'aime à nouveau!">
+                                    <td>{{ recipe.name }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -59,13 +62,16 @@
             <div class="main-box clearfix">
                 <header class="main-box-header clearfix">Aliments que je n'aime pas</header>
                 <div class="main-box-body clearfix">
-                    <ul id="disliked-ingredients" class="list-group">
-                        {% for ingredient in unlikes_ingredients %}
-                            <li>
-                                {{ ingredient.name }}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    <input type="text" class="form-control" id="filter-ingredients" placeholder="filtrer">
+                    <table class="table table-striped">
+                        <tbody>
+                            {% for ingredient in unlikes_ingredients %}
+                                <tr class="clickable-row" data-url="{% url 'relike_ingredient' ingredient_id=ingredient.id %}" title="J'aime à nouveau!">
+                                    <td>{{ ingredient.name }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -133,6 +139,11 @@
 
             update_tastes(data_dico);
             $(this).closest('li').prependTo("#liked-aliments");
+        });
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.document.location = $(this).data("url");
+            });
         });
     </script>
 
