@@ -1,0 +1,115 @@
+{% extends '_base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="row" id="user-profile">
+        <div class="col-lg-3 col-md-4 col-sm-4">
+            <div class="main-box clearfix">
+                <header class="main-box-header clearfix">
+                    <h2>{{ request.user.username }}</h2>
+                </header>
+                <div class="main-box-body clearfix">
+                    <div class="profile-status">
+                        <i class="fa fa-circle"></i> Online
+                    </div>
+                    <ul class="widget-products">
+                        <li>
+                            <a href="#">
+                                <span class="img">
+                                    <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
+                                </span>
+                                <span class="product clearfix">
+                                    <span class="name">Mon Profil</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <img src="{{ request.user.profile.image.url }}" alt="" class="profile-img img-responsive center-block">
+                    <div class="profile-since">
+                        Membre depuis le {{ request.user.date_joined | date:"d F Y" }}
+                    </div>
+                </div>
+            </div>
+            <div class="main-box clearfix">
+                <header class="main-box-header clearfix">
+                    <h2>Autres Profils</h2>
+                </header>
+                <div class="main-box-body clearfix">
+                    <ul class="widget-products">
+                        <li>
+                            <a href="#">
+                                <span class="img">
+                                    <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
+                                </span>
+                                <span class="product clearfix">
+                                    <span class="name">Paul Louis</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="img">
+                                    <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
+                                </span>
+                                <span class="product clearfix">
+                                    <span class="name">Guillaume</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="main-box clearfix">
+                <header class="main-box-header clearfix">
+                    <h2>Amis</h2>
+                </header>
+                <div class="main-box-body clearfix">
+                    <ul class="widget-products">
+                        <li>
+                            <a href="#">
+                                <span class="img">
+                                    <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
+                                </span>
+                                <span class="product clearfix">
+                                    <span class="name">Kiyoaki</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-8">
+            <div class="main-box clearfix">
+                <div class="tabs-wrapper profile-tabs">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab-physio" data-toggle="tab">Physiologie</a></li>
+                        <li><a href="#tab-regimes" data-toggle="tab">Régimes</a></li>
+                        <li><a href="#tab-tastes" data-toggle="tab">Goûts</a></li>
+                        <li><a href="#tab-account" data-toggle="tab">Compte</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab-physio">
+                            {% include 'profiles/physiology_ajax.html' %}
+                        </div>
+                        <div class="tab-pane fade" id="tab-regimes">
+                            {% include 'profiles/regimes_ajax.html' %}
+                        </div>
+                        <div class="tab-pane clearfix fade" id="tab-tastes">
+                        </div>
+                        <div class="tab-pane fade" id="tab-account">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+    {% include 'profiles/physiology.js.html' %}
+{% endblock js %}
+
+{% block css %}
+    {% include 'profiles/physiology.css.html' %}
+{% endblock css %}

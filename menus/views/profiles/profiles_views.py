@@ -157,7 +157,7 @@ def update_tastes(request):
     return HttpResponse('tastes updated successfully')
 
 
-def physiology(request):
+def physiology(request, ajax=False):
     if request.user.is_authenticated():
         p = request.user.account.profile
         physio = {
@@ -179,12 +179,15 @@ def physiology(request):
             'activity': request.session.get('activity') if 'activity' in request.session else default.ACTIVITY,
         }
 
-    return render(request, 'profiles/physiology.html', {
-        'physio': physio,
-    })
+    if ajax:
+        return physio
+    else:
+        return render(request, 'profiles/physiology.html', {
+            'physio': physio,
+        })
 
 
-def regimes(request):
+def regimes(request, ajax=False):
     health_regimes_list = []
     value_regimes_list = []
     nutrients_regimes_st = []
@@ -221,13 +224,29 @@ def regimes(request):
     value_regimes_list.append(regime_vegetalien)
     value_regimes_list.append(regime_halal)
 
-    return render(request, 'profiles/regimes.html', {
-        'health_regimes_list': health_regimes_list,
-        'value_regimes_list': value_regimes_list
-    })
+    if ajax:
+        return {
+            'health_regimes_list': health_regimes_list,
+            'value_regimes_list': value_regimes_list
+        }
+    else:
+        return render(request, 'profiles/regimes.html', {
+            'health_regimes_list': health_regimes_list,
+            'value_regimes_list': value_regimes_list
+        })
 
 
 def tastes(request):
     ingredient_list = []  # Ingredient.objects.all()  # TODO: Filter most frequent
     return render(request, 'profiles/tastes.html',
                   {'ingredients': [ingredient.name for ingredient in ingredient_list]})
+
+
+def profile(request):
+    r = regimes(request, True)
+
+    return render(request, 'profiles/_base.html', {
+        'physio': physiology(request, True),
+        'health_regimes_list': r['health_regimes_list'],
+        'value_regimes_list': r['value_regimes_list']
+    })

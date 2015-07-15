@@ -1,0 +1,130 @@
+{% load staticfiles %}
+{% load l10n %}
+
+<script>
+    $(function () {
+        $(".dropdown-menu li a").click(function () {
+            var buttonFirstChild = $(".btn:first-child");
+            buttonFirstChild.text($(this).text());
+            buttonFirstChild.val($(this).text());
+        });
+    });
+
+    // AJAX for posting
+    function update_physio(data_dico) {
+        $.ajax({
+            url : '{% url 'update_physio' %}', // the endpoint
+            type : "POST", // http method
+            data : data_dico, // data sent with the post request
+            // handle a successful response
+            success: function (json) {
+                console.log(json); // log the returned json to the console
+                console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) { //TODO Kyo Display err, or at least remove parameter
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                // TODO Kyo : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
+            }
+        });
+    }
+</script>
+
+{% comment %} SLIDERS {% endcomment %}
+<script src="{% static 'bootstrap-slider/bootstrap-slider.min.js' %}"></script>
+<script>
+    var activity_slider = $('#activity').slider({
+        min: 0,
+        max: 4,
+        value: {{ physio.activity }},
+        step: 1,
+        focus: true,
+        formatter: function(value) {
+            return 'Activité (' + value + '/4)';
+        }
+    });
+    activity_slider.on('change', function (e) {
+        var data_dico = {activity: activity_slider.slider('getValue') };
+        update_physio(data_dico);
+    });
+
+    var height_slider = $('#height').slider({
+        min: 0.5,
+        max: 2.3,
+        value: {{ physio.height | unlocalize }},
+        step: 0.1,
+        focus: true,
+        orientation: 'vertical',
+        reversed : true,
+        formatter: function(value) {
+            return 'Taille : ' + value + 'm';
+        }
+    });
+    height_slider.on('change', function (e) {
+        var data_dico = {height: height_slider.slider('getValue') };
+        update_physio(data_dico);
+    });
+
+    var weight_slider = $('#weight').slider({
+        min: 40,
+        max: 120,
+        value: {{ physio.weight }},
+        step: 5,
+        focus: true,
+        formatter: function(value) {
+            return 'Poid: ' + value + 'kg';
+        }
+    });
+    weight_slider.on('change', function (e) {
+        var data_dico = {weight: weight_slider.slider('getValue') };
+        update_physio(data_dico);
+    });
+
+</script>
+
+
+<script>
+
+    $('#name').on('change', function (e) {
+        var data_dico = {name: $("#name").val()};
+        update_physio(data_dico);
+    });
+    $('#sex').on('change', function (e) {
+        var data_dico = {sex: $('select#sex option:selected').val()};
+        update_physio(data_dico);
+    });
+    {% comment %}$('#height').on('change', function (e) {
+        var data_dico = {height: $("#height").slider('getValue')};
+        update_physio(data_dico);
+    });
+    $('#weight').slider().on('slide', function (e) {
+        var data_dico = {weight: weight_slider.slider('getValue')};
+        update_physio(data_dico);
+    });
+    $('#activity').on('change', function (e) {
+        var data_dico = {activity: $("#activity").slider('getValue')};
+        update_physio(data_dico);
+    });{% endcomment %}
+
+</script>
+
+{% comment %} DATEPICKERS {% endcomment %}
+<script src="{% static 'datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'datepicker/js/bootstrap-datepicker.fr.js' %}" charset="UTF-8"></script>
+<script>
+    $(function(){
+        $('#birthday').datepicker({
+            language: 'fr',
+            format: 'dd-mm-yyyy',
+            weekStart: 1,
+            viewMode: 'years'
+        })
+    });
+    $('#birthday').on('change', function (e) {
+        var data_dico = {birthday: $("#birthday").val()};
+        update_physio(data_dico);
+    });
+</script>

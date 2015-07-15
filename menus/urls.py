@@ -53,6 +53,7 @@ urlpatterns += patterns(
     'menus.views.profiles.profiles_views',
 
     url(r'^profiles$', 'index', name='profiles'),
+    url(r'^profile$', 'profile', name='profile'),
 
     url(r'^profiles/new', 'new', name='profile_new'),
     url(r'^profiles/(?P<profile_id>[0-9]+)/detail$', 'detail', name='profile_detail'),
