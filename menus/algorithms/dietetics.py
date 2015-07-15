@@ -1,3 +1,6 @@
+import datetime
+from dateutil.relativedelta import relativedelta
+
 __author__ = 'PLNech'
 
 
@@ -47,6 +50,12 @@ class Calculator:
         return calories * (min_percentage + max_percentage) / 2
 
     @staticmethod
+    def estimate_needs_profile(profile):
+        print('birthday:', profile.birthday)
+        age = relativedelta(datetime.date.today(), profile.birthday).years
+        return Calculator.estimate_needs(age, profile.height, profile.weight, profile.sex, profile.activity)
+
+    @staticmethod
     def estimate_needs(age, size, weight, sex, exercise):
         """
         Return a DieteticsNeeds object describing the calculated needs
@@ -63,41 +72,76 @@ class Calculator:
 
         bmi = 10 * weight + 6.25 * size - 5 * age + Calculator.sex_handicaps[sex]
         calories = bmi * Calculator.exercise_calories_ratio[exercise]
-
-        proteins_g = weight * Calculator.exercise_proteins_ratio[exercise]
-        proteins = proteins_g * 4
-
-        carbohydrates = Calculator.average_percentage(0.45, 0.65, calories)
-        carbohydrates_g = carbohydrates / Calculator.calories_per_gram[Calculator.NUTRIENT_CARBOHYDRATES]
-        fats = Calculator.average_percentage(0.20, 0.35, calories)
-        fats_g = fats / Calculator.calories_per_gram[Calculator.NUTRIENT_FATS]
+        needs = DieteticsNeeds(calories)
 
         print("Basal metabolic rate estimated at %.1f kcal/day." % bmi)
         print("Real calorific needs estimated at %.1f kcal/day." % calories)
-        print("Proteinic needs estimated at %.1f kcal/day -> %.1f g/day." % (proteins, proteins_g))
-        print("Carbohydrates needs estimated at %.1f kcal/day -> %.1f g/day." % (carbohydrates, carbohydrates_g))
-        print("Fatty needs estimated at %.1f kcal/day -> %.1f g/day." % (fats, fats_g))
+        print("Proteinic needs estimated between %.1f and %1.f g/day." % (needs.proteins_min, needs.proteins_max))
+        print("Carbohydrates needs estimated between %.1f and %1.f g/day." % (needs.carbs_min, needs.carbs_max))
+        print("Fatty needs estimated between %.1f and %1.f g/day." % (needs.fats_min, needs.fats_max))
 
-        return DieteticsNeeds(calories, proteins_g, carbohydrates_g, fats_g)
+        return needs
+
+    @staticmethod
+    def age_from_date(date):
+        today = datetime.date.today()
+        return today.year - date.birthday.year - ((today.month, today.day) <
+                                                  (date.birthday.month, date.birthday.day))
 
 
 class DieteticsNeeds:
-    # FIXME Use min and max objectives
-    def __init__(self, calories, proteins, carbohydrates, fats):
+    RATIO_PROT_MIN = 0.10
+    RATIO_PROT_MAX = 0.35
+    RATIO_CARB_MIN = 0.45
+    RATIO_CARB_MAX = 0.65
+    RATIO_FATS_MAX = 0.35
+    RATIO_FATS_MIN = 0.20
+
+    def __init__(self, calories):
+        grams_per_cal_prot = Calculator.calories_per_gram[Calculator.NUTRIENT_PROTEINS]
+        grams_per_cal_carb = Calculator.calories_per_gram[Calculator.NUTRIENT_CARBOHYDRATES]
+        grams_per_cal_fats = Calculator.calories_per_gram[Calculator.NUTRIENT_FATS]
+
         self.calories = calories
-        self.grams_fats = fats
-        self.grams_carbohydrates = carbohydrates
-        self.grams_proteins = proteins
+        self.proteins_min = self.RATIO_PROT_MIN * calories / grams_per_cal_prot
+        self.proteins_max = self.RATIO_PROT_MAX * calories / grams_per_cal_prot
+        self.carbs_min = self.RATIO_CARB_MIN * calories / grams_per_cal_carb
+        self.carbs_max = self.RATIO_CARB_MAX * calories / grams_per_cal_carb
+        self.fats_min = self.RATIO_FATS_MIN * calories / grams_per_cal_fats
+        self.fats_max = self.RATIO_FATS_MAX * calories / grams_per_cal_fats
 
     def __str__(self):
-        return "%d kcal, %d g fats, %d g carbs, %d g proteins" % \
-               (self.calories, self.grams_fats, self.grams_carbohydrates, self.grams_proteins)
+        return "%d kcal, %d-%d g fats, %d-%d g carbs, %d-%d g proteins." % \
+               (self.calories, self.proteins_min, self.proteins_max,
+                self.carbs_min, self.carbs_max,
+                self.fats_min, self.fats_max)
+
+    def __add__(self, other):
+        d = DieteticsNeeds(0)
+        d.calories = self.calories + other.calories
+        d.proteins_min = self.proteins_min + other.proteins_min
+        d.proteins_max = self.proteins_max + other.proteins_max
+        d.carbs_min = self.carbs_min + other.carbs_min
+        d.carbs_max = self.carbs_max + other.carbs_max
+        d.fats_min = self.fats_min + other.fats_min
+        d.fats_max = self.fats_max + other.fats_max
+        return d
+
+    def __iadd__(self, other):
+        self.calories += other.calories
+        self.proteins_min += other.proteins_min
+        self.proteins_max += other.proteins_max
+        self.carbs_min += other.carbs_min
+        self.carbs_max += other.carbs_max
+        self.fats_min += other.fats_min
+        self.fats_max += other.fats_max
+        return self
 
 
 if __name__ == "__main__":
     given_age = 18
     given_size_cm = 180
     given_weight_kg = 70
-    given_sex = 'woman'
+    given_sex = 'man'
     given_exercise = Calculator.EXERCISE_MODERATE
     Calculator.estimate_needs(given_age, given_size_cm, given_weight_kg, given_sex, given_exercise)

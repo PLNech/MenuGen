@@ -4,6 +4,7 @@ from django.conf import settings
 from testing.models import Comment
 from testing.recipe_engine.scraper import random_recipe, Recipe
 from testing.recipe_engine.db_link import get_matching_ingredients, save_recipe
+from testing.recipe_engine.main import retrieve_recipes
 
 def index(request):
     return render(request, 'index.html', {})
@@ -12,10 +13,11 @@ def recipes(request):
     if 'recipe_url' in request.POST and request.POST['recipe_url']:
         recipe = Recipe(request.POST['recipe_url'])
         if 'save' in request.POST and request.POST['save']:
-            save_recipe(recipe)
+            #save_recipe(recipe)
+            retrieve_recipes()
     else:
         recipe = random_recipe()
-    recipe.save_screenshot()
+    #recipe.save_screenshot()
     screenshot = settings.MEDIA_ROOT + '/screen.jpg'
     matched_ingredients = get_matching_ingredients(recipe.ingredients)
 

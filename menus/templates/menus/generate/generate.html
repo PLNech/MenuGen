@@ -81,12 +81,12 @@
 
                                 <div class="col-sm-4">
                                     <div id="nbDays-input-group" class="input-group has-success">
-                                        <select class="form-control" id="nb_days" name="nb_days"
+                                        <select class="form-control" id="sel-nb_days" name="nb_days"
                                                 aria-describedby="day-unit-addon">
                                             <option value="1">1 jour</option>
                                             <option value="2">2 jours</option>
                                             <option value="3">3 jours</option>
-                                            <option value="4" selected>4 jours</option>
+                                            <option value="4">4 jours</option>
                                             <option value="5">5 jours</option>
                                             <option value="6">6 jours</option>
                                             <option value="7">7 jours</option>
@@ -95,7 +95,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-1 col-sm-offset-3">
-                                    <button id="placements-detail-ajax" href="{% url 'generate_placements_detail'%}" class="btn btn-success" type="button">
+                                    <button id="placements-detail-ajax" href="{% url 'generate_placements_detail' %}" class="btn btn-success" type="button">
                                         <i class="fa fa-table"></i>
                                     </button>
                                 </div>
@@ -183,8 +183,8 @@
     </script>
 
     <script type="text/javascript">
-
         $(document).ready(function () {
+            document.querySelector('#sel-nb_days [value="{{ nb_days }}"]').selected = true;
             $("#select-profils-ajax").click(function (e) {
                 var lien = $(this).attr('href');
                 console.log(lien);
@@ -210,53 +210,50 @@
                 });
                 e.preventDefault()
             });
-        });
 
-        $(function () {
-            $(".dropdown-menu li a").click(function () {
-                var btnFirstSelector = $(".btn:first-child");
-                btnFirstSelector.text($(this).text());
-                btnFirstSelector.val($(this).text());
+            $(function () {
+                $(".dropdown-menu li a").click(function () {
+                    var btnFirstSelector = $(".btn:first-child");
+                    btnFirstSelector.text($(this).text());
+                    btnFirstSelector.val($(this).text());
+                });
+            });
+
+
+            // AJAX for posting
+            function update_pre_generation(data_dico) {
+                $.ajax({
+                    url : '{% url 'update_gen_criteria' %}', // the endpoint
+                    type : "POST", // http method
+                    data : data_dico, // data sent with the post request
+                    // handle a successful response
+                    success: function (json) {
+                        console.log(json); // log the returned json to the console
+                        console.log("success"); // another sanity check
+                    },
+                    // handle a non-successful response
+                    error: function (xhr, errmsg, err) { //TODO Kyo Display err, or at least remove parameter
+                        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                        // TODO Kyo : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
+                    }
+                });
+            }
+
+            $('.budget').on('click', function () {
+                var data_dico = {budget: $(this).val()};
+                update_pre_generation(data_dico);
+            });
+            $('.difficulty').on('click', function () {
+                var data_dico = {difficulty: $(this).val()};
+                update_pre_generation(data_dico);
+            });
+            $('#sel-nb_days').on('change', function () {
+                var data_dico = {nb_days: $("select#sel-nb_days option:selected").val()};
+                $("#placements-detail-ajax").trigger('click');
+                update_pre_generation(data_dico);
             });
         });
-
-
-        // AJAX for posting
-        function update_pre_generation(data_dico) {
-            console.log("sanity check"); // sanity check TODO Kyo : Log meaningful things or stop logging
-            $.ajax({
-                url : '{% url 'update_gen_criteria' %}', // the endpoint
-                type : "POST", // http method
-                data : data_dico, // data sent with the post request
-                // handle a successful response
-                success: function (json) {
-                    console.log(json); // log the returned json to the console
-                    console.log("success"); // another sanity check
-                },
-
-                // handle a non-successful response
-                error: function (xhr, errmsg, err) { //TODO Kyo Display err, or at least remove parameter
-                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-                            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                    // TODO Kyo : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
-                }
-            });
-        }
-
-        $('.budget').on('click', function () {
-            var data_dico = {budget: $(this).val()};
-            update_pre_generation(data_dico);
-        });
-        $('.difficulty').on('click', function () {
-            var data_dico = {difficulty: $(this).val()};
-            update_pre_generation(data_dico);
-        });
-        $('#nb_days').on('change', function () {
-            var data_dico = {nb_days: $("select#nb_days option:selected").val()};
-            $("#placements-detail-ajax").trigger('click');
-            update_pre_generation(data_dico);
-        });
-
     </script>
 {% endblock %}

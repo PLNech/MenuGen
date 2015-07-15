@@ -20,10 +20,13 @@ class Config:
     KEY_OVERWEIGHT_FACTOR = "overweight_factor"
     KEY_NB_DISHES = "nb_dishes"
     KEY_MAX_DISHES = "max_dishes"
-    KEY_OBJECTIVE_CALORIES = "max_calories"
-    KEY_OBJECTIVE_PROTEINS = "max_proteins"
-    KEY_OBJECTIVE_CARBOHYDRATES = "max_carbs"
-    KEY_OBJECTIVE_FATS = "max_fats"
+    KEY_OBJECTIVE_CALORIES = "calories"
+    KEY_OBJECTIVE_PROTEINS_MIN = "min_proteins"
+    KEY_OBJECTIVE_PROTEINS_MAX = "max_proteins"
+    KEY_OBJECTIVE_CARBOHYDRATES_MIN = "min_carbs"
+    KEY_OBJECTIVE_CARBOHYDRATES_MAX = "max_carbs"
+    KEY_OBJECTIVE_FATS_MAX = "min_fats"
+    KEY_OBJECTIVE_FATS_MIN = "max_fats"
 
     KEY_NB_TEST_STEPS = "nb_test_steps"
 
@@ -34,7 +37,7 @@ class Config:
 
         # Amounts
         KEY_RUN_NUMBER: 1,  # Number of runs
-        KEY_NB_GENERATION: 10,  # Number of generations
+        KEY_NB_GENERATION: 1,  # Number of generations
 
         # Algorithm parameters
         KEY_ELITISM: True,
@@ -56,10 +59,13 @@ class Config:
         KEY_OVERWEIGHT_FACTOR: 1.1,  # Factor of allowed overweight
 
         # Optimisation-related parameters
-        KEY_OBJECTIVE_CALORIES: 2439.7 * 7,
-        KEY_OBJECTIVE_PROTEINS: 364.0 * 7,
-        KEY_OBJECTIVE_CARBOHYDRATES: 1341.8 * 7,
-        KEY_OBJECTIVE_FATS: 670.9 * 7,
+        KEY_OBJECTIVE_CALORIES: 2697.0 * 7,
+        KEY_OBJECTIVE_PROTEINS_MIN: 67.4 * 7,
+        KEY_OBJECTIVE_PROTEINS_MAX: 236 * 7,
+        KEY_OBJECTIVE_CARBOHYDRATES_MIN: 303 * 7,
+        KEY_OBJECTIVE_CARBOHYDRATES_MAX: 438 * 7,
+        KEY_OBJECTIVE_FATS_MIN: 59.9 * 7,
+        KEY_OBJECTIVE_FATS_MAX: 105 * 7,
 
         KEY_NB_TEST_STEPS: 20,  # Number of test steps
     }
@@ -69,7 +75,7 @@ class Config:
     draw_all = False  # Should we draw all steps of each run?
 
     print_each_run = False  # Should we print results for each run?
-    print_generation = False  # Should we print details of each generation?
+    print_generation = True  # Should we print details of each generation?
     print_population = False  # Should we print the generated population?
     print_selection = False  # Should we print the selection of individuals?
     print_crossover = False  # Should we print the crossover of individuals?
@@ -205,8 +211,17 @@ class Config:
 
     @staticmethod
     def update_needs(needs, nb_days):
+        """
+
+        :type needs: menus.algorithms.dietetics.DieteticsNeeds
+        :param nb_days: int
+        :return:
+        """
         Config.parameters[Config.KEY_OBJECTIVE_CALORIES] = needs.calories * nb_days
-        Config.parameters[Config.KEY_OBJECTIVE_PROTEINS] = needs.grams_proteins * nb_days
-        Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES] = needs.grams_carbohydrates * nb_days
-        Config.parameters[Config.KEY_OBJECTIVE_FATS] = needs.grams_fats * nb_days
+        Config.parameters[Config.KEY_OBJECTIVE_PROTEINS_MIN] = needs.proteins_min * nb_days
+        Config.parameters[Config.KEY_OBJECTIVE_PROTEINS_MAX] = needs.proteins_max * nb_days
+        Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES_MIN] = needs.carbs_min * nb_days
+        Config.parameters[Config.KEY_OBJECTIVE_CARBOHYDRATES_MAX] = needs.carbs_max * nb_days
+        Config.parameters[Config.KEY_OBJECTIVE_FATS_MIN] = needs.fats_min * nb_days
+        Config.parameters[Config.KEY_OBJECTIVE_FATS_MAX] = needs.fats_max * nb_days
         print("Dietetic needs set to %s." % needs)

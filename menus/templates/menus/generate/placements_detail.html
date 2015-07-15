@@ -1,24 +1,32 @@
+{% load staticfiles %}
+
 <header class="main-box-header clearfix">Vue détaillée - Nombre de repas</header>
+
 <div class="main-box-body clearfix">
     <div class="row">
         <table class="table">
             <thead>
-            <td></td>
-            {% for i in days_range %}
-                <td>Jour {{ forloop.counter }}</td>
-            {% endfor %}
+            <tr>
+                <th>Repas</th>
+                {% for i in days_range %}
+                    <th>Jour {{ forloop.counter }}</th>
+                {% endfor %}
+                <th>Tous</th>
+            </tr>
             </thead>
             <tbody>
             <tr>
                 <th>Déjeuner</th>
-                {% for i in days_range %}
-                    <td id="lunches">
-                        <div class="checkbox-nice">
-                            <input class="lunch" type="checkbox" id="m-checkbox-lunch-{{ i }}" value={{ i }} checked>
-                            <label for="m-checkbox-mid-{{ i }}"></label>
-                        </div>
-                    </td>
-                {% endfor %}
+                <div id="lunches">
+                    {% for i in days_range %}
+                        <td>
+                            <div class="checkbox-nice">
+                                <input class="lunch" type="checkbox" id="m-checkbox-lunch-{{ i }}" value={{ i }} checked>
+                                <label for="m-checkbox-lunch-{{ i }}"></label>
+                            </div>
+                        </td>
+                    {% endfor %}
+                </div>
             </tr>
             <tr>
                 <th>Dîner</th>
@@ -36,6 +44,22 @@
     </div>
 </div>
 {% block js %}
+    <script src="{% static 'vendor/js/jquery.js' %}"></script>
+    <script src="{% static "jquery.cookie.js" %}"></script>
+    <script>
+        // Move header request handler method in a seperate file
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                }
+            }
+        });
+    </script>
     <script>
         $(document).ready( function() {
             function update_pre_generation(data_dico) {
@@ -58,19 +82,19 @@
                     }
                 });
             };
-
-            var cols = document.querySelectorAll('#lunches .lunch');
-            [].forEach.call(cols, function (col, i) {
-                col.on('click', function () {
-                var data_dico = {day: i, meal: 'dinner'};
-                update_pre_generation(data_dico);
+            $('input.lunch').each(function (index) {
+                $(this).on("change", function () {
+                    var is_checked = $(this)[0].checked ? 1 : 0;
+                    var data_dico = {matrix: {day: index, meal: '0', val: is_checked}};
+                    update_pre_generation(data_dico);
+                });
             });
-            var cols = document.querySelectorAll('#dinners .dinner');
-            [].forEach.call(cols, function (col, i) {
-                col.on('click', function () {
-                var data_dico = {day: i, meal: 'dinner'};
-                update_pre_generation(data_dico);
-            });
+            $('input.dinner').each(function (index) {
+                $(this).on("change", function () {
+                    var is_checked = $(this)[0].checked ? 1 : 0;
+                    var data_dico = {matrix: {day: index, meal: '1', val: is_checked}};
+                    update_pre_generation(data_dico);
+                });
             });
         });
     </script>
