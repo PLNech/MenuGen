@@ -23,11 +23,11 @@ SEX = (
 )
 
 ACTIVITY = (
-    ('low', 'Sédentaire'),
-    ('light', 'Légère'),
-    ('moderate', 'Modérée'),
-    ('active', 'Régulière'),
-    ('extreme', 'Intense'),
+    (0, 'Sédentaire'),
+    (1, 'Légère'),
+    (2, 'Modérée'),
+    (3, 'Régulière'),
+    (4, 'Intense'),
 )
 
 MEAL = (
