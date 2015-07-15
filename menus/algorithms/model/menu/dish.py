@@ -34,3 +34,15 @@ class Dish(Comparable):
 
     def __repr__(self):
         return "Dish " + str(self)
+
+    def __iadd__(self, other):
+        """
+        :type other Dish
+        :rtype Dish
+        """
+        self.calories += other.calories
+        self.proteins += other.proteins
+        self.carbohydrates += other.carbohydrates
+        self.fats += other.fats
+        return self
+
