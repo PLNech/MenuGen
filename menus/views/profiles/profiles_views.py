@@ -2,9 +2,9 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
-from menus.algorithms.dietetics import Calculator
 from menus.forms import ProfileForm
 import menugen.defaults as default
+from menus.models import Recipe, Ingredient
 
 
 @login_required
@@ -236,12 +236,6 @@ def regimes(request, ajax=False):
         })
 
 
-def tastes(request):
-    ingredient_list = []  # Ingredient.objects.all()  # TODO: Filter most frequent
-    return render(request, 'profiles/tastes.html',
-                  {'ingredients': [ingredient.name for ingredient in ingredient_list]})
-
-
 def profile(request):
     r = regimes(request, True)
 
@@ -249,4 +243,37 @@ def profile(request):
         'physio': physiology(request, True),
         'health_regimes_list': r['health_regimes_list'],
         'value_regimes_list': r['value_regimes_list']
+    })
+
+
+@login_required
+def tastes(request):
+    profile = request.user.account.profile;
+    unlikes_recipes = profile.unlikes_recipe.all()
+    unlikes_ingredients = profile.unlikes.all()
+    return render(request, 'profiles/tastes.html', {
+        'unlikes_recipes' : unlikes_recipes,
+        'unlikes_ingredients' : unlikes_ingredients,
+    })
+
+def relike_recipe(request, recipe_id):
+    profile = request.user.account.profile;
+    recipe = Recipe.objects.get(id=recipe_id)
+    profile.unlikes_recipe.remove(recipe)
+    unlikes_recipes = profile.unlikes_recipe.all()
+    unlikes_ingredients = profile.unlikes.all()
+    return render(request, 'profiles/tastes.html', {
+        'unlikes_recipes' : unlikes_recipes,
+        'unlikes_ingredients' : unlikes_ingredients,
+    })
+
+def relike_ingredient(request, ingredient_id):
+    profile = request.user.account.profile;
+    ingredient = Ingredient.objects.get(id=ingredient_id)
+    profile.unlikes.remove(ingredient)
+    unlikes_recipes = profile.unlikes_recipe.all()
+    unlikes_ingredients = profile.unlikes.all()
+    return render(request, 'profiles/tastes.html', {
+        'unlikes_recipes' : unlikes_recipes,
+        'unlikes_ingredients' : unlikes_ingredients,
     })

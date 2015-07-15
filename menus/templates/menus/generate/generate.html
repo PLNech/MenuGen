@@ -15,8 +15,8 @@
             </div>
             <div class="pull-right hidden-xs">
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'tastes' %}" class="btn btn-primary">
-                        <i class="fa fa-angle-double-left"></i> Mes goûts
+                    <a href="{% url 'regimes' %}" class="btn btn-primary">
+                        <i class="fa fa-angle-double-left"></i> Mes régimes
                     </a>
                 {% endif %}
                 <a href="{% url 'generation' %}" class="btn btn-primary" id="generate-button">

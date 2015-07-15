@@ -99,6 +99,7 @@ def save_recipe(recipe):
     r.category = recipe.meal_type
     r.save()
 
+    # TODO: check uniqueness of relation recipe/ingredient
     # link to ingredients
     matching = get_matching_ingredients(recipe.ingredients)
     for parsed, matched in matching.items():
