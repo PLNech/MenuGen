@@ -1,3 +1,5 @@
+import math
+
 __author__ = 'PLNech'
 
 from menus.algorithms.dietetics import DieteticsNeeds
@@ -27,7 +29,7 @@ class Menu(Individual):  # TODO Document!
         self.fats = 0
 
     def __str__(self):
-        ret_str = "["
+        ret_str = "[%i|" % len(self.genes)
         for dish in self.genes:
             ret_str += str(dish)
         return ret_str + "]"
@@ -105,10 +107,13 @@ class Menu(Individual):  # TODO Document!
         self.fitness_proteins = self.nutrient_fitness_range(accu_proteins, obj_proteins_min, obj_proteins_max)
         self.fitness_carbohydrates = self.nutrient_fitness_range(accu_carbs, obj_carbs_min, obj_carbs_max)
         self.fitness_fats = self.nutrient_fitness_range(accu_fats, obj_fats_min, obj_fats_max)
-        self.fitness = (1 + self.fitness_proteins + self.fitness_carbohydrates + self.fitness_fats) / 4 \
-                       * self.fitness_calories
-        print("Fitness: %i prot, %i carb, %i fats, %f cal -> %f total." % (self.fitness_proteins, self.fitness_carbohydrates,
-                                                  self.fitness_fats, self.fitness_calories, self.fitness))
+
+        fitness_nutrition = (1 + self.fitness_proteins + self.fitness_carbohydrates + self.fitness_fats) / 4
+
+        fitness_amount = min(len(self.genes) / Config.parameters[Config.KEY_MAX_DISHES],
+                             Config.parameters[Config.KEY_MAX_DISHES] / len(self.genes))
+
+        self.fitness = (fitness_nutrition ** 2) * fitness_amount * self.fitness_calories
         return self.fitness
 
     def print_score(self):
@@ -142,19 +147,18 @@ class Menu(Individual):  # TODO Document!
         manager = MenuManager.get()
 
         accu_calories = 0
-        over_size = 2439.7 * 7 * Config.parameters[Config.KEY_OVERWEIGHT_FACTOR]  # TODO: Use actual calories objective
+        over_size = Config.parameters[Config.KEY_OBJECTIVE_CALORIES] * Config.parameters[Config.KEY_OVERWEIGHT_FACTOR]
         genes_length = Config.parameters[Config.KEY_MAX_DISHES]
         # random.randrange(0, Config.parameters[Config.KEY_MAX_DISHES])  # TODO: Consider random genome length
         for _ in range(genes_length):
             dish = manager.get_random()
-            accu_calories += dish.calories
             if accu_calories + dish.calories > over_size:
                 break
             else:
                 accu_calories += dish.calories
                 self.genes.append(dish)
                 # print("Finished generating a menu of %d calories through %d dishes." %
-                # (accu_calories, len(self.genes)))
+                #     (accu_calories, len(self.genes)))
 
     @staticmethod
     def nutrient_fitness(quantity, objective):

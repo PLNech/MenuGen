@@ -32,12 +32,12 @@ class Config:
 
     parameters = {
         # Sizes
-        KEY_POPULATION_SIZE: 100,  # Number of individuals in each generation
-        KEY_TOURNAMENT_SIZE: 10,  # Number of random individuals in each tournament
+        KEY_POPULATION_SIZE: 10,  # Number of individuals in each generation
+        KEY_TOURNAMENT_SIZE: 5,  # Number of random individuals in each tournament
 
         # Amounts
         KEY_RUN_NUMBER: 1,  # Number of runs
-        KEY_NB_GENERATION: 1,  # Number of generations
+        KEY_NB_GENERATION: 100,  # Number of generations
 
         # Algorithm parameters
         KEY_ELITISM: True,
@@ -51,7 +51,7 @@ class Config:
 
         # Menu-related parameters
         KEY_NB_DISHES: 50,  # Number of dishes to choose between
-        KEY_MAX_DISHES: 7 * 5 * 3,  # Maximum dishes per weekly menu
+        KEY_MAX_DISHES: 7 * 2 * 3,  # Maximum dishes per weekly menu
         KEY_MAX_DISH_CALORIES: 250,  # Maximum amount of calories in a dish
         KEY_MAX_DISH_FATS: 100,  # Maximum amount of grams of fat in a dish
         KEY_MAX_DISH_CARBOHYDRATES: 106,  # Maximum amount of grams of carbohydrates in a dish

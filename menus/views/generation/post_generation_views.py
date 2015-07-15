@@ -30,7 +30,7 @@ def generation(request):
     """ Use the days number if exists """
     if 'nb_days' in request.session:
         nb_days = int(request.session['nb_days'])
-    nb_meals = 2  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
+    nb_meals = 2
     nb_dishes = 3
     today = datetime.date.today()
 
@@ -40,14 +40,14 @@ def generation(request):
     user_height = int(float(int(replace_if_none(request.session.get('height'), defaults.HEIGHT)) * 100))
     user_sex = Calculator.SEX_F if request.session.get('sex') is 1 else Calculator.SEX_H
     user_birthday = datetime.date(year=today.year - user_age, month=today.month, day=today.day)
+
     profile = Profile(weight=user_weight, height=user_height, birthday=user_birthday, sex=user_sex, activity=user_exercise)
     profile_list = [profile, Profile(weight=100, height=200, birthday=datetime.date(1928, 2, 10),
                                      sex=defaults.SEX, activity=defaults.EXERCISE)]
+    # profile_list = [profile]  # TODO: GET list of profiles to 'merge'
     needs_list = [Calculator.estimate_needs_profile(profile) for profile in profile_list]
-    needs = reduce(lambda x,y: x+y, needs_list)
+    needs = reduce(lambda x, y: x+y, needs_list)
     print("Final needs:", needs)
-    # """ Here is an example of a matrix containing (nb_days x 5) meals """
-    # planning = generate_planning(nb_days, nb_meals, nb_dishes)
 
     Config.parameters[Config.KEY_MAX_DISHES] = nb_days * nb_meals * nb_dishes
     Config.update_needs(needs, nb_days)
