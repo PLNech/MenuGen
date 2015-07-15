@@ -9,7 +9,7 @@ from menus.algorithms.dietetics import Calculator
 from menus.algorithms.run import run_standard
 from menus.algorithms.utils.config import Config
 from menus.data.generator import generate_planning_from_list
-from menus.models import Recipe, Profile
+from menus.models import Recipe, Profile, Ingredient
 
 
 def generation(request):
@@ -82,4 +82,14 @@ def unlike_recipe_message(request, recipe_id):
     profile.unlikes_recipe.add(recipe);
     return render(request, 'menus/generation/unlike_recipe_popup.html', {
         'recipe_name': recipe.name
+    })
+
+@login_required
+def unlike_ingredient_message(request, ingredient_id):
+    """ Message after unliking an ingredient """
+    ingredient = Ingredient.objects.get(id=ingredient_id)
+    profile = request.user.account.profile;
+    profile.unlikes.add(ingredient)
+    return render(request, 'menus/generation/unlike_ingredient_popup.html', {
+        'ingredient_name': ingredient.name
     })

@@ -231,8 +231,8 @@ def regimes(request):
 def tastes(request):
     profile = request.user.account.profile;
     unlikes_recipes = profile.unlikes_recipe.all()
-    ingredient_list = []  # Ingredient.objects.all()  # TODO: Filter most frequent
-    return render(request, 'profiles/tastes.html',
-        { 'ingredients': [ingredient.name for ingredient in ingredient_list],
-          'unlikes_recipes' : unlikes_recipes
+    unlikes_ingredients = profile.unlikes.all()
+    return render(request, 'profiles/tastes.html', {
+        'unlikes_recipes' : unlikes_recipes,
+        'unlikes_ingredients' : unlikes_ingredients,
     })

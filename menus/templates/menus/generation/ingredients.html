@@ -15,9 +15,12 @@
                         <tr>
                             <td>
                                 {{ i.name }}
-                                <button type="button" class="btn btn-danger btn-xs pull-right">
-                                    <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                                </button>
+                                <form class="form-horizontal pull-right" id="unlike-ingredient-form" action="{% url 'unlike_ingredient_message' i.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-xs">
+                                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         {% endfor %}

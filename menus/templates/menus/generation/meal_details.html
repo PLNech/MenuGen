@@ -47,5 +47,22 @@
         $(document).on("hidden.bs.modal", function (e) {
             $(e.target).removeData("bs.modal").find(".modal-content").empty();
         });
+
+        $('.modal-body').on('submit', '#unlike-ingredient-form', function() {
+            $.ajax({
+                is_allowed: false,
+                type: $(this).attr('method'),
+                url: this.action,
+                data: $(this).serialize(),
+                context: this,
+                success: function(data, status) {
+                    $('#mealDetailsModal').removeData("bs.modal").find(".modal-content").html(data);
+                },
+            });
+            return false;
+        });
+        $(document).on("hidden.bs.modal", function (e) {
+            $(e.target).removeData("bs.modal").find(".modal-content").empty();
+        });
     </script>
 {% endblock %}

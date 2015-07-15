@@ -35,6 +35,7 @@ urlpatterns += patterns(
         'generation_meal_details',
         name='generation_meal_details'),
     url(r'^generation/unlike_recipe/(?P<recipe_id>\d+)$', 'unlike_recipe_message', name='unlike_recipe_message'),
+    url(r'^generation/unlike_ingredient/(?P<ingredient_id>\d+)$', 'unlike_ingredient_message', name='unlike_ingredient_message'),
 )
 
 """

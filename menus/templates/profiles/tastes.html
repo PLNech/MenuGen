@@ -13,15 +13,9 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="main-box clearfix">
-                <p></p>
-
+                <header class="main-box-header clearfix">Rechercher</header>
                 <div class="main-box-body clearfix">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="search" placeholder="Aliment ou groupe d'aliments">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">Rechercher</button>
-                        </span>
-                    </div>
+                        <input type="text" class="form-control" id="search" placeholder="Aliment ou recette">
                 </div>
                 <div class="row">
                     <div class="col-lg-offset-2 col-lg-8">
@@ -63,21 +57,12 @@
 
         <div class="col-lg-4">
             <div class="main-box clearfix">
-                <header class="main-box-header clearfix">Ma liste noire</header>
+                <header class="main-box-header clearfix">Aliments que je n'aime pas</header>
                 <div class="main-box-body clearfix">
-                    <ul id="disliked-aliments" class="list-group">
-                        {% for aliment in request.session.disliked_aliments %}
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <span class="name">{{ aliment }}</span>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <button type="button" class="btn btn-success btn-sm">
-                                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                </div>
+                    <ul id="disliked-ingredients" class="list-group">
+                        {% for ingredient in unlikes_ingredients %}
+                            <li>
+                                {{ ingredient.name }}
                             </li>
                         {% endfor %}
                     </ul>
