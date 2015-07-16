@@ -20,8 +20,33 @@
                            role="button"
                            data-toggle="modal"
                            data-target="#auth-modal">
-                            Sauvegarder et créer un compte <i class="fa fa-angle-double-right"></i>
-                        </a>
+                           Sauvegarder et créer un compte <i class="fa fa-angle-double-right"></i>
+                    </a>
+
+                    <!-- Shopping list accordion -->
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel" role="tab" id="heading">
+                            <a class="collapsed btn btn-success" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <h4 class="panel-title"> Shopping list </h4>
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading">
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                    <tbody>
+                                    {% for i in shopping_list %}
+                                        <tr>
+                                            <td>
+                                                {{ i }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 {% else %}
                     <a class="btn btn-warning"
                            href="{% url 'menu_new'%}"
