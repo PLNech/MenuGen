@@ -36,3 +36,8 @@ h5.recipe-title, .unlike-recipe-form {
 .recipe-title-container {
     height: 80px;
 }
+
+.unlikes-relike:hover{
+    text-decoration: underline;
+    color: #006611;
+}
