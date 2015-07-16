@@ -1,4 +1,6 @@
 import datetime
+import numpy
+
 from django.contrib.auth.decorators import login_required
 from functools import reduce
 import time
@@ -8,7 +10,7 @@ from django.shortcuts import render
 from menus.algorithms.dietetics import Calculator
 from menus.algorithms.run import run_standard
 from menus.algorithms.utils.config import Config
-from menus.data.generator import generate_planning_from_list
+from menus.data.generator import generate_planning_from_list, generate_planning_from_matrix
 from menus.models import Recipe, Profile, Ingredient
 
 
@@ -27,11 +29,21 @@ def generation(request):
 
     """ Default days number """
     nb_days = 7
+
     """ Use the days number if exists """
     if 'nb_days' in request.session:
         nb_days = int(request.session['nb_days'])
-    nb_meals = 2
+
+    """ Default values """
     nb_dishes = 3
+    nb_meals = 2
+
+    if 'matrix' in request.session:
+        matrix = request.session['matrix']
+        nb_meals_menu = numpy.sum(matrix)
+    else:
+        nb_meals_menu = nb_meals * nb_days
+
     today = datetime.date.today()
 
     user_exercise = replace_if_none(request.session.get('exercise'), defaults.EXERCISE)
@@ -49,10 +61,15 @@ def generation(request):
     needs = reduce(lambda x, y: x+y, needs_list)
     print("Final needs:", needs)
 
-    Config.parameters[Config.KEY_MAX_DISHES] = nb_days * nb_meals * nb_dishes
+    Config.parameters[Config.KEY_MAX_DISHES] = nb_meals_menu * nb_dishes
     Config.update_needs(needs, nb_days)
     menu = run_standard(None, time.ctime())
-    planning = generate_planning_from_list(nb_days, nb_meals, menu)
+
+    if 'matrix' in request.session:
+        planning = generate_planning_from_matrix(matrix, menu)
+    else:
+        planning = generate_planning_from_list(nb_days, nb_meals, menu)
+
 
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 
@@ -74,6 +91,7 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
     meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
     return render(request, 'menus/generation/meal_details.html', {'meal': meal})
 
+
 @login_required
 def unlike_recipe_message(request, recipe_id):
     """ Message after unliking a recipe """
@@ -83,6 +101,7 @@ def unlike_recipe_message(request, recipe_id):
     return render(request, 'menus/generation/unlike_recipe_popup.html', {
         'recipe_name': recipe.name
     })
+
 
 @login_required
 def unlike_ingredient_message(request, ingredient_id):

@@ -82,6 +82,8 @@ class Config:
     print_mutation = False  # Should we print the mutation of individuals?
     print_manager = False  # Debug information about the solution manager
 
+    fake_run = True  # Do we care about optimising anything?
+
     folder_name_output = "img"
     folder_name_log = "log"
 

@@ -31,9 +31,9 @@
 
 {% block js %}
     <script>
-
         // unlike recipe
-        $('.modal-body').on('submit', '#unlike-recipe-form', function() {
+        var $modal = $('.modal-body');
+        $modal.on('submit', '#unlike-recipe-form', function() {
             $.ajax({
                 is_allowed: false,
                 type: $(this).attr('method'),
@@ -48,7 +48,7 @@
         });
 
         // unlike ingredient
-        $('.modal-body').on('submit', '#unlike-ingredient-form', function() {
+        $modal.on('submit', '#unlike-ingredient-form', function() {
             $.ajax({
                 is_allowed: false,
                 type: $(this).attr('method'),
@@ -57,7 +57,7 @@
                 context: this,
                 success: function(data, status) {
                     $('#mealDetailsModal').removeData("bs.modal").find(".modal-content").html(data);
-                },
+                }
             });
             return false;
         });

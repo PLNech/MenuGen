@@ -37,7 +37,6 @@
                    data-toggle="modal"
                    data-target="#profile-modal"
                    class="btn btn-primary btn-sm">
-                    {#                        <a class="btn btn-primary btn-sm" href="{% url 'profile_new' %}" role="button">#}
                     <i class="fa fa-plus-circle fa-lg"></i>
                     Nouveau profil
                 </a>
@@ -56,6 +55,7 @@
                 </header>
                 <div class="main-box-body clearfix">
                     <ul class="widget-products guests">
+                        <span id="guests-top"></span>
                         {% for profile in guests %}
                             {% include 'profiles/guests/guest.html' %}
                         {% endfor %}
@@ -89,16 +89,19 @@
                         <li class="active"><a href="#tab-physio" data-toggle="tab">Physiologie</a></li>
                         <li><a href="#tab-regimes" data-toggle="tab">Régimes</a></li>
                         <li><a href="#tab-tastes" data-toggle="tab">Goûts</a></li>
-                        <li><a href="#tab-account" data-toggle="tab">Compte</a></li>
-                        <li class="pull-right">
-                            <a href="{% url 'profile_remove' pk %}"
-                               role="button"
-                               data-toggle="modal"
-                               data-target="#profile-modal"
-                               class="table-link danger">
+                        {% if user.account.profile.pk != pk  %}
+                            <li class="pull-right">
+                                <a href="{% url 'profile_remove' pk %}"
+                                   role="button"
+                                   data-toggle="modal"
+                                   data-target="#profile-modal"
+                                   class="table-link danger">
                                     <i class="fa fa-trash-o"></i>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li><a href="#tab-account" data-toggle="tab">Compte</a></li>
+                        {% endif %}
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab-physio">

@@ -60,16 +60,20 @@
                             <th>{{ forloop.counter0|meal_slot_name }}</th>
                             {% for meal in meal_time %}
                                 <td>
-
-                                    <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
-                                        <a data-toggle="modal"
-                                           href="{% url 'generation_meal_details' starter_id=meal.starter.id main_course_id=meal.main_course.id dessert_id=meal.dessert.id %}"
-                                           data-target="#mealDetailsModal">
-                                            DETAILS
-                                        </a>
-                                        {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
-                                    </div>
-
+                                    {% if meal %}
+                                        <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
+                                            <a data-toggle="modal"
+                                               href="{% url 'generation_meal_details' starter_id=meal.starter.id main_course_id=meal.main_course.id dessert_id=meal.dessert.id %}"
+                                               data-target="#mealDetailsModal">
+                                                DETAILS
+                                            </a>
+                                            {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
+                                        </div>
+                                    {% else %}
+                                        <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
+                                            <p>FREE</p>
+                                        </div>
+                                    {% endif %}
                                 </td>
                             {% endfor %}
                         </tr>

@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseNotAllowed
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from menus.forms import ProfileForm
 import menugen.defaults as default
@@ -68,16 +68,11 @@ def edit(request, profile_id):
 def remove(request, profile_id):
     account = request.user.account
     p = account.guests.filter(id__exact=profile_id).first()
+    # TODO : check ownership
     if request.method == 'GET':
-        if p is None:
-            p = account.profile
-            title = 'Réinitialisation de votre profile'
-            message = 'Etes vous certain de vouloir réinitialiser ce profile ?'
-            action = 'Réinitialiser'
-        else:
-            title = 'Suppression du profile ' + p.name
-            message = 'Etes vous certain de vouloir supprimer ce profile ?'
-            action = 'Supprimer'
+        title = 'Suppression du profile ' + p.name
+        message = 'Etes vous certain de vouloir supprimer ce profile ?'
+        action = 'Supprimer'
 
         return render(request, 'profiles/guests/remove_modal.html', {
             'profile': p,
@@ -86,15 +81,8 @@ def remove(request, profile_id):
             'action': action
         })
     else:
-        if p is None:
-            p = account.profile.id
-            # Reset user default profile
-            pass
-        else:
-            p.delete()
-
-    return redirect('profiles')
-
+        p.delete()
+        return HttpResponseRedirect('/profile')
 
 def update_physio(request):
     """ This method is used as ajax call in order to update physio """
@@ -244,12 +232,12 @@ def regimes(request, ajax=False):
 
 
 @login_required
-def profile(request, profile_id):
+def profile(request, profile_id=0):
     r = regimes(request, True)
     g = index(request, True)
-    profile_id = int(profile_id)
+
+    profile_id = int(profile_id) if profile_id != 0 else request.user.account.profile_id
     p = Profile.objects.get(pk=profile_id)
-    pk = p.pk
     #p = get_object_or_404(Profile, pk=profile_id)
     # TODO : test propriety
 
@@ -260,7 +248,7 @@ def profile(request, profile_id):
         'user_profile':         g['user_profile'],
         'guests':               g['guests'],
         'guests_nb':            g['guests_nb'],
-        'pk':              pk,
+        'pk':                   profile_id,
     })
 
 
