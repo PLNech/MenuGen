@@ -29,17 +29,21 @@ def generation(request):
 
     """ Default days number """
     nb_days = 7
+
     """ Use the days number if exists """
     if 'nb_days' in request.session:
         nb_days = int(request.session['nb_days'])
 
-    """ Default nb_meals """
-    nb_meals = 2  # TODO: Get amount of meals  # FIXME: Differentiate breakfast/lunch/dinner/etc
+    """ Default values """
+    nb_dishes = 3
+    nb_meals = 2
+
     if 'matrix' in request.session:
         matrix = request.session['matrix']
         nb_meals_menu = numpy.sum(matrix)
+    else:
+        nb_meals_menu = nb_meals * nb_days
 
-    nb_dishes = 3
     today = datetime.date.today()
 
     user_exercise = replace_if_none(request.session.get('exercise'), defaults.EXERCISE)
@@ -60,8 +64,12 @@ def generation(request):
     Config.parameters[Config.KEY_MAX_DISHES] = nb_meals_menu * nb_dishes
     Config.update_needs(needs, nb_days)
     menu = run_standard(None, time.ctime())
-    # planning = generate_planning_from_list(nb_days, nb_meals, menu)
-    planning = generate_planning_from_matrix(matrix, menu)
+
+    if 'matrix' in request.session:
+        planning = generate_planning_from_matrix(matrix, menu)
+    else:
+        planning = generate_planning_from_list(nb_days, nb_meals, menu)
+
 
     return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
 
