@@ -48,7 +48,7 @@
                     <table class="table table-striped">
                         <tbody>
                             {% for recipe in unlikes_recipes %}
-                                <tr class="clickable-row" data-url="{% url 'relike_recipe' recipe_id=recipe.id %}" title="J'aime à nouveau!">
+                                <tr id="recipes" class="clickable-row" data-url="{% url 'relike_recipe' recipe_id=recipe.id %}" title="J'aime à nouveau!">
                                     <td>{{ recipe.name }}</td>
                                 </tr>
                             {% endfor %}
@@ -66,7 +66,7 @@
                     <table class="table table-striped">
                         <tbody>
                             {% for ingredient in unlikes_ingredients %}
-                                <tr class="clickable-row" data-url="{% url 'relike_ingredient' ingredient_id=ingredient.id %}" title="J'aime à nouveau!">
+                                <tr id="ingredients" class="clickable-row" data-url="{% url 'relike_ingredient' ingredient_id=ingredient.id %}" title="J'aime à nouveau!">
                                     <td>{{ ingredient.name }}</td>
                                 </tr>
                             {% endfor %}
@@ -80,66 +80,26 @@
 
 {% block js %}
     <script type="text/javascript">
-        var $rows = $('ul#liked-aliments li');
-        $('#search').keyup(function () {
+        var $rows_recipes = $('tr#recipes td');
+        $('#filter-recipes').keyup(function () {
             var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
-            $rows.show().filter(function () {
+            $rows_recipes.show().filter(function () {
                 var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
                 return !~text.indexOf(val);
             }).hide();
         });
 
-        // AJAX for posting
-        function update_tastes(data_dico) {
-            console.log("sanity check"); // sanity check TODO Kyo : Log meaningful things or stop logging
-            $.ajax({
-                url : '{% url 'update_tastes' %}', // the endpoint
-                type : "POST", // http method
-                data : data_dico, // data sent with the post request
-                // handle a successful response
-                success: function (json) {
-                    console.log(json); // log the returned json to the console
-                    console.log("success"); // another sanity check
-                },
+        var $rows_ingreds = $('tr#ingredients td');
+        $('#filter-ingredients').keyup(function () {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
-                // handle a non-successful response
-                error: function (xhr, errmsg, err) { //TODO Kyo Display err, or at least remove parameter
-                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-                            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-                    // TODO Kyo : Cleanup and/or extract a method to avoid copy/paste (see generate.html)
-                }
-            });
-        }
-
-        $("#liked-aliments").on('click', 'li button', function () {
-            $(this).removeClass('btn-danger');
-            $(this).addClass('btn-success');
-            $(this).children().first().removeClass('glyphicon-thumbs-down');
-            $(this).children().first().addClass('glyphicon-thumbs-up');
-
-            var list_item = $(this).closest('li');
-            var aliment_text = jQuery('span.name', list_item).text();
-            var data_dico = {disliked: aliment_text};
-
-            update_tastes(data_dico);
-            list_item.prependTo("#disliked-aliments");
+            $rows_ingreds.show().filter(function () {
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
         });
 
-        $("#disliked-aliments").on('click', 'li button', function () {
-            $(this).removeClass('btn-success');
-            $(this).addClass('btn-danger');
-            $(this).children().first().removeClass('glyphicon-thumbs-up');
-            $(this).children().first().addClass('glyphicon-thumbs-down');
-
-            var list_item = $(this).closest('li');
-            var aliment_text = jQuery('span.name', list_item).text();
-            var data_dico = {liked: aliment_text};
-
-            update_tastes(data_dico);
-            $(this).closest('li').prependTo("#liked-aliments");
-        });
         jQuery(document).ready(function($) {
             $(".clickable-row").click(function() {
                 window.document.location = $(this).data("url");
