@@ -24,8 +24,8 @@
                         <option value="man" {% if physio.sex == 'man' %}selected="selected"{% endif %}>Homme</option>
                         <option value="woman" {% if physio.sex == 'woman' %}selected="selected"{% endif %}>Femme</option>
                     </select>{% endcomment %}
-                    <input type="radio" name="sex" class="sex" value="man" {% if physio.sex == 'man' %}selected="selected"{% endif %}> <i class="fa fa-male fa-3x"></i>
-                    <input type="radio" name="sex" class="sex" value="woman" {% if physio.sex == 'woman' %}selected="selected"{% endif %}> <i class="fa fa-female fa-3x"></i>
+                    <input type="radio" name="sex" class="sex" value="man" {% if physio.sex == 'man' %}checked{% endif %}> <i class="fa fa-male fa-3x"></i>
+                    <input type="radio" name="sex" class="sex" value="woman" {% if physio.sex == 'woman' %}checked{% endif %}> <i class="fa fa-female fa-3x"></i>
                 </div>
             </div>
 
