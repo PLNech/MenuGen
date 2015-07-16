@@ -38,7 +38,7 @@
                 data: $(this).serialize(),
                 context: this,
                 success: function(data, status) {
-                    location.href = '{% url 'profiles' %}';
+                    location.href = '{% url 'generate' %}';
                 },
                 error:  function(data, status) {
                     console.log(data);

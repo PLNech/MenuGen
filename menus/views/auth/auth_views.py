@@ -7,6 +7,7 @@ __author__ = 'kiyoakimenager'
 
 from menus.forms import RegistrationForm, SignInForm
 
+
 def sign_in(request):
     if request.method == "GET":
         form = SignInForm
@@ -19,6 +20,7 @@ def sign_in(request):
         return HttpResponse(content=render(request, 'auth/sign_in.html', {'form': form}),
                             content_type='text/html; charset=utf-8',
                             status=form.error_code)
+
 
 def sign_up(request):
     if request.method == "GET":
@@ -36,6 +38,7 @@ def sign_up(request):
         return HttpResponse(content=render(request, 'auth/sign_up.html', {'form': form}),
                                 content_type='text/html; charset=utf-8',
                                 status=400)
+
 
 @login_required
 def sign_out(request):
