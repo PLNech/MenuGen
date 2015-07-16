@@ -21,12 +21,12 @@
                             <span>Mes Menus</span>
                         </a>
                     </li>
-                    <li>
+                    {% comment %}<li>
                         <a href="{% url 'profiles' %}">
                             <i class="fa fa-users"></i>
                             <span>Mes Convives</span>
                         </a>
-                    </li>
+                    </li>{% endcomment %}
                     <li>
                         <a href="{% url 'profile' request.user.account.profile.pk %}">
                             <i class="fa fa-user"></i>
