@@ -14,7 +14,7 @@
                     </div>
                     <ul class="widget-products">
                         <li>
-                            <a href="#">
+                            <a href="{% url 'profile' request.user.account.profile.pk %}">
                                 <span class="img">
                                     <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
                                 </span>
@@ -53,7 +53,6 @@
 
             <div class="main-box clearfix">
                 <header class="main-box-header clearfix">
-                    <h2>Autres Profils</h2>
                 </header>
                 <div class="main-box-body clearfix">
                     <ul class="widget-products guests">
@@ -91,6 +90,20 @@
                         <li><a href="#tab-regimes" data-toggle="tab">Régimes</a></li>
                         <li><a href="#tab-tastes" data-toggle="tab">Goûts</a></li>
                         <li><a href="#tab-account" data-toggle="tab">Compte</a></li>
+                        {% comment %}<a href="{% url 'profile_remove' profile.id %}"
+                           role="button"
+                           data-toggle="modal"
+                           data-target="#profile-modal"
+                           class="table-link danger">
+                                                    <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                        {% if default %}
+                                                            <i class="fa fa-refresh fa-stack-1x fa-inverse"></i>
+                                                        {% else %}
+                                                            <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                                                        {% endif %}
+                                                    </span>
+                        </a>{% endcomment %}
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab-physio">
