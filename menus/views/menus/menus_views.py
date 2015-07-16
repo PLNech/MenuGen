@@ -34,7 +34,7 @@ def new(request):
         form = MenuForm(data=request.POST)
         if form.is_valid():
             new_menu = form.menu_cache
-            new_menu.people_n = 1
+            new_menu.nb_people = 1
             new_menu.price = 2
             new_menu.difficulty = 3
             new_menu.save()

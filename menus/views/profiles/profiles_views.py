@@ -1,24 +1,29 @@
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from menus.forms import ProfileForm
 import menugen.defaults as default
-from menus.models import Recipe, Ingredient
+from menus.models import Recipe, Ingredient, Profile
 
 
 @login_required
-def index(request):
+def index(request, ajax=False):
     account = request.user.account
     profile = account.profile
     guests = account.guests.order_by('modified').reverse()
     guests_nb = guests.count()
 
+    if ajax:
+        return {
+            'user_profile': profile,
+            'guests':       guests,
+            'guests_nb':    guests_nb,
+        }
     return render(request, 'profiles/guests/index.html', {
-        'user_profile': profile,
-        'guests': guests,
-        'guests_nb': guests_nb,
-
+        'user_profile':     profile,
+        'guests':           guests,
+        'guests_nb':        guests_nb,
     })
 
 
@@ -103,9 +108,12 @@ def update_physio(request):
     sex = request.POST.get('sex')
     birthday = request.POST.get('birthday')
     name = request.POST.get('name')
+    pk = request.POST.get('pk')
 
     if request.user.is_authenticated():
-        p = request.user.account.profile
+        #p = request.user.account.profile
+        p = get_object_or_404(Profile, pk=pk)
+        # TODO : check propriety
         if name:
             p.name = name
         elif sex:
@@ -157,9 +165,8 @@ def update_tastes(request):
     return HttpResponse('tastes updated successfully')
 
 
-def physiology(request, ajax=False):
+def physiology(request, p, ajax=False):
     if request.user.is_authenticated():
-        p = request.user.account.profile
         physio = {
             'name': p.name,
             'sex': p.sex,
@@ -236,13 +243,24 @@ def regimes(request, ajax=False):
         })
 
 
-def profile(request):
+@login_required
+def profile(request, profile_id):
     r = regimes(request, True)
+    g = index(request, True)
+    profile_id = int(profile_id)
+    p = Profile.objects.get(pk=profile_id)
+    pk = p.pk
+    #p = get_object_or_404(Profile, pk=profile_id)
+    # TODO : test propriety
 
     return render(request, 'profiles/_base.html', {
-        'physio': physiology(request, True),
-        'health_regimes_list': r['health_regimes_list'],
-        'value_regimes_list': r['value_regimes_list']
+        'physio':               physiology(request, p, True),
+        'health_regimes_list':  r['health_regimes_list'],
+        'value_regimes_list':   r['value_regimes_list'],
+        'user_profile':         g['user_profile'],
+        'guests':               g['guests'],
+        'guests_nb':            g['guests_nb'],
+        'pk':              pk,
     })
 
 
@@ -256,6 +274,7 @@ def tastes(request):
         'unlikes_ingredients' : unlikes_ingredients,
     })
 
+
 def relike_recipe(request, recipe_id):
     profile = request.user.account.profile;
     recipe = Recipe.objects.get(id=recipe_id)
@@ -266,6 +285,7 @@ def relike_recipe(request, recipe_id):
         'unlikes_recipes' : unlikes_recipes,
         'unlikes_ingredients' : unlikes_ingredients,
     })
+
 
 def relike_ingredient(request, ingredient_id):
     profile = request.user.account.profile;

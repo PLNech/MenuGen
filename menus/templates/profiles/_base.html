@@ -6,7 +6,7 @@
         <div class="col-lg-3 col-md-4 col-sm-4">
             <div class="main-box clearfix">
                 <header class="main-box-header clearfix">
-                    <h2>{{ request.user.username }}</h2>
+                    <h2>{{ request.user.account.profile.name }}</h2>
                 </header>
                 <div class="main-box-body clearfix">
                     <div class="profile-status">
@@ -14,7 +14,7 @@
                     </div>
                     <ul class="widget-products">
                         <li>
-                            <a href="#">
+                            <a href="{% url 'profile' request.user.account.profile.pk %}">
                                 <span class="img">
                                     <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
                                 </span>
@@ -30,36 +30,39 @@
                     </div>
                 </div>
             </div>
+
+            <div class="add-profile pull-right hidden-xs">
+                <a href="{% url 'profile_new' %}"
+                   role="button"
+                   data-toggle="modal"
+                   data-target="#profile-modal"
+                   class="btn btn-primary btn-sm">
+                    {#                        <a class="btn btn-primary btn-sm" href="{% url 'profile_new' %}" role="button">#}
+                    <i class="fa fa-plus-circle fa-lg"></i>
+                    Nouveau profil
+                </a>
+            </div>
+            <div class="modal fade" id="profile-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="vertical-alignment-helper">
+                    <div class="modal-dialog vertical-align-center modal-md">
+                        <div class="modal-content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="main-box clearfix">
                 <header class="main-box-header clearfix">
-                    <h2>Autres Profils</h2>
                 </header>
                 <div class="main-box-body clearfix">
-                    <ul class="widget-products">
-                        <li>
-                            <a href="#">
-                                <span class="img">
-                                    <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
-                                </span>
-                                <span class="product clearfix">
-                                    <span class="name">Paul Louis</span>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="img">
-                                    <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
-                                </span>
-                                <span class="product clearfix">
-                                    <span class="name">Guillaume</span>
-                                </span>
-                            </a>
-                        </li>
+                    <ul class="widget-products guests">
+                        {% for profile in guests %}
+                            {% include 'profiles/guests/guest.html' %}
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
-            <div class="main-box clearfix">
+            {% comment %}<div class="main-box clearfix">
                 <header class="main-box-header clearfix">
                     <h2>Amis</h2>
                 </header>
@@ -77,7 +80,7 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div>{% endcomment %}
         </div>
         <div class="col-lg-9 col-md-8 col-sm-8">
             <div class="main-box clearfix">
@@ -87,6 +90,15 @@
                         <li><a href="#tab-regimes" data-toggle="tab">Régimes</a></li>
                         <li><a href="#tab-tastes" data-toggle="tab">Goûts</a></li>
                         <li><a href="#tab-account" data-toggle="tab">Compte</a></li>
+                        <li class="pull-right">
+                            <a href="{% url 'profile_remove' pk %}"
+                               role="button"
+                               data-toggle="modal"
+                               data-target="#profile-modal"
+                               class="table-link danger">
+                                    <i class="fa fa-trash-o"></i>
+                            </a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab-physio">

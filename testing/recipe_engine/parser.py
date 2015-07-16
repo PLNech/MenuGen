@@ -15,53 +15,56 @@ class Ingredient:
             s = s[:-1]
 
         ingredsHelper = {
-                "lait": "lait entier",
-                "eau": "eau de source, embouteillée (aliment moyen)",
-                "poire": "poire belle hélène",
-                "poires": "poire belle hélène",
-                "œuf": "oeuf",
-                "pommes terre" : "pomme de terre, cuite à l'eau",
-                "lardons" : "lardon fumé, cuit",
-                "lard" : "lardon fumé, cuit",
-                "échalotes": "échalote, crue"
+            "lait": "lait entier",
+            "eau": "eau de source, embouteillée (aliment moyen)",
+            "poire": "poire belle hélène",
+            "poires": "poire belle hélène",
+            "œuf": "oeuf",
+            "pommes terre": "pomme de terre, cuite à l'eau",
+            "lardons": "lardon fumé, cuit",
+            "lard": "lardon fumé, cuit",
+            "échalotes": "échalote, crue"
         }
 
         word2num = {
-                "un demi" : 1/2,
-                "trois-quarts" : 3/4, "trois quarts" : 3/4, "3 quart" : 3/4,
-                "un" : 1, "une" : 1,
-                "deux" : 2,
-                "trois" : 3,
-                "quatre" : 4,
-                "cinq" : 5,
-                "six" : 6,
-                "sept" : 7,
-                "huit" : 8,
-                "neuf" : 9,
-                "dix" : 10, "une dizaine" : 10,
-                "onze" : 11, "une onzaine" : 11,
-                "douze" : 12, "une douzaine" : 12
+            "un demi": 1 / 2,
+            "trois-quarts": 3 / 4, "trois quarts": 3 / 4, "3 quart": 3 / 4,
+            "un": 1, "une": 1,
+            "deux": 2,
+            "trois": 3,
+            "quatre": 4,
+            "cinq": 5,
+            "six": 6,
+            "sept": 7,
+            "huit": 8,
+            "neuf": 9,
+            "dix": 10, "une dizaine": 10,
+            "onze": 11, "une onzaine": 11,
+            "douze": 12, "une douzaine": 12
         }
 
         word2unit = {
-                "quelques gouttes" : "1 g", "un peu" : "1 g", "une pincée" : "1 g", "un soupçon" : "1 g", "une goutte" : "1 g", "un nuage" : "1 g", "un zeste" : "1 g", "un fond" : "1 g",
-                "milligramme" : "mg", "milligrammes" : "mg",
-                "centigramme" : "cg", "centigrammes" : "cg",
-                "decigramme" : "dg", "decigrammes" : "dg",
-                "gramme" : "g", "grammes" : "g",
-                "kilogramme" : "kg", "kilogrammes" : "kg", "kilo" : "kg", "kilos" : "kg",
-                "litre" : "l",
-                "cuillères à soupe" : "cuillère à soupe", "cuillerée" : "cuillère à soupe",
-                "cuillères": "cuillère à café", "cuillères à café" : "cuillère à café",
-                "verres" : "verre",
-                "tranches" : "tranche",
-                "gousses" : "gousse",
-                "boîtes": "boîte", "boites": "boîte"
+            "quelques gouttes": "1 g", "un peu": "1 g", "une pincée": "1 g", "un soupçon": "1 g", "une goutte": "1 g",
+            "un nuage": "1 g", "un zeste": "1 g", "un fond": "1 g",
+            "milligramme": "mg", "milligrammes": "mg",
+            "centigramme": "cg", "centigrammes": "cg",
+            "decigramme": "dg", "decigrammes": "dg",
+            "gramme": "g", "grammes": "g",
+            "kilogramme": "kg", "kilogrammes": "kg", "kilo": "kg", "kilos": "kg",
+            "litre": "l",
+            "cuillères à soupe": "cuillère à soupe", "cuillerée": "cuillère à soupe",
+            "cuillères": "cuillère à café", "cuillères à café": "cuillère à café",
+            "verres": "verre",
+            "tranches": "tranche",
+            "gousses": "gousse",
+            "boîtes": "boîte", "boites": "boîte"
         }
 
-        units = [ "mg", "g", "cg", "kg", "l", "cl", "cuillère à soupe", "cuillère à café", "verre", "tranche" , "gousse", "boîte", "pot" ]
-        
-        useless = [ "de", "branches", "feuilles", "liquide", "grains", "blancs", "grosses", "gros", "petites", "petite", "tiède", "cuisses", "morceau", "bâton", "séchée", "bûche", "belles", "filets" ]
+        units = ["mg", "g", "cg", "kg", "l", "cl", "cuillère à soupe", "cuillère à café", "verre", "tranche", "gousse",
+                 "boîte", "pot"]
+
+        useless = ["de", "branches", "feuilles", "liquide", "grains", "blancs", "grosses", "gros", "petites", "petite",
+                   "tiède", "cuisses", "morceau", "bâton", "séchée", "bûche", "belles", "filets"]
 
         # step 1: remove useless words
         for w in useless:
@@ -112,13 +115,13 @@ class Ingredient:
                     except:
                         pass
                 else:
-                    if word in units:
+                    if word.lower() in units:
                         self.unit = word
                     else:
                         for u in units:
                             if u.split(" ")[0] == word:
                                 self.unit = word
-                                self.name = word # in case not a unit
+                                self.name = word  # in case not a unit
                                 in_unit = True
                         if after_quantity:
                             after_quantity = False

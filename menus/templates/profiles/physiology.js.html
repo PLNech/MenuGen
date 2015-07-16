@@ -12,6 +12,7 @@
 
     // AJAX for posting
     function update_physio(data_dico) {
+        data_dico['pk'] = '{{ pk }}';
         $.ajax({
             url : '{% url 'update_physio' %}', // the endpoint
             type : "POST", // http method

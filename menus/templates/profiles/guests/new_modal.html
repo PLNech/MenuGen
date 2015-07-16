@@ -11,13 +11,13 @@
 </div>
 <div class="modal-body">
     <form class="form-horizontal" id="profile_new-form" action="{% url 'profile_new' %}" method="POST">
-            {% if form.errors %}
-                <p class="danger">
-                    {{ form.error_messages }}
-                </p>
-            {% endif %}
-            {% csrf_token %}
-            {{ form.as_table }}
+        {% if form.errors %}
+            <p class="danger">
+                {{ form.error_messages }}
+            </p>
+        {% endif %}
+        {% csrf_token %}
+        {{ form.as_table }}
         </br>
         <div class="control-group">
             <div class="controls text-right">
@@ -31,17 +31,17 @@
     <script>
         $('.modal-body').on('submit', '#profile_new-form', function() {
             $.ajax({
-                is_allowed: false,
-                type: $(this).attr('method'),
-                url: this.action,
-                data: $(this).serialize(),
-                context: this,
-                success: function(data, status) {
+                is_allowed:     false,
+                type:           $(this).attr('method'),
+                url:            this.action,
+                data:           $(this).serialize(),
+                context:        this,
+                success:        function(data, status) {
                     $('#profile-modal').modal('hide');
-                    var guests_table = $("table#guests");
-                    guests_table.find('tbody:first').prepend(data);
+                    var guests_table = $(".guests");
+                    guests_table.find('li:first').prepend(data);
                 },
-                error:  function(data, status) {
+                error:          function(data, status) {
                     $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);
                 }
             });
