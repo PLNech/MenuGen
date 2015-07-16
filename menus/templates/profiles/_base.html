@@ -88,7 +88,9 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab-physio" data-toggle="tab">Physiologie</a></li>
                         <li><a href="#tab-regimes" data-toggle="tab">Régimes</a></li>
+{% comment %}
                         <li><a href="#tab-tastes" data-toggle="tab">Goûts</a></li>
+{% endcomment %}
                         {% if user.account.profile.pk != pk  %}
                             <li class="pull-right">
                                 <a href="{% url 'profile_remove' pk %}"
