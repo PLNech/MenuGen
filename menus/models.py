@@ -23,11 +23,11 @@ SEX = (
 )
 
 ACTIVITY = (
-    ('low', 'Sédentaire'),
-    ('light', 'Légère'),
-    ('moderate', 'Modérée'),
-    ('active', 'Régulière'),
-    ('extreme', 'Intense'),
+    (0, 'Sédentaire'),
+    (1, 'Légère'),
+    (2, 'Modérée'),
+    (3, 'Régulière'),
+    (4, 'Intense'),
 )
 
 MEAL = (
@@ -73,6 +73,7 @@ class Profile(models.Model):
 
 
 class RecipeToIngredient(models.Model):
+    #FIXME SHOULD BE UNIQUE FOR A RECIPE/INGREDIENT PAIR!
     recipe = models.ForeignKey('Recipe')
     ingredient = models.ForeignKey('Ingredient')
     quantity = models.FloatField(blank=True, null=True, default=None)
@@ -126,6 +127,7 @@ class Ingredient(models.Model):
 
 
 class IngredientNutriment(models.Model):
+    #FIXME SHOULD BE UNIQUE FOR A INGREDIENT/NUTRIMENT PAIR!
     ingredient = models.ForeignKey('Ingredient')
     nutriment = models.ForeignKey('Nutriment')
     quantity = models.FloatField()

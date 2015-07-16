@@ -32,16 +32,22 @@ def generate_placements_detail(request):
         Set menu's matrix size based on nb_days and nb meal per day
         Set matrix content to true
     """
-    nb_days = int(request.POST['nb_days'])
-    request.session['matrix'] = [[1 for x in range(nb_days)] for x in range(2)]
+
+    nb_days = request.session.get('nb_days')
+    if 'nb_days' in request.POST:
+        nb_days = int(request.POST['nb_days'])
+        if nb_days != request.session['nb_days']:
+            request.session['nb_days'] = nb_days
+            request.session['matrix'] = [[1 for x in range(nb_days)] for x in range(2)]
+
     return render(request, 'menus/generate/placements_detail.html',
-                  {'days_range': range(0, nb_days)})
+                  {'days_range': range(0, nb_days),
+                   'meals_matrix': request.session['matrix']})
 
 
 def update_gen_criteria(request):
     """ This method is used as ajax call in order to update the pre-generation """
 
-    print(request.POST)
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
 
@@ -65,6 +71,21 @@ def update_gen_criteria(request):
         day = int(request.POST.get('matrix[day]'))
         meal = int(request.POST.get('matrix[meal]'))
         request.session['matrix'][meal][day] = int(request.POST.get('matrix[val]'))
+        request.session.modified = True
+
+    if 'lunch' in request.POST:
+        is_checked = int(request.POST.get('lunch'))
+        lunches = request.session['matrix'][0]
+        print(lunches)
+        request.session['matrix'][0] = [is_checked for x in lunches]
+        request.session.modified = True
+
+    if 'dinner' in request.POST:
+        is_checked = int(request.POST.get('dinner'))
+        dinners = request.session['matrix'][1]
+        print(dinners)
+        request.session['matrix'][1] = [is_checked for x in dinners]
+        request.session.modified = True
 
     print(request.session.items())
     return HttpResponse('ok')

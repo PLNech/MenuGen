@@ -1,3 +1,4 @@
+import numpy
 from menus.algorithms import adapter
 
 __author__ = 'PLNech'
@@ -134,6 +135,7 @@ def generate_recipe(name):
     r.price = random.randint(1, 3)
     return r
 
+
 def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
     """
 
@@ -184,6 +186,33 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
         planning.append(daily_planning)
         planning_str += "]\n"
     print(planning_str)
+    return planning
+
+
+def generate_planning_from_matrix(matrix, menu):
+    """
+
+    :type nb_days: int
+    :type nb_meals_per_day: int
+    :type  menu: model.menu.menu.Menu
+    """
+
+    planning = []
+    random.shuffle(menu.genes)
+
+    for y in range(len(matrix)):
+        row = []
+        for x in range(len(matrix[y])):
+            menu_item = None
+            if matrix[y][x]:
+                dish = menu.genes.pop()
+                dish2 = menu.genes.pop()
+                dish3 = menu.genes.pop()
+                menu_item = {'starter': adapter.dish2recipe(dish),
+                             'main_course': adapter.dish2recipe(dish2),
+                             'dessert': adapter.dish2recipe(dish3)}
+            row.append(menu_item)
+        planning.append(row)
     return planning
 
 

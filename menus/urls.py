@@ -33,6 +33,8 @@ urlpatterns += patterns(
     url(r'^generation/meal_details/(?P<starter_id>\d+)-(?P<main_course_id>\d+)-(?P<dessert_id>\d+)$',
         'generation_meal_details',
         name='generation_meal_details'),
+    url(r'^generation/unlike_recipe/(?P<recipe_id>\d+)$', 'unlike_recipe_message', name='unlike_recipe_message'),
+    url(r'^generation/unlike_ingredient/(?P<ingredient_id>\d+)$', 'unlike_ingredient_message', name='unlike_ingredient_message'),
 )
 
 """
@@ -53,6 +55,7 @@ urlpatterns += patterns(
     'menus.views.profiles.profiles_views',
 
     url(r'^profiles$', 'index', name='profiles'),
+    url(r'^profile$', 'profile', name='profile'),
 
     url(r'^profiles/new', 'new', name='profile_new'),
     url(r'^profiles/(?P<profile_id>[0-9]+)/detail$', 'detail', name='profile_detail'),
@@ -64,6 +67,8 @@ urlpatterns += patterns(
     url(r'^physiology$', 'physiology', name='physiology'),
     url(r'^regimes$', 'regimes', name='regimes'),
     url(r'^tastes$', 'tastes', name='tastes'),
+    url(r'^tastes/relike_recipe/(?P<recipe_id>\d+)$', 'relike_recipe', name='relike_recipe'),
+    url(r'^tastes/relike_ingredient/(?P<ingredient_id>\d+)$', 'relike_ingredient', name='relike_ingredient'),
 )
 
 """

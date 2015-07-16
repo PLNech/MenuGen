@@ -15,8 +15,8 @@
             </div>
             <div class="pull-right hidden-xs">
                 {% if not user.is_authenticated %}
-                    <a href="{% url 'tastes' %}" class="btn btn-primary">
-                        <i class="fa fa-angle-double-left"></i> Mes goûts
+                    <a href="{% url 'regimes' %}" class="btn btn-primary">
+                        <i class="fa fa-angle-double-left"></i> Mes régimes
                     </a>
                 {% endif %}
                 <a href="{% url 'generation' %}" class="btn btn-primary" id="generate-button">
@@ -34,20 +34,18 @@
                         <form class="form-horizontal" name="criteria" action="{% url 'physiology' %}" method="POST">
                             <div class="form-group">
                                 <label for="budgetRadioOptions" class="col-sm-3 control-label">Budget</label>
-
                                 <div class="col-sm-9">
-                                    <label class="radio-inline">
-                                        <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio1"
-                                               value="0"> Bon marché
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio2"
-                                               value="1"> Moyen
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio3"
-                                               value="2"> Assez cher
-                                    </label>
+                                    <div class="budgets btn-group" data-toggle="buttons">
+                                        <label class="btn btn-primary active">
+                                            <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio1" value="0"> Bon marché
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio2" value="1"> Moyen
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio3" value="2"> Assez cher
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -55,22 +53,20 @@
                                 <label for="DifficultyRadioOptions" class="col-sm-3 control-label">Difficulté</label>
 
                                 <div class="col-sm-9">
-                                    <label class="radio-inline">
-                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions"
-                                               id="inlineRadio1" value="option1"> Très facile
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions"
-                                               id="inlineRadio2" value="option2"> Facile
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions"
-                                               id="inlineRadio3" value="option3"> Moyenne
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input class="difficulty" type="radio" name="DifficultyRadioOptions"
-                                               id="inlineRadio4" value="option4"> Difficile
-                                    </label>
+                                    <div class="difficulties btn-group" data-toggle="buttons">
+                                        <label class="btn btn-primary active">
+                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio1" value="option1"> Très facile
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio2" value="option2"> Facile
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Moyenne
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Difficile
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -127,11 +123,10 @@
                 </div>
             </div>
 
-
             <div class="col-md-6">
                 <div class="main-box clearfix">
                     <div id="contextual-container">
-                        {% include 'menus/generate/placements_detail.html' with days_range=days_range %}
+                        {% include 'menus/generate/placements_detail.html' with meals_matrix=meals_matrix days_range=days_range %}
                     </div>
                 </div>
             </div>
@@ -241,12 +236,13 @@
                 });
             }
 
-            $('.budget').on('click', function () {
-                var data_dico = {budget: $(this).val()};
+            $('.budgets').on('click',  function () {
+                var data_dico = {budget: $(this).find('input').val()};
                 update_pre_generation(data_dico);
             });
-            $('.difficulty').on('click', function () {
-                var data_dico = {difficulty: $(this).val()};
+
+            $('.difficulties').on('click', function () {
+                var data_dico = {difficulty: $(this).find('input').val()};
                 update_pre_generation(data_dico);
             });
             $('#sel-nb_days').on('change', function () {

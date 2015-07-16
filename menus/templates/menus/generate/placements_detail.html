@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load utils_extras %}
 
 <header class="main-box-header clearfix">Vue détaillée - Nombre de repas</header>
 
@@ -8,7 +9,7 @@
             <thead>
             <tr>
                 <th>Repas</th>
-                {% for i in days_range %}
+                {% for i in meals_matrix.0 %}
                     <th>Jour {{ forloop.counter }}</th>
                 {% endfor %}
                 <th>Tous</th>
@@ -18,31 +19,46 @@
             <tr>
                 <th>Déjeuner</th>
                 <div id="lunches">
-                    {% for i in days_range %}
+                    {% for meal in meals_matrix.0 %}
                         <td>
                             <div class="checkbox-nice">
-                                <input class="lunch" type="checkbox" id="m-checkbox-lunch-{{ i }}" value={{ i }} checked>
-                                <label for="m-checkbox-lunch-{{ i }}"></label>
+                                <input class="lunch" type="checkbox" id="m-checkbox-lunch-{{ forloop.counter }}" value={{ forloop.counter }}
+                                        {% if meal %}checked{% endif %}>
+                                <label for="m-checkbox-lunch-{{ forloop.counter }}"></label>
                             </div>
                         </td>
                     {% endfor %}
+                    <td>
+                        <div class="checkbox-nice">
+                            <input type="checkbox" id="m-checkbox-lunches-all" checked>
+                            <label for="m-checkbox-lunches-all"></label>
+                        </div>
+                    </td>
                 </div>
             </tr>
             <tr>
                 <th>Dîner</th>
-                {% for i in days_range %}
+                {% for meal in meals_matrix.1 %}
                     <td class="dinners">
                         <div class="checkbox-nice">
-                            <input class="dinner" type="checkbox" id="m-checkbox-dinner-{{ i }}" value={{ i }} checked>
-                            <label for="m-checkbox-dinner-{{ i }}"></label>
+                            <input class="dinner" type="checkbox" id="m-checkbox-dinner-{{ forloop.counter }}" value={{ forloop.counter }}
+                                    {% if meal %}checked{% endif %}>
+                            <label for="m-checkbox-dinner-{{ forloop.counter }}"></label>
                         </div>
                     </td>
                 {% endfor %}
+                <td>
+                    <div class="checkbox-nice">
+                        <input type="checkbox" id="m-checkbox-dinners-all" checked>
+                        <label for="m-checkbox-dinners-all"></label>
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
+
 {% block js %}
     <script src="{% static 'vendor/js/jquery.js' %}"></script>
     <script src="{% static "jquery.cookie.js" %}"></script>
@@ -83,18 +99,46 @@
                 });
             };
             $('input.lunch').each(function (index) {
+                all_checked = all_checked && $(this)[0].checked;
+                $("#m-checkbox-lunches-all").attr('checked', $(this)[0].checked);
                 $(this).on("change", function () {
                     var is_checked = $(this)[0].checked ? 1 : 0;
                     var data_dico = {matrix: {day: index, meal: '0', val: is_checked}};
                     update_pre_generation(data_dico);
                 });
             });
+            var all_checked = false;
             $('input.dinner').each(function (index) {
+                all_checked = all_checked && $(this)[0].checked;
+                $("#m-checkbox-dinners-all").attr('checked', $(this)[0].checked);
                 $(this).on("change", function () {
                     var is_checked = $(this)[0].checked ? 1 : 0;
                     var data_dico = {matrix: {day: index, meal: '1', val: is_checked}};
                     update_pre_generation(data_dico);
                 });
+            });
+
+
+            $('#m-checkbox-lunches-all').on("change", function () {
+                var box = $(this)[0];
+                var is_checked = box.checked ? 1 : 0;
+                $('input.lunch').each(function (index) {
+                    console.log(box.checked)
+                    $(this).attr('checked', box.checked);
+                });
+                var data_dico = {lunch: is_checked};
+                update_pre_generation(data_dico);
+            });
+
+            $('#m-checkbox-dinners-all').on("change", function () {
+                var box = $(this)[0];
+                var is_checked = box.checked ? 1 : 0;
+                $('input.dinner').each(function (index) {
+                    console.log(box.checked)
+                    $(this).attr('checked', box.checked);
+                });
+                var data_dico = {dinner: is_checked};
+                update_pre_generation(data_dico);
             });
         });
     </script>
