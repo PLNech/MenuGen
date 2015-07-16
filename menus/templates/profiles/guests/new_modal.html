@@ -39,7 +39,7 @@
                 success:        function(data, status) {
                     $('#profile-modal').modal('hide');
                     var guests_table = $(".guests");
-                    guests_table.find('li:first').prepend(data);
+                    guests_table.find('#guests-top').prepend(data);
                 },
                 error:          function(data, status) {
                     $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);

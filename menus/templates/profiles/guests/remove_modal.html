@@ -35,7 +35,7 @@
                         selector.fadeOut(700, function() {
                             $(this).fadeOut();
                         });
-
+                        window.location.replace("/profile");
                     },
                     error:  function(data, status) {
                         $('#profile-modal').removeData("bs.modal").find(".modal-content").html(data.responseText);
