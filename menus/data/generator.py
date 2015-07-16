@@ -191,12 +191,8 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
 
 def generate_planning_from_matrix(matrix, menu):
     """
-
-    :type nb_days: int
-    :type nb_meals_per_day: int
-    :type  menu: model.menu.menu.Menu
     """
-
+    print("Generating from matrix: %i/%i" % (len(menu.genes), numpy.sum(matrix)))
     planning = []
     random.shuffle(menu.genes)
 
@@ -205,6 +201,7 @@ def generate_planning_from_matrix(matrix, menu):
         for x in range(len(matrix[y])):
             menu_item = None
             if matrix[y][x]:
+                print("Filling matrix in %i*%i: %i" % (x, y, matrix[y][x]))
                 dish = menu.genes.pop()
                 dish2 = menu.genes.pop()
                 dish3 = menu.genes.pop()

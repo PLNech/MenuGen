@@ -41,3 +41,9 @@ h5.recipe-title, .unlike-recipe-form {
     text-decoration: underline;
     color: #006611;
 }
+
+.btn-details {
+    width: 100px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
