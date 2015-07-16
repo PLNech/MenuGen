@@ -70,8 +70,20 @@ def generation(request):
     else:
         planning = generate_planning_from_list(nb_days, nb_meals, menu)
 
+    shopping_list = []
+    for meal_time in planning:
+        for meal in meal_time:
+            if meal:
+                print(meal)
+                main_course = meal['main_course']
+                for i in main_course.ingredients.all():
+                    shopping_list.append(i.name)
 
-    return render(request, 'menus/generation/generation.html', {'planning': planning, 'days_range': range(0, nb_days)})
+    return render(request, 'menus/generation/generation.html', {
+        'planning': planning,
+        'days_range': range(0, nb_days),
+        'shopping_list': shopping_list
+    })
 
 
 def replace_if_none(var, default):
