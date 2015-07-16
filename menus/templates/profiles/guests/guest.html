@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 <li>
-    <a href="#">
+    <a href="{% url 'profile' profile.pk %}">
         <span class="img">
             <img src="{% static 'vendor/img/default-avatar.png' %}" alt="">
         </span>
