@@ -28,6 +28,10 @@ def run(run_name, init_fittest=None):
 
     if init_fittest is None:
         init_fittest = population.get_at(0)
+
+    if Config.fake_run:
+        return init_fittest
+
     init_score = init_fittest.get_score()
     stats.save_progress(run_name, 0, init_fittest.genes)
 
