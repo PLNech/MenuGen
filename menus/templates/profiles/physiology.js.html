@@ -93,8 +93,8 @@
         var data_dico = {name: $("#name").val()};
         update_physio(data_dico);
     });
-    $('#sex').on('change', function (e) {
-        var data_dico = {sex: $('select#sex option:selected').val()};
+    $('.sex').on('change', function (e) {
+        var data_dico = {sex: $('input[name=sex]:checked').val()};
         update_physio(data_dico);
     });
     {% comment %}$('#height').on('change', function (e) {
