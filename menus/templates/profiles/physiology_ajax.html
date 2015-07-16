@@ -8,7 +8,7 @@
         <form class="form-horizontal" name="physiology" action="{% url 'physiology' %}" method="POST">
 
             <div class="form-group">
-                <label for="name" class="col-sm-2 control-label">Nom du profil</label>
+                <label for="name" class="col-sm-2 control-label">Profil de </label>
                 <div class="col-sm-2">
                     <input type="text" class="form-control" id="name" name="name" placeholder="Nom du profil" value="{{ physio.name }}">
                 </div>
@@ -18,12 +18,8 @@
             <div class="form-group">
                 <label for="sex" class="col-sm-2 control-label">Sexe</label>
                 <div class="col-sm-2">
-                    <i class="fa fa-female fa-3x"></i>
-                    <i class="fa fa-male fa-3x"></i>
-                    <select class="form-control" id="sex" name="sex">
-                        <option value="man" {% if physio.sex == 'man' %}selected="selected"{% endif %}>Homme</option>
-                        <option value="woman" {% if physio.sex == 'woman' %}selected="selected"{% endif %}>Femme</option>
-                    </select>
+                    <input type="radio" name="sex" class="sex" value="man" {% if physio.sex == 'man' %}checked{% endif %}> <i class="fa fa-male fa-3x"></i>
+                    <input type="radio" name="sex" class="sex" value="woman" {% if physio.sex == 'woman' %}checked{% endif %}> <i class="fa fa-female fa-3x"></i>
                 </div>
             </div>
 
