@@ -28,3 +28,16 @@ div.regime_desc {
     min-height: 100%;
     height: 100%;
 }
+
+h5.recipe-title, .unlike-recipe-form {
+    margin: 20px 0;
+}
+
+.recipe-title-container {
+    height: 80px;
+}
+
+.unlikes-relike:hover{
+    text-decoration: underline;
+    color: #006611;
+}

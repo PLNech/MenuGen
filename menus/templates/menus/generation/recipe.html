@@ -1,12 +1,13 @@
-<h5>{{ recipe.name }}</h5>
+<div class="recipe-title-container">
+    <h5 class="recipe-title">{{ recipe.name }}</h5>
 
-<form class="form-horizontal" id="unlike-recipe-form" action="{% url 'unlike_recipe_message' recipe.id %}" method="POST">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger btn-xs">
-        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-    </button>
-</form>
-
+    <form class="form-horizontal unlike-recipe-form" action="{% url 'unlike_recipe_message' recipe.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-xs">
+            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+        </button>
+    </form>
+</div>
 <hr>
 
 {% if recipe.prep_time != 0 %}

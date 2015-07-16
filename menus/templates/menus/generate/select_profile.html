@@ -1,2 +1,48 @@
 <header class="main-box-header clearfix">Ajouter un profil</header>
-<p>Vous devez être connecté pour inviter des convives</p>
+<div class="main-box-body clearfix">
+    {% if not user.is_authenticated %}
+        <p>Vous devez être connecté pour inviter des convives</p>
+    {% else %}
+        <table id="users" class="table user-list table-hover">
+            <thead>
+            </thead>
+            <tbody>
+            <ul id="email-list">
+                {% for profile in profiles %}
+                    <li class="unread clickable-row" data-href="email-detail.html">
+                        <div class="chbox">
+                            <div class="checkbox-nice">
+                                <input type="checkbox" id="m-checkbox-1">
+                                <label for="m-checkbox-1"></label>
+                            </div>
+                        </div>
+                        <div class="message">
+                            {% for diet in profile.diets.all %}
+                                <span class="label label-success">{{ diet.name }}</span>
+                                {#                        <span class="subject">Like your new movie -</span>#}
+                                {#                        <span class="body">Hi beauty, I watched your movies last night.</span>#}
+                            {% empty %}
+                                <span class="label label-success">Aucun régime</span>
+                            {% endfor %}
+                        </div>
+                        <div class="meta-info">
+                            <a href="#" class="attachment">
+                            <span class="fa-stack fa-1x">
+                                <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                                <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+                            </span>
+                            </a>
+                        </div>
+                    </li>
+                {% empty %}
+                    <div class="alert alert-info">
+                        <p>Aucun profiles n'est associer à votre compte.
+                            Pour ajouter de nouveau convives a cette generation veillez d'abord
+                            <a href="{% url 'profiles' %}" class="alert-link">créez de nouveaux profile</a>.</p>
+                    </div>
+                {% endfor %}
+            </ul>
+            </tbody>
+        </table>
+    {% endif %}
+</div>

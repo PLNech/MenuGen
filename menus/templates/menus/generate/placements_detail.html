@@ -1,28 +1,145 @@
-<header class="main-box-header clearfix">Vue détaillée - Nombre de repas</header>
-<div class="row">
-    <table class="table">
-    <thead>
-    <tr>
-        <th>Repas</th>
-        {% for i in days_range %}
-                <th>Jour {{i}}</th>
-            {% endfor %}
-        <th>Tous</th>
-    </tr>
-    </thead>
-        <tr>
-            <th>Déjeuner</th>
-            {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..." checked></td>
-            {% endfor %}
-        </tr>
-        <tr>
-            <th>Dîner</th>
-            {% for i in days_range %}
-                <td><input type="checkbox" aria-label="..." checked></td>
-            {% endfor %}
-        </tr>
+{% load staticfiles %}
+{% load utils_extras %}
 
-    </table>
+<header class="main-box-header clearfix">Vue détaillée - Nombre de repas</header>
+
+<div class="main-box-body clearfix">
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Repas</th>
+                {% for i in meals_matrix.0 %}
+                    <th>Jour {{ forloop.counter }}</th>
+                {% endfor %}
+                <th>Tous</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Déjeuner</th>
+                <div id="lunches">
+                    {% for meal in meals_matrix.0 %}
+                        <td>
+                            <div class="checkbox-nice">
+                                <input class="lunch" type="checkbox" id="m-checkbox-lunch-{{ forloop.counter }}" value={{ forloop.counter }}
+                                        {% if meal %}checked{% endif %}>
+                                <label for="m-checkbox-lunch-{{ forloop.counter }}"></label>
+                            </div>
+                        </td>
+                    {% endfor %}
+                    <td>
+                        <div class="checkbox-nice">
+                            <input type="checkbox" id="m-checkbox-lunches-all" checked>
+                            <label for="m-checkbox-lunches-all"></label>
+                        </div>
+                    </td>
+                </div>
+            </tr>
+            <tr>
+                <th>Dîner</th>
+                {% for meal in meals_matrix.1 %}
+                    <td class="dinners">
+                        <div class="checkbox-nice">
+                            <input class="dinner" type="checkbox" id="m-checkbox-dinner-{{ forloop.counter }}" value={{ forloop.counter }}
+                                    {% if meal %}checked{% endif %}>
+                            <label for="m-checkbox-dinner-{{ forloop.counter }}"></label>
+                        </div>
+                    </td>
+                {% endfor %}
+                <td>
+                    <div class="checkbox-nice">
+                        <input type="checkbox" id="m-checkbox-dinners-all" checked>
+                        <label for="m-checkbox-dinners-all"></label>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
+{% block js %}
+    <script src="{% static 'vendor/js/jquery.js' %}"></script>
+    <script src="{% static "jquery.cookie.js" %}"></script>
+    <script>
+        // Move header request handler method in a seperate file
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrftoken'));
+                }
+            }
+        });
+    </script>
+    <script>
+        $(document).ready( function() {
+            function update_pre_generation(data_dico) {
+                $.ajax({
+                    url : '{% url 'update_gen_criteria' %}', // the endpoint
+                    type : "POST", // http method
+                    data : data_dico, // data sent with the post request
+                    // handle a successful response
+                    success: function (json) {
+                        console.log(json); // log the returned json to the console
+                        console.log("success"); // another sanity check
+                    },
+
+                    // handle a non-successful response
+                    error: function (xhr, errmsg, err) { //TODO Kyo Display err, or at least remove parameter
+                        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                        // TODO Kyo : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
+                    }
+                });
+            };
+            $('input.lunch').each(function (index) {
+                all_checked = all_checked && $(this)[0].checked;
+                $("#m-checkbox-lunches-all").attr('checked', $(this)[0].checked);
+                $(this).on("change", function () {
+                    var is_checked = $(this)[0].checked ? 1 : 0;
+                    var data_dico = {matrix: {day: index, meal: '0', val: is_checked}};
+                    update_pre_generation(data_dico);
+                });
+            });
+            var all_checked = false;
+            $('input.dinner').each(function (index) {
+                all_checked = all_checked && $(this)[0].checked;
+                $("#m-checkbox-dinners-all").attr('checked', $(this)[0].checked);
+                $(this).on("change", function () {
+                    var is_checked = $(this)[0].checked ? 1 : 0;
+                    var data_dico = {matrix: {day: index, meal: '1', val: is_checked}};
+                    update_pre_generation(data_dico);
+                });
+            });
+
+
+            $('#m-checkbox-lunches-all').on("change", function () {
+                var box = $(this)[0];
+                var is_checked = box.checked ? 1 : 0;
+                $('input.lunch').each(function (index) {
+                    console.log(box.checked)
+                    $(this).attr('checked', box.checked);
+                });
+                var data_dico = {lunch: is_checked};
+                update_pre_generation(data_dico);
+            });
+
+            $('#m-checkbox-dinners-all').on("change", function () {
+                var box = $(this)[0];
+                var is_checked = box.checked ? 1 : 0;
+                $('input.dinner').each(function (index) {
+                    console.log(box.checked)
+                    $(this).attr('checked', box.checked);
+                });
+                var data_dico = {dinner: is_checked};
+                update_pre_generation(data_dico);
+            });
+        });
+    </script>
+{% endblock %}
