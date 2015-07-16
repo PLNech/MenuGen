@@ -9,7 +9,7 @@ def landing(request):
     # if 'disliked_aliments' not in request.session:
     #     request.session['disliked_aliments'] = []
 
-    return render(request, 'landing.html', {
+    return render(request, 'landing_s.html', {
         'landing': True})
 
 
