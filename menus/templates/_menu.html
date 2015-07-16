@@ -28,7 +28,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'profile' pk %}">
+                        <a href="{% url 'profile' request.user.account.profile.pk %}">
                             <i class="fa fa-user"></i>
                             <span>Mon Profil</span>
                         </a>
