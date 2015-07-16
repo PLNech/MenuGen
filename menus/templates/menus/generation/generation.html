@@ -16,11 +16,11 @@
                         <i class="fa fa-angle-double-left"></i> Paramètres de la génération
                     </a>
                     <a class="btn btn-warning"
-                           href="{% url 'sign_up'%}"
-                           role="button"
-                           data-toggle="modal"
-                           data-target="#auth-modal">
-                           Sauvegarder et créer un compte <i class="fa fa-angle-double-right"></i>
+                       href="{% url 'sign_up'%}"
+                       role="button"
+                       data-toggle="modal"
+                       data-target="#auth-modal">
+                        Sauvegarder et créer un compte <i class="fa fa-angle-double-right"></i>
                     </a>
 
                     <!-- Shopping list accordion -->
@@ -49,12 +49,12 @@
 
                 {% else %}
                     <a class="btn btn-warning"
-                           href="{% url 'menu_new'%}"
-                           role="button"
-                           data-toggle="modal"
-                           data-target="#auth-modal">
-                            Sauvegarder ce menu <i class="fa fa-angle-double-right"></i>
-                        </a>
+                       href="{% url 'menu_new'%}"
+                       role="button"
+                       data-toggle="modal"
+                       data-target="#auth-modal">
+                        Sauvegarder ce menu <i class="fa fa-angle-double-right"></i>
+                    </a>
                 {% endif %}
             </div>
         </div>
@@ -70,10 +70,10 @@
         <div class="main-box clearfix">
             <div class="main-box-body clearfix">
                 <div class="table-responsive">
-                <table id="planning" class="table">
-                    {% for meal_time in planning %}
-                        {% if forloop.counter0 == 0 %}
-                            <th></th>
+                    <table id="planning" class="table">
+                        {% for meal_time in planning %}
+                            {% if forloop.counter0 == 0 %}
+                                <th></th>
                                 {% for meal in meal_time %}
                                     <th class="col-md-{{ meal_time|length|column_size }}">
                                         <h3>Jour {{ forloop.counter }}</h3>
@@ -81,29 +81,35 @@
                                     </th>
                                 {% endfor %}
                             {% endif %}
-                        <tr>
-                            <th>{{ forloop.counter0|meal_slot_name }}</th>
-                            {% for meal in meal_time %}
-                                <td>
-                                    {% if meal %}
-                                        <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
-                                            <a data-toggle="modal"
-                                               href="{% url 'generation_meal_details' starter_id=meal.starter.id main_course_id=meal.main_course.id dessert_id=meal.dessert.id %}"
-                                               data-target="#mealDetailsModal">
-                                                DETAILS
-                                            </a>
-                                            {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
+                            <tr>
+                                <th>{{ forloop.counter0|meal_slot_name }}</th>
+                                {% for meal in meal_time %}
+                                    <td>
+                                        <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well text-center" draggable="true">
+                                            {% if meal %}
+                                                {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
+                                                <btn class="btn btn-primary btn-details center-block" data-toggle="modal"
+                                                     href="{% url 'generation_meal_details' starter_id=meal.starter.id main_course_id=meal.main_course.id dessert_id=meal.dessert.id %}"
+                                                     data-target="#mealDetailsModal">
+                                                    Détails
+                                                </btn>
+                                            {% else %}
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <br>
+                                                        <p><i>Pas de repas prévu</i></p>
+                                                    </div>
+                                                </div>
+                                                <btn class="btn btn-primary btn-details center-block disabled" data-toggle="modal">
+                                                Détails
+                                                </btn>
+                                            {% endif %}
                                         </div>
-                                    {% else %}
-                                        <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well" draggable="true">
-                                            <p>FREE</p>
-                                        </div>
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </table>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </table>
                 </div>
             </div>
         </div>

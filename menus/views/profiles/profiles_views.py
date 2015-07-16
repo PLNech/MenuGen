@@ -153,7 +153,7 @@ def update_tastes(request):
     return HttpResponse('tastes updated successfully')
 
 
-def physiology(request, p, ajax=False):
+def physiology(request, p=None, ajax=False):
     if request.user.is_authenticated():
         physio = {
             'name': p.name,
