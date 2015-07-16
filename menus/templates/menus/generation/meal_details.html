@@ -31,6 +31,8 @@
 
 {% block js %}
     <script>
+
+        // unlike recipe
         $('.modal-body').on('submit', '#unlike-recipe-form', function() {
             $.ajax({
                 is_allowed: false,
@@ -44,10 +46,8 @@
             });
             return false;
         });
-        $(document).on("hidden.bs.modal", function (e) {
-            $(e.target).removeData("bs.modal").find(".modal-content").empty();
-        });
 
+        // unlike ingredient
         $('.modal-body').on('submit', '#unlike-ingredient-form', function() {
             $.ajax({
                 is_allowed: false,
@@ -61,6 +61,7 @@
             });
             return false;
         });
+
         $(document).on("hidden.bs.modal", function (e) {
             $(e.target).removeData("bs.modal").find(".modal-content").empty();
         });

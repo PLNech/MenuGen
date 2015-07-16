@@ -24,3 +24,5 @@ def statistics(request):
 def account(request):
     return render(request, 'profiles/account.html', {})
 
+def call_to_action(request):
+    return render(request, 'call_to_action_modal.html', {})

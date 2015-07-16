@@ -8,6 +8,7 @@ urlpatterns = patterns(
 
     url(r'^statistics$', 'statistics', name='statistics'),
     url(r'^account$', 'account', name='account'),
+    url(r'^generation/cta$', 'call_to_action', name='call_to_action'),
 )
 
 """

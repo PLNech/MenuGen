@@ -15,27 +15,7 @@
             <div class="main-box clearfix">
                 <header class="main-box-header clearfix">Rechercher</header>
                 <div class="main-box-body clearfix">
-                        <input type="text" class="form-control" id="search" placeholder="Aliment ou recette">
-                </div>
-                <div class="row">
-                    <div class="col-lg-offset-2 col-lg-8">
-                        <ul id="liked-aliments" class="list-group">
-                            {% for aliment in ingredients %}
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <span class="name">{{ aliment }}</span>
-                                        </div>
-                                        <div class="col-md-6 text-right">
-                                            <button type="button" class="btn btn-danger btn-sm">
-                                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    <input type="text" class="form-control" id="search" placeholder="Aliment ou recette">
                 </div>
             </div>
         </div>
@@ -80,6 +60,8 @@
 
 {% block js %}
     <script type="text/javascript">
+
+        // filter recipes
         var $rows_recipes = $('tr#recipes td');
         $('#filter-recipes').keyup(function () {
             var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
@@ -90,6 +72,7 @@
             }).hide();
         });
 
+        // filter ingredients
         var $rows_ingreds = $('tr#ingredients td');
         $('#filter-ingredients').keyup(function () {
             var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
@@ -100,6 +83,7 @@
             }).hide();
         });
 
+        // clickable row
         jQuery(document).ready(function($) {
             $(".clickable-row").click(function() {
                 window.document.location = $(this).data("url");

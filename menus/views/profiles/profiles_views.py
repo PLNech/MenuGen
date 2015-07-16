@@ -275,6 +275,7 @@ def tastes(request):
     })
 
 
+@login_required
 def relike_recipe(request, recipe_id):
     profile = request.user.account.profile;
     recipe = Recipe.objects.get(id=recipe_id)
@@ -287,6 +288,7 @@ def relike_recipe(request, recipe_id):
     })
 
 
+@login_required
 def relike_ingredient(request, ingredient_id):
     profile = request.user.account.profile;
     ingredient = Ingredient.objects.get(id=ingredient_id)
