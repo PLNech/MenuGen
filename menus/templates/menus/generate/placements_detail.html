@@ -97,25 +97,21 @@
                         // TODO Kyo : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
                     }
                 });
-            };
+            }
+
+            var all_checked_lunch = true;
+            var all_checked_dinner = true;
+            /* FIXME Kyo: The 'all checked' information should come from a variable from the back-end */
             $('input.lunch').each(function (index) {
-                all_checked = all_checked && $(this)[0].checked;
-                $("#m-checkbox-lunches-all").attr('checked', $(this)[0].checked);
-                $(this).on("change", function () {
-                    var is_checked = $(this)[0].checked ? 1 : 0;
-                    var data_dico = {matrix: {day: index, meal: '0', val: is_checked}};
-                    update_pre_generation(data_dico);
-                });
+                var all_checked_lunch = all_checked_lunch && $(this)[0].checked;
+                $("#m-checkbox-lunches-all").attr('checked', all_checked_lunch);
+                $(this).on("change", '0', updateMatrix);
             });
-            var all_checked = false;
+
             $('input.dinner').each(function (index) {
-                all_checked = all_checked && $(this)[0].checked;
-                $("#m-checkbox-dinners-all").attr('checked', $(this)[0].checked);
-                $(this).on("change", function () {
-                    var is_checked = $(this)[0].checked ? 1 : 0;
-                    var data_dico = {matrix: {day: index, meal: '1', val: is_checked}};
-                    update_pre_generation(data_dico);
-                });
+                all_checked_dinner = all_checked_dinner && $(this)[0].checked;
+                $("#m-checkbox-dinners-all").attr('checked', all_checked_dinner);
+                $(this).on("change", '1', updateMatrix);
             });
 
 
@@ -123,8 +119,7 @@
                 var box = $(this)[0];
                 var is_checked = box.checked ? 1 : 0;
                 $('input.lunch').each(function (index) {
-                    console.log(box.checked)
-                    $(this).attr('checked', box.checked);
+                    $(this).prop('checked', box.checked);
                 });
                 var data_dico = {lunch: is_checked};
                 update_pre_generation(data_dico);
@@ -133,13 +128,19 @@
             $('#m-checkbox-dinners-all').on("change", function () {
                 var box = $(this)[0];
                 var is_checked = box.checked ? 1 : 0;
-                $('input.dinner').each(function (index) {
-                    console.log(box.checked)
-                    $(this).attr('checked', box.checked);
+                $('input.dinner').each  (function (index) {
+                    $(this).prop('checked', box.checked);
                 });
-                var data_dico = {dinner: is_checked};
-                update_pre_generation(data_dico);
+                update_pre_generation({dinner: is_checked});
             });
+
+            function updateMatrix(meal) {
+                var is_checked = $(this)[0].checked ? 1 : 0;
+                update_pre_generation({matrix: {day: index, meal: meal, val: is_checked}});
+            }
+
         });
+
+
     </script>
 {% endblock %}
