@@ -7,14 +7,15 @@
 <header class="navbar" id="header-navbar">
     <div class="container">
         <a href="{% url 'landing' %}" id="logo" class="navbar-brand">
+            <img src="{% static 'img/logo.png' %}" class="normal-logo logo-white">
             <!--
             <img src="img/logo.png" alt="" class="normal-logo logo-white"/>
             <img src="img/logo-black.png" alt="" class="normal-logo logo-black"/>
             <img src="img/logo-small.png" alt="" class="small-logo hidden-xs hidden-sm hidden"/>
             -->
             <div class="raw-brand" style="padding-top: 5px; padding-left: 25px;">
-                <i class="fa fa-cogs"></i>
-                <strong>MenuGen</strong>
+                {% comment %}<i class="fa fa-cogs"></i>
+                <strong>MenuGen</strong>{% endcomment %}
             </div>
         </a>
         <div class="clearfix">
