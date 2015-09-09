@@ -168,3 +168,13 @@ footer {
 p.copyright {
     margin: 15px 0 0;
 }
+
+.intro-message {
+    background-image: url('../../img/slate.jpg');
+    padding-bottom: 40px;
+    padding-top: 30px;
+    margin-top: 150px;
+    margin-bottom: 200px;
+
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.7);
+}
