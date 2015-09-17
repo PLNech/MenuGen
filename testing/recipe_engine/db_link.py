@@ -77,7 +77,6 @@ def save_recipe(recipe):
     """
     Save the recipe into the database
     :param recipe:the recipe scraped from marmiton
-    :return: the ingredients matched
     """
     price = {
         "bon marché": 0,

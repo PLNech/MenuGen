@@ -10,3 +10,4 @@ requests==2.7.0
 six==1.9.0
 wheel==0.24.0
 unidecode
+psycopg2==2.6.1
