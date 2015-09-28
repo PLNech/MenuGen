@@ -120,7 +120,7 @@
           <tbody>
           <tr>
               <th>Parsed</th>
-              <th>Matched</th>
+              <th>Matched (Ciqual)</th>
           </tr>
           {% for parsed, matched in matched_ingredients.items %}
           <tr>
@@ -138,52 +138,17 @@
   </div>
 
 
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="col-sm-1 pull-right">
-                <form class="form-horizontal" action="{% url 'testing.views.recipes' %}" method="POST">
-                    <input type="hidden" name="recipe_url" value="{{ recipe.url }}"/>
-                    <input type="hidden" name="save" value="go"/>
-                    {% csrf_token %}
-                    <button class="btn btn-default pull-right" type="submit">Save</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-  <ul class="nav nav-tabs col-sm-12">
-    <li class="active"> <a href="#new-comment" data-toggle="tab">New comment</a> </li>
-    <li> <a href="#comments" data-toggle="tab">Comments</a> </li>
-  </ul>
-
-  <div class="row tab-content">
-    <div class="col-sm-6 tab-pane active" id="new-comment">
-      <form class="form-horizontal" action="{% url 'testing.views.recipes' %}" method="POST">
-        <label for="comment-input" class="control-label">Comment about this page:</label>
-        <textarea type="text" id="comment-input" name="new_comment" class="form-control" rows="4"></textarea>
-        <input type="hidden" name="com_url" value="{{ recipe.url }}"/>
-        {% csrf_token %}
-        <button class="btn btn-default col-sm-1" type="submit">Save</button>
-      </form>
-    </div>
-
-    <div class="row tab-pane" id="comments">
-      <div class="col-sm-6">
-      {% for com in comments %}
-        <div class="well row">
-            <p class="text-left col-sm-9"><a href="{{ com.url }}">{{ com.url }}</a><br/>{{ com.text }}</p>
-            <div class="text-right">
-            <form action="{% url 'testing.views.recipes' %}" method="POST">
-              <input type="hidden" name="recipe_url" value="{{ com.url }}"/>
-              {% csrf_token %}
-              <button class="btn btn-default" type="submit">Load url</button>
-            </form>
-            </div>
-        </div>
-      {% endfor %}
+  <div class="row">
+      <div class="col-sm-12">
+          <div class="col-sm-1 pull-right">
+              <form class="form-horizontal" action="{% url 'testing.views.recipes' %}" method="POST">
+                  <input type="hidden" name="recipe_url" value="{{ recipe.url }}"/>
+                  <input type="hidden" name="save" value="go"/>
+                  {% csrf_token %}
+                  <button class="btn btn-default pull-right" type="submit">Save</button>
+              </form>
+          </div>
       </div>
-    </div>
   </div>
 
 </div>

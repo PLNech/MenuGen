@@ -34,6 +34,7 @@ class Recipe:
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
 
+        self.dom = response.text
         self.title = soup.find("span", "fn").string if soup.find("span", "fn") else None
         self.url = response.url
         self.picture_url = soup.find("img", { "class" : "photo"})['src'] if soup.find("img", { "class" : "photo"}) else None
