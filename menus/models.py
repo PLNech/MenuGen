@@ -85,6 +85,7 @@ class Recipe(models.Model):
     dom = models.TextField(blank=True, null=True)
     name = models.CharField(max_length=128)
     picture = StdImageField(upload_to='media/images/recipe')
+    origin_url = models.URLField()
     prep_time = models.IntegerField()
     cook_time = models.IntegerField()
     amount = models.IntegerField()
@@ -93,7 +94,6 @@ class Recipe(models.Model):
     steps = models.TextField(blank=True, null=True)
     detail = models.TextField(blank=True, null=True)
     drink = models.TextField(blank=True, null=True)
-    origin_url = models.URLField()
 
     ingredients = models.ManyToManyField('Ingredient', through=RecipeToIngredient)
     category = models.CharField(default="Plat", max_length=128)

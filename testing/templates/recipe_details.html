@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="container">
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{% url 'testing.views.index' %}">Recipe details of <b>{{ recipe.name }}</b></a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-1 pull-right">
+                    <form class="form-horizontal" action="{% url 'testing.views.recipe_details_marmiton' %}" method="POST">
+                        <input type="hidden" name="recipe_url" value="{{ recipe.origin_url }}"/>
+                        {% csrf_token %}
+                        <button class="btn btn-default pull-right" type="submit">Load from marmiton</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li class="active"> <a href="#infos" data-toggle="tab">General infos</a> </li>
+            <li> <a href="#ingredients" data-toggle="tab">Ingredients</a> </li>
+        </ul>
+
+        <div class="row tab-content">
+            <table class="table table-striped tab-pane active" id="infos">
+                <tbody></b>
+                <tr>
+                    <th>Name:</th>
+                    <td>{{ recipe.name }}</td>
+                </tr>
+                <tr>
+                    <th>Url:</th>
+                    <td><a href="{{ recipe.origin_url }}">{{ recipe.origin_url }}</a></td>
+                </tr>
+                <tr>
+                    <th>Prep time:</th>
+                    <td>{{ recipe.prep_time }} minutes</td>
+                </tr>
+                <tr>
+                    <th>Cook time:</th>
+                    <td>{{ recipe.cook_time }} minutes</td>
+                </tr>
+                <tr>
+                    <th>Amount of people:</th>
+                    <td>{{ recipe.amount }}</td>
+                </tr>
+                <tr>
+                    <th>Difficulty:</th>
+                    <td>{{ recipe.difficulty }}</td>
+                </tr>
+                <tr>
+                    <th>Price:</th>
+                    <td>{{ recipe.price }}</td>
+                </tr>
+                <tr>
+                    <th>Steps:</th>
+                    <td>{{ recipe.steps }}</td>
+                </tr>
+                <tr>
+                    <th>Detail:</th>
+                    <td>{{ recipe.detail }}</td>
+                </tr>
+                <tr>
+                    <th>Drink:</th>
+                    <td>{{ recipe.drink }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-striped tab-pane" id="ingredients">
+                <tbody>
+                <tr>
+                    <th>Text</th>
+                    <th>Parsed quantity</th>
+                    <th>Parsed unit</th>
+                    <th>Parsed name</th>
+                    <th>Matched (Ciqual)</th>
+                </tr>
+                {% for rtoi in recipe_to_ingredient %}
+                    <tr>
+                        <td>{{ rtoi.scraped_text }}</td>
+                        <td>{{ rtoi.quantity }}</td>
+                        <td>{{ rtoi.unit }}</td>
+                        <td>{{ rtoi.parsed_name }}</td>
+                        <td>{{ rtoi.ingredient.name }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}
+
