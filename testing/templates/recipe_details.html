@@ -29,7 +29,7 @@
             <li> <a href="#ingredients" data-toggle="tab">Ingredients</a> </li>
         </ul>
 
-        <div class="row tab-content">
+        <div class="row col-md-8 pull-left tab-content">
             <table class="table table-striped tab-pane active" id="infos">
                 <tbody></b>
                 <tr>
@@ -96,6 +96,10 @@
                 </tbody>
             </table>
         </div>
+
+    <div class="row col-md-4 pull-right">
+        <img alt="" src="{{ recipe.picture }}"/>
+    </div>
 
     </div>
 {% endblock %}

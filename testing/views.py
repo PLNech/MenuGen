@@ -4,11 +4,13 @@ from django.conf import settings
 import testing.recipe_engine.scraper
 from testing.recipe_engine.db_link import get_matching_ingredients, save_recipe
 from menus.models import Recipe, RecipeToIngredient
+from testing.recipe_engine.main import retrieve_recipes
 
 def index(request):
     return render(request, 'index.html', {})
 
 def recipes(request):
+    #retrieve_recipes()
     recipes = Recipe.objects.all()
     return render(request, 'recipes.html', {
         'recipes': recipes

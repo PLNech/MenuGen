@@ -19,14 +19,14 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="col-sm-1 pull-right">
-        <form class="form-horizontal" action="{% url 'testing.views.recipes' %}" method="POST">
+        <form class="form-horizontal" action="{% url 'testing.views.recipe_details_marmiton' %}" method="POST">
             <input type="hidden" name="recipe_url" value="{{ recipe.url }}"/>
             {% csrf_token %}
             <button class="btn btn-default pull-right" type="submit">Reload</button>
         </form>
       </div>
-      <a class="btn btn-default pull-right" href="{% url 'testing.views.recipes' %}">Random recipe</a>
-      <form class="form-horizontal col-sm-7 pull-right" action="{% url 'testing.views.recipes' %}" method="POST">
+      <a class="btn btn-default pull-right" href="{% url 'testing.views.recipe_details_marmiton' %}">Random recipe</a>
+      <form class="form-horizontal col-sm-7 pull-right" action="{% url 'testing.views.recipe_details_marmiton' %}" method="POST">
         <label for="url-input" class="col-sm-6 control-label">Specific url:</label>
         <div class="col-sm-4">
           <input type="text" id="url-input" name="recipe_url" class="form-control">
