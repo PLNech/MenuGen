@@ -73,16 +73,19 @@ class Profile(models.Model):
 
 
 class RecipeToIngredient(models.Model):
-    #FIXME SHOULD BE UNIQUE FOR A RECIPE/INGREDIENT PAIR!
     recipe = models.ForeignKey('Recipe')
     ingredient = models.ForeignKey('Ingredient')
     quantity = models.FloatField(blank=True, null=True, default=None)
     unit = models.CharField(max_length=128, blank=True, null=True, default=None)
+    scraped_text = models.CharField(max_length=256, blank=True, null=True, default=None)
+    parsed_name = models.CharField(max_length=256, blank=True, null=True, default=None)
 
 
 class Recipe(models.Model):
+    dom = models.TextField(blank=True, null=True)
     name = models.CharField(max_length=128)
     picture = StdImageField(upload_to='media/images/recipe')
+    origin_url = models.URLField()
     prep_time = models.IntegerField()
     cook_time = models.IntegerField()
     amount = models.IntegerField()
@@ -91,7 +94,6 @@ class Recipe(models.Model):
     steps = models.TextField(blank=True, null=True)
     detail = models.TextField(blank=True, null=True)
     drink = models.TextField(blank=True, null=True)
-    origin_url = models.URLField()
 
     ingredients = models.ManyToManyField('Ingredient', through=RecipeToIngredient)
     category = models.CharField(default="Plat", max_length=128)
@@ -113,7 +115,7 @@ class Diet(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=128)
     # country =  #  FIXME : use it for local menu generation
     # season?
     family = models.ForeignKey('IngredientFamily')
@@ -134,9 +136,8 @@ class IngredientNutriment(models.Model):
 
 
 class IngredientFamily(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=64)
     picture = StdImageField(upload_to='media/images/ingredient_family')
-
     ingredients = models.ManyToManyField('Ingredient')
 
     # TODO (addition by Kevin) : seems necessary for hierarchy (to discuss)

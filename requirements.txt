@@ -11,9 +11,10 @@ six==1.9.0
 wheel==0.24.0
 unidecode
 
-
 djangorestframework==3.2.4
 
 # Optional
 Werkzeug
 django-extensions
+
+psycopg2==2.6.1

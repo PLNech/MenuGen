@@ -32,8 +32,9 @@ class Recipe:
 
     def __init__(self, url):
         response = requests.get(url)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
 
+        self.dom = response.text
         self.title = soup.find("span", "fn").string if soup.find("span", "fn") else None
         self.url = response.url
         self.picture_url = soup.find("img", { "class" : "photo"})['src'] if soup.find("img", { "class" : "photo"}) else None
@@ -53,7 +54,7 @@ class Recipe:
         self.cooktime = soup.find("span", { "class" : "cooktime" }).text if soup.find("span", { "class" : "cooktime" }) else None
         self.cooktime_unit = self.sanitize(txt).split(" ")[11] if txt else None
 
-        txt_ing = soup.find("p", { "class" : "m_content_recette_ingredients"})
+        txt_ing = soup.find("div", { "class" : "m_content_recette_ingredients"})
         self.nb_person = txt_ing.span.string.split(" ")[2] if txt_ing else None
         ingreds = [self.sanitize(i) for i in txt_ing.text.split("-")[1:]] if txt_ing else None
         self.ingredients = []
@@ -112,5 +113,5 @@ class Recipe:
 
 
 def random_recipe():
-    with  open("testing/recipe_engine/good_recipes.txt", "r") as f:
+    with open("testing/recipe_engine/good_recipes.txt", "r") as f:
         return Recipe(random.choice(f.readlines()).rstrip("\n"))
