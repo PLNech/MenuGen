@@ -1,1 +1,1 @@
-conf/settings.py
+conf/settings.kevin.py
