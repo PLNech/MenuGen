@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="container">
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{% url 'testing.views.index' %}">Dashboard</a>
+                </div>
+            </div>
+        </nav>
+
+        <button class="btn btn-primary">{{ nb_recipes }} Recettes</button>
+        <button class="btn btn-info">{{ nb_ingreds }} Ingrédients</button>
+        <button class="btn btn-warning">{{ nb_nut }} Nutriments</button>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+
+        <div class="row">
+            <label for="difficultyPieChart">Difficulté des recettes</label>
+            <canvas id="difficultyPieChart" width="200" height="200"></canvas>
+            <label for="peopleAmountPieChart">Nombre de personnes</label>
+            <canvas id="peopleAmountPieChart" width="200" height="200"></canvas>
+            <label for="pricePieChart">Prix des recettes</label>
+            <canvas id="pricePieChart" width="200" height="200"></canvas>
+        </div>
+        <div class="row">
+            <label for="mealTypesPieChart">Catégories de recettes</label>
+            <canvas id="mealTypesPieChart" width="200" height="200"></canvas>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'vendor/js/Chart.min.js' %}"></script>
+    <script>
+        var data_difficulty = [
+            {
+                value: {{ nb_very_easy }},
+                color:"#33CC33",
+                highlight: "#70DB70",
+                label: "Très Facile"
+            },
+            {
+                value: {{ nb_easy }},
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: "Facile"
+            },
+            {
+                value: {{ nb_medium }},
+                color: "#FDB45C",
+                highlight: "#FFC870",
+                label: "Moyenne"
+            },
+            {
+                value: {{ nb_difficult }},
+                color:"#F7464A",
+                highlight: "#FF5A5E",
+                label: "Difficile"
+            }
+        ];
+        var ctxDPC = $("#difficultyPieChart").get(0).getContext("2d");
+        new Chart(ctxDPC).Pie(data_difficulty);
+
+        var data_people_amount = [
+            {
+                value: {{ amount_1 }},
+                color:"#33CC33",
+                highlight: "#70DB70",
+                label: "Pour 1 personne"
+            },
+            {
+                value: {{ amount_2 }},
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: "Pour 2 personnes"
+            },
+            {
+                value: {{ amount_3 }},
+                color: "#FDB45C",
+                highlight: "#FFC870",
+                label: "Pour 3 personnes"
+            },
+            {
+                value: {{ amount_4 }},
+                color:"#F7464A",
+                highlight: "#FF5A5E",
+                label: "Pour 4 personnes"
+            },
+            {
+                value: {{ amount_many }},
+                color:"#660066",
+                highlight: "#751975",
+                label: "Pour 5 personnes ou plus"
+            }
+        ];
+        var ctxPPC = $("#peopleAmountPieChart").get(0).getContext("2d");
+        new Chart(ctxPPC).Pie(data_people_amount);
+
+        var data_price = [
+            {
+                value: {{ price_0 }},
+                color:"#33CC33",
+                highlight: "#70DB70",
+                label: "Bon marché"
+            },
+            {
+                value: {{ price_1 }},
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: "Moyen"
+            },
+            {
+                value: {{ price_2 }},
+                color:"#F7464A",
+                highlight: "#FF5A5E",
+                label: "Assez cher"
+            }
+        ];
+        var ctxPPC = $("#pricePieChart").get(0).getContext("2d");
+        new Chart(ctxPPC).Pie(data_price);
+
+        var data_categories = [
+            {
+                value: {{ cat_amuse_gueule }},
+                color:"#33CC33",
+                highlight: "#70DB70",
+                label: "Amuse-gueule"
+            },
+            {
+                value: {{ cat_confiserie }},
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: "Confiserie"
+            },
+            {
+                value: {{ cat_accompagnement }},
+                color:"#F7464A",
+                highlight: "#FF5A5E",
+                label: "Accompagnement"
+            },
+            {
+                value: {{ cat_conseil }},
+                color:"#F7464A",
+                highlight: "#FF5A5E",
+                label: "Conseil"
+            },
+            {
+                value: {{ cat_dessert }},
+                color:"#99CC00",
+                highlight: "#A3D119",
+                label: "Dessert"
+            },
+            {
+                value: {{ cat_entree }},
+                color:"#007A7A",
+                highlight: "#008A8A",
+                label: "Entrée"
+            },
+            {
+                value: {{ cat_sauce }},
+                color:"#9900FF",
+                highlight: "#A319FF",
+                label: "Sauce"
+            },
+            {
+                value: {{ cat_boisson }},
+                color:"#3333FF",
+                highlight: "#4747FF",
+                label: "Boisson"
+            },
+            {
+                value: {{ cat_plat_principal }},
+                color:"#FF3300",
+                highlight: "#FF4719",
+                label: "Plat principal"
+            }
+        ];
+        var ctxPPC = $("#mealTypesPieChart").get(0).getContext("2d");
+        new Chart(ctxPPC).Pie(data_categories);
+    </script>
+{% endblock %}

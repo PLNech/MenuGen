@@ -41,6 +41,10 @@
                     <td><a href="{{ recipe.origin_url }}">{{ recipe.origin_url }}</a></td>
                 </tr>
                 <tr>
+                    <th>Category:</th>
+                    <td>{{ recipe.category }}</td>
+                </tr>
+                <tr>
                     <th>Prep time:</th>
                     <td>{{ recipe.prep_time }} minutes</td>
                 </tr>
@@ -98,7 +102,7 @@
         </div>
 
     <div class="row col-md-4 pull-right">
-        <img alt="" src="{{ recipe.picture }}"/>
+        <p><img class="img-thumbnail" alt="" src="{{ recipe.picture }}"/></p>
     </div>
 
     </div>

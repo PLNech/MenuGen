@@ -8,14 +8,15 @@ def retrieve_recipes():
         urls = f.readlines();
         for i, url in enumerate(urls):
             url = url.strip('\n')
-            recipe = Recipe(url)
-            if not menus.models.Recipe.objects.filter(name=recipe.title):
-                try:
+            try:
+                recipe = Recipe(url)
+                if not menus.models.Recipe.objects.filter(name=recipe.title):
                     save_recipe(recipe)
-                except:
-                    break
-                print("Saved %s" % recipe.title)
-            else:
-                print("Skipping %s, already in database" % recipe.title)
-            if i % 1000 == 0:
-                time.sleep(600)
+                    print("Saved %s (%s)" % (recipe.title, url))
+                else:
+                    print("Skipping %s, already in database" % recipe.title)
+            except:
+                continue
+            if (i + 1) % 700 == 0:
+                print("%s - Sleeping 15 minutes" % time.strftime("%H:%M"))
+                time.sleep(900)

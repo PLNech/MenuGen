@@ -99,11 +99,10 @@ def save_recipe(recipe):
     r.category = recipe.meal_type
     r.save()
 
-    # TODO: check uniqueness of relation recipe/ingredient
     # link to ingredients
     matching = get_matching_ingredients(recipe.ingredients)
     for parsed, matched in matching.items():
-        if matched:
+        if matched and not r.ingredients.filter(name=matched.name):
             rtoi = RecipeToIngredient(
                 recipe=r,
                 ingredient=matched,
@@ -113,4 +112,3 @@ def save_recipe(recipe):
                 parsed_name=parsed.name,
             )
             rtoi.save()
-

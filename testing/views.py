@@ -3,15 +3,43 @@ from django.conf import settings
 
 import testing.recipe_engine.scraper
 from testing.recipe_engine.db_link import get_matching_ingredients, save_recipe
-from menus.models import Recipe, RecipeToIngredient
+from menus.models import Recipe, RecipeToIngredient, Ingredient, Nutriment
 from testing.recipe_engine.main import retrieve_recipes
 
 def index(request):
     return render(request, 'index.html', {})
 
+def dashboard(request):
+    return render(request, 'dashboard.html', {
+        'nb_recipes': Recipe.objects.count(),
+        'nb_ingreds': Ingredient.objects.count(),
+        'nb_nut': Nutriment.objects.count(),
+        'nb_very_easy': Recipe.objects.filter(difficulty=0).count(),
+        'nb_easy': Recipe.objects.filter(difficulty=1).count(),
+        'nb_medium': Recipe.objects.filter(difficulty=2).count(),
+        'nb_difficult': Recipe.objects.filter(difficulty=3).count(),
+        'amount_1': Recipe.objects.filter(amount=1).count(),
+        'amount_2':  Recipe.objects.filter(amount=2).count(),
+        'amount_3': Recipe.objects.filter(amount=3).count(),
+        'amount_4': Recipe.objects.filter(amount=4).count(),
+        'amount_many': Recipe.objects.filter(amount__gte=5).count(),
+        'price_0': Recipe.objects.filter(price=0).count(),
+        'price_1': Recipe.objects.filter(price=1).count(),
+        'price_2': Recipe.objects.filter(price=2).count(),
+        'cat_amuse_gueule': Recipe.objects.filter(category='Amuse-gueule').count(),
+        'cat_confiserie': Recipe.objects.filter(category='Confiserie').count(),
+        'cat_conseil': Recipe.objects.filter(category='Conseil').count(),
+        'cat_accompagnement': Recipe.objects.filter(category='Accompagnement').count(),
+        'cat_dessert': Recipe.objects.filter(category='Dessert').count(),
+        'cat_entree': Recipe.objects.filter(category='Entrée').count(),
+        'cat_sauce': Recipe.objects.filter(category='Sauce').count(),
+        'cat_boisson': Recipe.objects.filter(category='Boisson').count(),
+        'cat_plat_principal': Recipe.objects.filter(category='Plat principal').count(),
+    })
+
 def recipes(request):
-    #retrieve_recipes()
-    recipes = Recipe.objects.all()
+    # todo: show all recipe and paginate
+    recipes = Recipe.objects.all()[:50]
     return render(request, 'recipes.html', {
         'recipes': recipes
     })
