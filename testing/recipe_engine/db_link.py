@@ -84,6 +84,7 @@ def save_recipe(recipe):
         "assez cher": 2
     }
     r = Recipe()
+    r.dom = recipe.dom
     r.name = recipe.title
     r.picture = recipe.picture_url
     r.prep_time = recipe.preptime
@@ -107,7 +108,9 @@ def save_recipe(recipe):
                 recipe=r,
                 ingredient=matched,
                 quantity=parsed.quantity,
-                unit=parsed.unit
+                unit=parsed.unit,
+                scraped_text=parsed.text,
+                parsed_name=parsed.name,
             )
             rtoi.save()
 
