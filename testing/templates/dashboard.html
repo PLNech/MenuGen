@@ -1,24 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base_dashboard.html' %}
 {% load staticfiles %}
 
-{% block content %}
+{% block dash-content %}
     <div class="container">
 
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="{% url 'testing.views.index' %}">Dashboard</a>
-                </div>
+        <div class="row col-sm-12">
+            <div class="alert alert-info col-sm-4">
+                <b>Nombre total de recettes: {{ nb_recipes }}</b>
             </div>
-        </nav>
-
-        <button class="btn btn-primary">{{ nb_recipes }} Recettes</button>
-        <button class="btn btn-info">{{ nb_ingreds }} Ingrédients</button>
-        <button class="btn btn-warning">{{ nb_nut }} Nutriments</button>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+            <div class="pull-right">
+            <a href="{% url 'testing.views.recipes_default' %}">
+                <button class="btn btn-default navbar-btn">Toutes les recettes</button>
+            </a></div>
+        </div>
 
         <div class="row">
             <label for="difficultyPieChart">Difficulté des recettes</label>
@@ -28,6 +22,7 @@
             <label for="pricePieChart">Prix des recettes</label>
             <canvas id="pricePieChart" width="200" height="200"></canvas>
         </div>
+
         <div class="row">
             <label for="mealTypesPieChart">Catégories de recettes</label>
             <canvas id="mealTypesPieChart" width="200" height="200"></canvas>

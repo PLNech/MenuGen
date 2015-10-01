@@ -7,7 +7,7 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="{% url 'testing.views.index' %}">Recipe details of <b>{{ recipe.name }}</b></a>
+                    <a class="navbar-brand" href="{% url 'testing.views.recipes_default' %}">Details of recipe <b>{{ recipe.name }}</b></a>
                 </div>
             </div>
         </nav>
@@ -101,9 +101,9 @@
             </table>
         </div>
 
-    <div class="row col-md-4 pull-right">
-        <p><img class="img-thumbnail" alt="" src="{{ recipe.picture }}"/></p>
-    </div>
+        <div class="row col-md-4 pull-right">
+            <p><img class="img-thumbnail" alt="Pas d'image pour cette recette :(" src="{{ recipe.picture }}"/></p>
+        </div>
 
     </div>
 {% endblock %}

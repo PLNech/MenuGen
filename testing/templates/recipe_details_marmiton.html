@@ -7,14 +7,10 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="{% url 'testing.views.index' %}">Recipe details from marmiton</a>
+        <a class="navbar-brand" href="{% url 'testing.views.recipes_default' %}">Recipe details from marmiton</a>
       </div>
     </div>
   </nav>
-
-  {% if com_saved %}
-    <div class="alert alert-success">Comment successfully saved!</div>
-  {% endif %}
 
   <div class="row">
     <div class="col-sm-12">
@@ -141,7 +137,7 @@
   <div class="row">
       <div class="col-sm-12">
           <div class="col-sm-1 pull-right">
-              <form class="form-horizontal" action="{% url 'testing.views.recipes' %}" method="POST">
+              <form class="form-horizontal" action="{% url 'testing.views.recipe_details_marmiton' %}" method="POST">
                   <input type="hidden" name="recipe_url" value="{{ recipe.url }}"/>
                   <input type="hidden" name="save" value="go"/>
                   {% csrf_token %}

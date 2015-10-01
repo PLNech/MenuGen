@@ -7,13 +7,25 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="{% url 'testing.views.index' %}">Recipes</a>
+                    <a class="navbar-brand" href="{% url 'testing.views.recipes_default' %}">Recipes</a>
                 </div>
             </div>
         </nav>
 
+        <div class="row col-sm-12">
+            <form class="form-horizontal" action="{% url 'testing.views.recipes_default' %}" method="POST">
+                <label for="search-input" class="col-sm-1 control-label">Search </label>
+                <div class="col-sm-2">
+                    <input type="text" id="search-input" name="search_term" class="form-control">
+                </div>
+                {% csrf_token %}
+                <button class="btn btn-default" type="submit">Go</button>
+            </form>
+        </div>
+        <br/>
+        <br/>
 
-        <div class="row">
+        <div class="row col-sm-12">
             <table class="table table-striped tab-pane active" id="infos">
                 <tbody>
                 {% for recipe in recipes %}
@@ -23,6 +35,22 @@
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
+
+        <div class="row col-sm-12">
+            <nav>
+                <ul class="pager">
+                    {% if results != None %}
+                        <li><b>{{ results }} results</b></li>
+                    {% else %}
+                        <li><a href="{% url 'testing.views.recipes_default' %}">First</a></li>
+                        <li><a href="{% url 'testing.views.recipes' prev %}">Previous</a></li>
+                        <li><b>Page {{ page }}</b></li>
+                        <li><a href="{% url 'testing.views.recipes' next %}">Next</a></li>
+                        <li><a href="{% url 'testing.views.recipes' 10000 %}">Last</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
 
     </div>
