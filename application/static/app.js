@@ -18,7 +18,7 @@ MenuGen.factory('authInterceptor', ['$injector', '$location', '$rootScope', '$q'
         response: function (response) {
             if (response.status == 401) {
                 console.log("Got unauthorized while accessing " + response.config.url);
-                $injector.get("$state").go("login", {destination: $location.path()});
+                $injector.get("$state").go("landing", {destination: $location.path()});
                 console.log("Redirect after response 401.");
             }
             return response || $q.when(response);
@@ -30,7 +30,7 @@ MenuGen.factory('authInterceptor', ['$injector', '$location', '$rootScope', '$q'
                 $window.sessionStorage.token = null;
                 $window.sessionStorage.username = null;
                 console.log("Redirect after rejection 401.");
-                $injector.get('$state').transitionTo('login');
+                $injector.get('$state').transitionTo('landing');
             }
             return $q.reject(rejection);
         }
