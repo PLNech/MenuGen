@@ -1,11 +1,11 @@
 {
-    "name": "untitled",
-    "version": "1.0.0",
-    "dependencies": {
-        "angular": "1.2.13",
-        "angular-resource": "1.2.13",
-        "underscore": "",
-        "bootstrap": ">=3.0"
-    },
-    "private": true
+  "name": "MenuGen",
+  "version": "0.5",
+  "dependencies": {
+    "angular": "1.4.7",
+    "angular-resource": "1.4.7",
+    "angular-ui-router": "0.2.x",
+    "bootstrap": ">=3.0"
+  },
+  "private": true
 }
