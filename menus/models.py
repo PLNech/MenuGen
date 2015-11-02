@@ -129,7 +129,6 @@ class Ingredient(models.Model):
 
 
 class IngredientNutriment(models.Model):
-    #FIXME SHOULD BE UNIQUE FOR A INGREDIENT/NUTRIMENT PAIR!
     ingredient = models.ForeignKey('Ingredient')
     nutriment = models.ForeignKey('Nutriment')
     quantity = models.FloatField()

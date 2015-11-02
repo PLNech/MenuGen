@@ -101,5 +101,4 @@ def recipe_details_marmiton(request):
         'recipe': recipe,
         'screenshot': screenshot,
         'matched_ingredients': matched_ingredients,
-    })
-
+   })
