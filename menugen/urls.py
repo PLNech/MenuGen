@@ -24,6 +24,7 @@ router.register(r'meals', views.MealViewSet)
 urlpatterns = patterns(
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include(router.urls)),
+    url(r'^', include('application.urls')),
     url(r'^', include('menus.urls')),
     url(r'^', include('testing.urls')),
     url(r'^admin/', include(admin.site.urls)),
