@@ -2,8 +2,7 @@
 
 
 var MenuGen = angular.module('MenuGen', [
-    'ui.router',
-    'ui.bootstrap'
+    'ui.router'
 ]);
 
 MenuGen.factory('authInterceptor', ['$injector', '$location', '$rootScope', '$q', '$window', function ($injector, $location, $rootScope, $q, $window) {
@@ -20,6 +19,7 @@ MenuGen.factory('authInterceptor', ['$injector', '$location', '$rootScope', '$q'
             if (response.status == 401) {
                 console.log("Got unauthorized while accessing " + response.config.url);
                 $injector.get("$state").go("login", {destination: $location.path()});
+                console.log("Redirect after response 401.");
             }
             return response || $q.when(response);
         },
@@ -29,6 +29,7 @@ MenuGen.factory('authInterceptor', ['$injector', '$location', '$rootScope', '$q'
                     ", redirecting to login screen...");
                 $window.sessionStorage.token = null;
                 $window.sessionStorage.username = null;
+                console.log("Redirect after rejection 401.");
                 $injector.get('$state').transitionTo('login');
             }
             return $q.reject(rejection);
@@ -39,15 +40,15 @@ MenuGen.factory('authInterceptor', ['$injector', '$location', '$rootScope', '$q'
 MenuGen.config([
     '$stateProvider', '$urlRouterProvider', '$urlMatcherFactoryProvider', '$httpProvider',
     function ($stateProvider, $urlRouterProvider, $urlMatcherFactory, $httpProvider) {
-        $urlRouterProvider.otherwise("login");
+        $urlRouterProvider.otherwise("/");
         $urlMatcherFactory.caseInsensitive(true);
         $httpProvider.interceptors.push('authInterceptor');
 
         $stateProvider
-            .state('home', {
-                url: '/',
-                templateUrl: 'templates/app.html',
-                controller: 'HomeController',
+            .state('landing', {
+                url: '^/',
+                templateUrl: 'static/views/landing.html',
+                controller: 'LandingController',
                 resolve: {}
             });
     }]);

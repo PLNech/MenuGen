@@ -99,6 +99,7 @@ STATIC_URL = '/static/'
 # STATIC_ROOT = '/srv/data/web/vhosts/default/static'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "application/static"),
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

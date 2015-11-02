@@ -1,43 +1,24 @@
+{% extends '_base.html' %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en" ng-app="MenuGen">
-<head>
-  <meta charset="UTF-8">
-  <title>Tweeter</title>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}"/>
-</head>
-<body>
-<h1 class="leader-h">Tweeter</h1>
 
-<div id='cssmenu'>
-  <ul>
-    <li ui-sref-active="active"><a ui-sref="tweets"><span>All Tweets</span></a></li>
-    <li ui-sref-active="active"><a ui-sref="my-tweets({ userId:AuthUser})"> <span>My Tweets</span></a></li>
-    <li ui-sref-active="active"><a ui-sref="profile"><span>Profile</span></a></li>
-  </ul>
-</div>
-<h3 class="user-h">logged in as: {{ user.get_username }}</h3>
+{% block js %}
+    <script type="text/javascript" src="{% static 'lib/jquery-2.1.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-resource.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-route.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-ui-router.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'app.js' %}"></script>
+    <script type="text/javascript" src="{% static 'controllers/landing.js' %}"></script>
+    {#    <script type="text/javascript" src="{% static 'js/script.js' %}"></script> <!-- Build with grunt? --> #}
 
-<div ui-view></div>
+{% endblock %}
 
-<script type="text/javascript" src="{% static 'lib/jquery-2.1.1.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'lib/angular.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'lib/angular-resource.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'lib/angular-route.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'lib/angular-ui-router.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+{% block css %}
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}"/>
+{% endblock %}
 
-<script type="text/javascript">
-  // This allows you to access the current user id in your angular controllers.
-  angular
-      .module('tweeterApp.services')
-      .factory('AuthUser', function() {
-        return {
-          id: "{{ user.id|default:''}}"
-        }
-      });
-</script>
-</body>
-</html>
+{% block content %}
+    <div id="ngview" ui-view></div>
+{% endblock %}
