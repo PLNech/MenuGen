@@ -21,10 +21,10 @@
         <div class="main-box clearfix">
             <header class="main-box-header clearfix">Recettes que je n'aime pas</header>
             <div class="main-box-body clearfix">
-                <input type="text" class="form-control" id="filter-recipes" placeholder="filtrer">
+                <input ng-model="query" type="text" class="form-control" placeholder="filtrer">
                 <table class="table table-striped">
                     <tbody>
-                        <tr id="recipes" class="clickable-row" data-url="#" title="J'aime à nouveau!" ng-repeat="recipe in not_liked_recipes">
+                        <tr ng-repeat="recipe in not_liked_recipes | filter:query">
                             <td class="unlikes-relike">{{ recipe.name }}</td>
                         </tr>
                     </tbody>
@@ -37,10 +37,10 @@
         <div class="main-box clearfix">
             <header class="main-box-header clearfix">Aliments que je n'aime pas</header>
             <div class="main-box-body clearfix">
-                <input type="text" class="form-control" id="filter-ingredients" placeholder="filtrer">
+                <input ng-model="ingred_query" type="text" class="form-control" placeholder="filtrer">
                 <table class="table table-striped">
                     <tbody>
-                        <tr id="ingredients" class="clickable-row" data-url="#" title="J'aime à nouveau!" ng-repeat="ingred in not_liked_ingreds">
+                        <tr ng-repeat="ingred in not_liked_ingreds | filter:ingred_query">
                             <td>{{ ingred.name }}</td>
                         </tr>
                     </tbody>
