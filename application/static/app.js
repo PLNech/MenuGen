@@ -2,7 +2,8 @@
 
 
 var MenuGen = angular.module('MenuGen', [
-    'ui.router'
+    'ui.router',
+    'MenuGen.services'
 ]);
 
 MenuGen.factory('authInterceptor', ['$injector', '$location', '$rootScope', '$q', '$window', function ($injector, $location, $rootScope, $q, $window) {
@@ -50,5 +51,10 @@ MenuGen.config([
                 templateUrl: 'static/views/landing.html',
                 controller: 'LandingController',
                 resolve: {}
+            })
+            .state('tastes', {
+                url: '/tastes',
+                templateUrl: 'static/views/tastes.html',
+                controller: 'TastesController'
             });
     }]);
