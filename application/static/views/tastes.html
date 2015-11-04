@@ -10,9 +10,24 @@
 <div class="row">
     <div class="col-lg-4">
         <div class="main-box clearfix">
-            <header class="main-box-header clearfix">Rechercher</header>
+            <header class="main-box-header clearfix">Nouveau goût</header>
             <div class="main-box-body clearfix">
-                <input type="text" class="form-control" id="search" placeholder="Aliment ou recette">
+                <div class="col-lg-6">
+                    <input type="text" class="form-control" placeholder="Aliment ou recette" ng-model="input">
+                </div>
+                <div class="col-lg-6">
+                    <button class="btn btn-default" ng-click="search()">Rechercher </button>
+                </div>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr ng-repeat="recipe in found_recipes">
+                        <td>{{ recipe.name }}</td>
+                    </tr>
+                    <tr ng-repeat="ingred in found_ingredients">
+                        <td>{{ ingred.name }}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -25,7 +40,7 @@
                 <table class="table table-striped">
                     <tbody>
                         <tr ng-repeat="recipe in not_liked_recipes | filter:query">
-                            <td class="unlikes-relike">{{ recipe.name }}</td>
+                            <td>{{ recipe.name }}</td>
                         </tr>
                     </tbody>
                 </table>
