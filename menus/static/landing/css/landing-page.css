@@ -168,3 +168,23 @@ footer {
 p.copyright {
     margin: 15px 0 0;
 }
+
+@font-face {
+    font-family: 'Chalk'; /*a name to be used later*/
+    src: url('../../fonts/chawp.ttf'); /*URL to font*/
+}
+
+.intro-message {
+    background-image: url('../../img/slate.jpg');
+    padding-bottom: 40px;
+    padding-top: 30px;
+    margin-top: 150px;
+    margin-bottom: 150px;
+    font-family: 'Chalk';
+
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.7);
+}
+
+.intro-message h2 {
+    font-family: 'Chalk';
+}

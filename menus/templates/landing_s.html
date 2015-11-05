@@ -39,15 +39,19 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-offset-3 col-lg-6">
                 <div class="intro-message">
+{% comment %}
+                    <h1>MenuGen</h1>
+{% endcomment %}
+                    <img src="{% static 'img/logo.png' %}">
                     <h1>MenuGen</h1>
                     <h2>le générateur intelligent de menus équilibrés !</h2>
                     <hr class="intro-divider">
                     <div class="temp-out-wrapper clearfix">
                         <i class="wi wi-day-sunny icon"></i>
                         <div class="temp-wrapper">
-                            <a style="height: 56px; width: 324px; font-size: 28px; background-color: #FF9900" class="btn btn-warning btn-lg" href="{% url 'generate' %}" role="button">Essayez maintenant &raquo;</a>
+                            <a style="height: 56px; width: 324px; font-size: 28px; background-color: #FF9900" class="btn btn-warning btn-lg" href="{% url 'generate' %}" role="button">Essayez maintenant </a>
                         </div>
                     </div>
                 </div>
@@ -64,6 +68,7 @@
     <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
         <div class="pricing-package-inner">
             <div class="package-header green-bg">
+                <h3><i class="fa fa-cogs fa-3x"></i></h3>
                 <h3>intelligent</h3>
             </div>
             <div class="package-content">
@@ -79,6 +84,7 @@
     <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
         <div class="pricing-package-inner">
             <div class="package-header green-bg">
+                <h3><i class="fa fa-heartbeat fa-3x"></i></h3>
                 <h3>diététique</h3>
             </div>
             <div class="package-content">
@@ -94,6 +100,7 @@
     <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
         <div class="pricing-package-inner">
             <div class="package-header green-bg">
+                <h3><i class="fa fa-child fa-3x"></i></h3>
                 <h3>qui vous ressemble</h3>
             </div>
             <div class="package-content">

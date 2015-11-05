@@ -1,0 +1,26 @@
+{% extends '_base.html' %}
+{% load staticfiles %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'lib/jquery-2.1.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-resource.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-route.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-ui-router.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'app.js' %}"></script>
+    <script type="text/javascript" src="{% static 'services.js' %}"></script>
+    <script type="text/javascript" src="{% static 'controllers/landing.js' %}"></script>
+    <script type="text/javascript" src="{% static 'controllers/tastes.js' %}"></script>
+    {#    <script type="text/javascript" src="{% static 'js/script.js' %}"></script> <!-- Build with grunt? --> #}
+
+{% endblock %}
+
+{% block css %}
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <div id="ngview" ui-view></div>
+{% endblock %}

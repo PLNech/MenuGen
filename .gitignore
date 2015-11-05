@@ -10,3 +10,5 @@ algorithms/img/
 media/screen.jpg
 wheelhouse/
 node_modules
+application/static/js
+application/static/lib

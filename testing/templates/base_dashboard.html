@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="container">
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{% url 'testing.views.dashboard' %}">Dashboard dev</a>
+                </div>
+                <a href="{% url 'testing.views.dashboard' %}">
+                    <button class="btn btn-primary navbar-btn">Recettes</button>
+                </a>
+                <a href="{% url 'testing.views.dashboard_ingreds' %}">
+                    <button class="btn btn-info navbar-btn">Ingrédients</button>
+                </a>
+            </div>
+        </nav>
+
+        {% block dash-content %}
+        {% endblock %}
+
+    </div>
+{% endblock %}

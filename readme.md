@@ -15,6 +15,24 @@ To disable the python virtual environment, run
 
     deactivate
 
+## Front-end
+
+    cd application 
+
+Install Bower + Grunt
+
+    npm install -g grunt-cli bower
+
+Install Assets
+
+    npm install
+    bower install
+
+Compile Assets
+
+    grunt
+
+
 ## Django
 
 Initialize and configure the development database

@@ -1,0 +1,24 @@
+{% extends 'base_dashboard.html' %}
+{% load staticfiles %}
+
+{% block dash-content %}
+    <div class="container">
+
+        <div class="row col-sm-12">
+            <div class="alert alert-info col-sm-4">
+                <b>Nombre total d'ingrédients: {{ nb_ingreds }}</b>
+            </div>
+        </div>
+        <div class="row col-sm-12">
+            <div class="alert alert-warning col-sm-4">
+                <b>Nombre total de familles d'ingrédients: {{ nb_family }}</b>
+            </div>
+        </div>
+        <div class="row col-sm-12">
+            <div class="alert alert-success col-sm-4">
+                <b>Nombre total de nutriments: {{ nb_nut }}</b>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
