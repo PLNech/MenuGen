@@ -3,6 +3,7 @@
 angular.module('MenuGen').
     controller('TastesController', ['$scope', '$resource', 'Profile', 'SearchRecipe', 'SearchIngredient',
         function ($scope, $resource, Profile, SearchRecipe, SearchIngredient) {
+
             // TODO: get profile of current user
             Profile.get({id:1}, function(response) {
                 $scope.profile = response;
@@ -28,6 +29,7 @@ angular.module('MenuGen').
                 });
             });
 
+            // search for ingredients and recipes
             $scope.search = function() {
                 SearchRecipe.query({name:$scope.input}, function(response) {
                     $scope.found_recipes = response;
@@ -36,6 +38,20 @@ angular.module('MenuGen').
                     $scope.found_ingredients = response;
                 });
             };
+
+            // relike recipe
+            $scope.relike = function(recipe) {
+                var index = $scope.not_liked_recipes.indexOf(recipe);
+                $scope.not_liked_recipes.splice(index, 1);
+                // todo: update database
+            };
+
+            // relike ingredient
+            $scope.relike_ingred = function(ingred) {
+                var index = $scope.not_liked_ingreds.indexOf(ingred);
+                $scope.not_liked_ingreds.splice(index, 1);
+                // todo: update database
+            }
         }
     ]);
 
