@@ -52,7 +52,12 @@ class RecipeToIngredientViewSet(viewsets.ModelViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all()
+    # enable filter with query parameters such as /api/recipes?name=tarte
+    def get_queryset(self):
+        name = self.request.query_params.get('name', None)
+        if name:
+            return Recipe.objects.filter(name__icontains=name)
+        return Recipe.objects.all()
     serializer_class = RecipeSerializer
 
 
@@ -62,7 +67,12 @@ class DietViewSet(viewsets.ModelViewSet):
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
-    queryset = Ingredient.objects.all()
+    # enable filter with query parameters such as /api/ingredients?name=sucre
+    def get_queryset(self):
+        name = self.request.query_params.get('name', None)
+        if name:
+            return Ingredient.objects.filter(name__icontains=name)
+        return Ingredient.objects.all()
     serializer_class = IngredientSerializer
 
 

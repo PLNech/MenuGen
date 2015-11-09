@@ -1,0 +1,67 @@
+<div class="col-lg-12">
+    <div id="content-header" class="clearfix">
+        <div class="pull-left">
+            <ol class="breadcrumb"></ol>
+            <h1>Mes goûts</h1>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">Nouveau goût</header>
+            <div class="main-box-body clearfix">
+                <div class="col-lg-6">
+                    <input type="text" class="form-control" placeholder="Aliment ou recette" ng-model="input">
+                </div>
+                <div class="col-lg-6">
+                    <button class="btn btn-default" ng-click="search()">Rechercher </button>
+                </div>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr ng-repeat="recipe in found_recipes">
+                        <td>{{ recipe.name }}</td>
+                    </tr>
+                    <tr ng-repeat="ingred in found_ingredients">
+                        <td>{{ ingred.name }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">Recettes que je n'aime pas</header>
+            <div class="main-box-body clearfix">
+                <input ng-model="query" type="text" class="form-control" placeholder="filtrer">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr ng-repeat="recipe in not_liked_recipes | filter:query">
+                            <td>{{ recipe.name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="main-box clearfix">
+            <header class="main-box-header clearfix">Aliments que je n'aime pas</header>
+            <div class="main-box-body clearfix">
+                <input ng-model="ingred_query" type="text" class="form-control" placeholder="filtrer">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr ng-repeat="ingred in not_liked_ingreds | filter:ingred_query">
+                            <td>{{ ingred.name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
