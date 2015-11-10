@@ -66,6 +66,7 @@ def generation(request):
     menu = run_standard(None, time.ctime())
 
     if 'matrix' in request.session:
+        matrix = request.session['matrix']
         planning = generate_planning_from_matrix(matrix, menu)
     else:
         planning = generate_planning_from_list(nb_days, nb_meals, menu)
