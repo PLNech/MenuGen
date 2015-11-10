@@ -49,7 +49,7 @@ def generation(request):
     user_exercise = replace_if_none(request.session.get('exercise'), defaults.EXERCISE)
     user_age = int(replace_if_none(request.session.get('age'), defaults.AGE))
     user_weight = int(replace_if_none(request.session.get('weight'), defaults.WEIGHT))
-    user_height = int(float(int(replace_if_none(request.session.get('height'), defaults.HEIGHT)) * 100))
+    user_height = int(replace_if_none(float(request.session.get('height')), defaults.HEIGHT) * 100)
     user_sex = Calculator.SEX_F if request.session.get('sex') is 1 else Calculator.SEX_H
     user_birthday = datetime.date(year=today.year - user_age, month=today.month, day=today.day)
 
@@ -66,6 +66,7 @@ def generation(request):
     menu = run_standard(None, time.ctime())
 
     if 'matrix' in request.session:
+        matrix = request.session['matrix']
         planning = generate_planning_from_matrix(matrix, menu)
     else:
         planning = generate_planning_from_list(nb_days, nb_meals, menu)
