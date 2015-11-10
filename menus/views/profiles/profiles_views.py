@@ -185,7 +185,6 @@ def physiology(request, p=None, ajax=False):
 def regimes(request, ajax=False):
     health_regimes_list = []
     value_regimes_list = []
-    nutrients_regimes_st = []
 
     regime_sans_sel = {
         'name': 'Hyposodé (sans sel)',
