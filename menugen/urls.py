@@ -3,7 +3,6 @@ from django.contrib import admin
 from menugen import settings
 from rest_framework import routers
 from menus.views import views
-from django.views.generic import TemplateView
 
 admin.site.site_header = 'Menugen - Administration'
 admin.autodiscover()
@@ -23,13 +22,6 @@ router.register(r'menus', views.MenuViewSet)
 router.register(r'meals', views.MealViewSet)
 
 urlpatterns = patterns(
-    url(r'^password-reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        TemplateView.as_view(template_name="password_reset_confirm.html"),
-        name='password_reset_confirm'),
-
-    url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
-
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include(router.urls)),
     url(r'^', include('application.urls')),
