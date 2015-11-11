@@ -1,17 +1,20 @@
 import datetime
-import numpy
-
-from django.contrib.auth.decorators import login_required
+import logging
 from functools import reduce
 import time
 
-import menugen.defaults as defaults
+import numpy
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+
+import menugen.defaults as defaults
 from menus.algorithms.dietetics import Calculator
 from menus.algorithms.run import run_standard
 from menus.algorithms.utils.config import Config
 from menus.data.generator import generate_planning_from_list, generate_planning_from_matrix
 from menus.models import Recipe, Profile, Ingredient
+
+logger = logging.getLogger("menus")
 
 
 def generation(request):
@@ -27,17 +30,13 @@ def generation(request):
     generating the structure containing the meals
     should be passed to the rendered view """
 
-    """ Default days number """
-    nb_days = 7
-
-    """ Use the days number if exists """
-    if 'nb_days' in request.session:
-        nb_days = int(request.session['nb_days'])
+    nb_days = int(request.session.get('nb_days', 7))
 
     """ Default values """
     nb_dishes = 3
     nb_meals = 2
 
+    logger.info("pk: %r" % request.session)
     if 'matrix' in request.session:
         matrix = request.session['matrix']
         nb_meals_menu = numpy.sum(matrix)
@@ -46,23 +45,26 @@ def generation(request):
 
     today = datetime.date.today()
 
-    user_exercise = replace_if_none(request.session.get('exercise'), defaults.EXERCISE)
-    user_age = int(replace_if_none(request.session.get('age'), defaults.AGE))
-    user_weight = int(replace_if_none(request.session.get('weight'), defaults.WEIGHT))
-    user_height = int(replace_if_none(float(request.session.get('height')), defaults.HEIGHT) * 100)
+    user_exercise = request.session.get('exercise', defaults.EXERCISE)
+    user_age = int(request.session.get('age', defaults.AGE))
+    user_weight = int(request.session.get('weight', defaults.WEIGHT))
+    user_height = int(float(request.session.get('height', defaults.HEIGHT)) * 100)
     user_sex = Calculator.SEX_F if request.session.get('sex') is 1 else Calculator.SEX_H
     user_birthday = datetime.date(year=today.year - user_age, month=today.month, day=today.day)
 
-    profile = Profile(weight=user_weight, height=user_height, birthday=user_birthday, sex=user_sex, activity=user_exercise)
-    profile_list = [profile, Profile(weight=100, height=200, birthday=datetime.date(1928, 2, 10),
-                                     sex=defaults.SEX, activity=defaults.EXERCISE)]
-    # profile_list = [profile]  # TODO: GET list of profiles to 'merge'
+    user_profile = Profile(weight=user_weight, height=user_height, birthday=user_birthday, sex=user_sex,
+                      activity=user_exercise)
+    # profile_list = request.session.get('profiles')
+    profile_list = [user_profile]
+
+    logger.info('Profiles at generation: %r.' % profile_list)
     needs_list = [Calculator.estimate_needs_profile(profile) for profile in profile_list]
-    needs = reduce(lambda x, y: x+y, needs_list)
-    print("Final needs:", needs)
+    needs = reduce(lambda x, y: x + y, needs_list)
+    logger.info("Final needs: %r" % needs)
 
     Config.parameters[Config.KEY_MAX_DISHES] = nb_meals_menu * nb_dishes
     Config.update_needs(needs, nb_days)
+
     menu = run_standard(None, time.ctime())
 
     if 'matrix' in request.session:

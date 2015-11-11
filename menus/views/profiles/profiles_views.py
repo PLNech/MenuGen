@@ -14,7 +14,6 @@ from menus.utils import json2obj
 
 logger = logging.getLogger("menus")
 
-
 @login_required
 def index(request, ajax=False):
     account = request.user.account
@@ -128,7 +127,6 @@ def update_profile(request):
             diets = json2obj(diets)
 
             for key, checked in diets:
-                logger.info('Diet %s: %s' % (key, checked))
                 if Diet.objects.filter(pk=key).exists():
                     if checked:
                         p.diets.add(key)
@@ -212,11 +210,7 @@ def regimes(request, ajax=False, profile_id=None):
 
     for diet in vege_diets:
         diet.active = profile.diets.filter(pk=diet.pk).exists()
-        logger.info("diet %s: %r" % (diet.name, diet.active))
         value_regimes_list.append(diet)
-
-    logger.info("regime| Diets:")
-    logger.info(value_regimes_list)
 
     regime_hyper_prot = {
         'name': 'Hyperprotéiné',

@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'dnd/dnd.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'dnd/dnd.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'loader.css' %}"/>
 {% endblock %}
 
@@ -34,16 +34,20 @@
                         <form class="form-horizontal" name="criteria" action="{% url 'physiology' %}" method="POST">
                             <div class="form-group">
                                 <label for="budgetRadioOptions" class="col-sm-3 control-label">Budget</label>
+
                                 <div class="col-sm-9">
                                     <div class="budgets btn-group" data-toggle="buttons">
                                         <label class="btn btn-primary active">
-                                            <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio1" value="0"> Bon marché
+                                            <input class="budget" type="radio" name="budgetRadioOptions"
+                                                   id="inlineRadio1" value="0"> Bon marché
                                         </label>
                                         <label class="btn btn-primary">
-                                            <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio2" value="1"> Moyen
+                                            <input class="budget" type="radio" name="budgetRadioOptions"
+                                                   id="inlineRadio2" value="1"> Moyen
                                         </label>
                                         <label class="btn btn-primary">
-                                            <input class="budget" type="radio" name="budgetRadioOptions" id="inlineRadio3" value="2"> Assez cher
+                                            <input class="budget" type="radio" name="budgetRadioOptions"
+                                                   id="inlineRadio3" value="2"> Assez cher
                                         </label>
                                     </div>
                                 </div>
@@ -55,16 +59,20 @@
                                 <div class="col-sm-9">
                                     <div class="difficulties btn-group" data-toggle="buttons">
                                         <label class="btn btn-primary active">
-                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio1" value="option1"> Très facile
+                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio1"
+                                                   value="option1"> Très facile
                                         </label>
                                         <label class="btn btn-primary">
-                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio2" value="option2"> Facile
+                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio2"
+                                                   value="option2"> Facile
                                         </label>
                                         <label class="btn btn-primary">
-                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Moyenne
+                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio3"
+                                                   value="option3"> Moyenne
                                         </label>
                                         <label class="btn btn-primary">
-                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio3" value="option3"> Difficile
+                                            <input type="radio" name="DifficultyRadioOptions" id="inlineRadio3"
+                                                   value="option3"> Difficile
                                         </label>
                                     </div>
                                 </div>
@@ -91,7 +99,8 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-1 col-sm-offset-3">
-                                    <button id="placements-detail-ajax" href="{% url 'generate_placements_detail' %}" class="btn btn-success" type="button">
+                                    <button id="placements-detail-ajax" href="{% url 'generate_placements_detail' %}"
+                                            class="btn btn-success" type="button">
                                         <i class="fa fa-table"></i>
                                     </button>
                                 </div>
@@ -109,7 +118,9 @@
                                             </span>
                                             <input type="text" class="form-control" id="maskedSsn">
                                             <span class="input-group-btn">
-                                                <button id="select-profils-ajax" href="{% url 'generate_select_profile' %}" class="btn btn-success" type="button">
+                                                <button id="select-profils-ajax"
+                                                        href="{% url 'generate_select_profile' %}"
+                                                        class="btn btn-success" type="button">
                                                     <i class="fa fa-user-plus"></i>
                                                 </button>
                                             </span>
@@ -171,7 +182,7 @@
 {% block js %}
     <script>
         $("#loader").hide();
-        $("#generate-button").click(function(){
+        $("#generate-button").click(function () {
             $("#generate").hide();
             $("#loader").show();
         });
@@ -218,9 +229,9 @@
             // AJAX for posting
             function update_pre_generation(data_dico) {
                 $.ajax({
-                    url : '{% url 'update_gen_criteria' %}', // the endpoint
-                    type : "POST", // http method
-                    data : data_dico, // data sent with the post request
+                    url: '{% url 'update_gen_criteria' %}', // the endpoint
+                    type: "POST", // http method
+                    data: data_dico, // data sent with the post request
                     // handle a successful response
                     success: function (json) {
                         console.log(json); // log the returned json to the console
@@ -236,7 +247,7 @@
                 });
             }
 
-            $('.budgets').on('click',  function () {
+            $('.budgets').on('click', function () {
                 var data_dico = {budget: $(this).find('input').val()};
                 update_pre_generation(data_dico);
             });

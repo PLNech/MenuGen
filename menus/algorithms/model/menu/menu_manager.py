@@ -51,10 +51,10 @@ class MenuManager(Manager):
         self.dishes = []
         self.names_count = {}
 
-    def init(self):
+    def init(self, request=None):
         nb_dishes = Config.parameters[Config.KEY_NB_DISHES]
         self.reset()
-        self.init_from_db(nb_dishes)
+        self.init_from_db(nb_dishes, request)
         if Config.print_manager:
             print("Initialised MenuManager with %i dishes." % len(self.dishes))
 
@@ -77,7 +77,7 @@ class MenuManager(Manager):
                 print("Dish %s." % dish)
 
     def init_from_db(self, nb_dishes, profile=None):
-        recipes = list(Recipe.objects.all()[:nb_dishes])
+        recipes = list(Recipe.for_profile(profile)[:nb_dishes])
         shuffle(recipes)
         for i in range(nb_dishes):
             recipe = recipes[i]

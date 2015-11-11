@@ -9,21 +9,22 @@
             <tbody>
             <ul id="email-list">
                 {% for profile in profiles %}
-                    <li class="unread clickable-row" data-href="email-detail.html">
-                        <div class="chbox">
+                    <li class="profile unread clickable-row" data-href="email-detail.html">
+                        <div class="chbox" data-profile-id="{{ profile.pk }}">
                             <div class="checkbox-nice">
-                                <input type="checkbox" id="m-checkbox-1">
-                                <label for="m-checkbox-1"></label>
+                                <input type="checkbox" id="m-checkbox-{{ forloop.counter }}">
+                                <label for="m-checkbox-{{ forloop.counter }}" {% if user.profile.name == profile.name %} checked="checked" {% endif %}></label>
+{#                                FIXME: Select if profile is me #}
                             </div>
                         </div>
                         <div class="message">
-                            {% for diet in profile.diets.all %}
-                                <span class="label label-success">{{ diet.name }}</span>
-                                {#                        <span class="subject">Like your new movie -</span>#}
-                                {#                        <span class="body">Hi beauty, I watched your movies last night.</span>#}
-                            {% empty %}
-                                <span class="label label-success">Aucun régime</span>
-                            {% endfor %}
+                            <h4>{{ profile.name }}
+                                {% for diet in profile.diets.all %}
+                                    <span class="label label-success">{{ diet.name }}</span>
+                                {% empty %}
+                                    <span class="label label-success">Aucun régime</span>
+                                {% endfor %}
+                            </h4>
                         </div>
                         <div class="meta-info">
                             <a href="#" class="attachment">
@@ -36,9 +37,9 @@
                     </li>
                 {% empty %}
                     <div class="alert alert-info">
-                        <p>Aucun profiles n'est associer à votre compte.
-                            Pour ajouter de nouveau convives a cette generation veillez d'abord
-                            <a href="{% url 'profiles' %}" class="alert-link">créez de nouveaux profile</a>.</p>
+                        <p>Aucun profil n'est associé à votre compte.
+                            Pour ajouter de nouveaux convives à cette génération, commencez par
+                            <a href="{% url 'profiles' %}" class="alert-link">créer de nouveaux profils</a>.</p>
                     </div>
                 {% endfor %}
             </ul>
@@ -46,3 +47,49 @@
         </table>
     {% endif %}
 </div>
+<script>
+    function update_pre_generation(data_dico) {
+        $.ajax({
+            url: '{% url 'update_gen_criteria' %}', // the endpoint
+            type: "POST", // http method
+            data: data_dico, // data sent with the post request
+            // handle a successful response
+            success: function (json) {
+                console.log(json); // log the returned json to the console
+                console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) { //TODO Kyo Display err, or at least remove parameter
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                // TODO Kyo : Cleanup and/or extract a method to avoid copy/paste (see tastes.html)
+            }
+        });
+    }
+
+    $('li.profile').on('click', function () {
+        var profileDivs = $('div.chbox');
+        var profiles = [];
+        var checkbox = $(this).find('input[type=checkbox]');
+        var checked = checkbox.prop('checked');
+        checkbox.prop('checked', !checked);
+        profileDivs.each(function () {
+            var profileDiv = $(this);
+            var id = profileDiv.data('profile-id');
+            var checkbox = profileDiv.find('input[type=checkbox]');
+            var checked = checkbox.prop('checked');
+            console.log(id, ":", checked);
+            profiles.push({id:id, checked:checked})
+        });
+        profiles = JSON.stringify(profiles);
+        var data_dico = {
+            'profiles': profiles,
+            'pk': '{{ pk }}'
+        };
+        console.log('data:', data_dico);
+        update_pre_generation(data_dico);
+    })
+
+</script>

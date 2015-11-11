@@ -1,5 +1,10 @@
+import logging
 from django.http import HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render
+from menus.models import Profile
+from menus.utils import json2obj
+
+logger = logging.getLogger("menus")
 
 
 def generate(request):
@@ -23,6 +28,10 @@ def generate(request):
 def generate_select_profile(request):
     user = request.user
     guests = user.account.guests.all()
+    logger.info("Guests: %r" % guests)
+    guests = list(guests)
+    logger.info("GuestList: %r" % guests)
+    guests.append(user.account.profile)
     return render(request, 'menus/generate/select_profile.html', {'profiles': guests})
 
 
@@ -87,5 +96,20 @@ def update_gen_criteria(request):
         request.session['matrix'][1] = [is_checked for x in dinners]
         request.session.modified = True
 
-    print(request.session.items())
+    if 'profiles' in request.POST:
+        profiles = request.POST.get('profiles')
+        request.session['profiles'] = []
+        profiles = json2obj(profiles)
+        for profileData in profiles:
+            try:
+                profile = Profile.objects.filter(pk=profileData.id).get()
+                if profileData.checked:
+                    request.session['profiles'].append(profile)
+                elif profile in request.session['profiles']:
+                    request.session['profiles'].remove(profile)
+            except Profile.DoesNotExist:
+                pass
+        logger.info("%d profiles loaded." % len(request.session['profiles']))
+
+    # print(request.session.items())
     return HttpResponse('ok')

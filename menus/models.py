@@ -1,7 +1,10 @@
+import logging
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from stdimage.models import StdImageField
+
 import menugen.defaults as default
 
 EASE = (
@@ -34,6 +37,8 @@ MEAL = (
     (0, 'midi'),
     (1, 'soir'),
 )
+
+logger = logging.getLogger("menus")
 
 
 class Account(models.Model):
@@ -101,6 +106,40 @@ class Recipe(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def for_profile(profile):
+        """
+        :type profile Profile
+        :return:
+        """
+        recipes = Recipe.objects.all()[:1000]  # FIXME: Remove when solved
+        listRecipes = []
+
+        if profile is None:
+            # FIXME: Remove hardfix
+            vege_diets = Diet.objects.filter(name__startswith='Végé').all()
+            for key, recipe in enumerate(recipes):
+                shouldBreak = False
+                validRecipe = True
+                for ingredient in recipe.ingredients.all():
+                    if shouldBreak:
+                        break
+                    for diet in ingredient.bad_diets.all():
+                        if diet in vege_diets:
+                            validRecipe = False
+                            shouldBreak = True
+                            break
+                    if validRecipe:
+                        listRecipes.append(recipe)
+                logger.info("Finished recipe %d." % key)
+            logger.info("returning %d recipes." % len(listRecipes))
+            return listRecipes
+        else:
+            logger.info('profile:%r.' % profile)
+            # recipes_but_diet = Recipe.objects.exclude(ingredients__bad_diets__in=profile.diets.all())
+            # logger.info("Diets: reduced from %d to %d recipes." % (len(recipes), len(recipes_but_diet)))
+            return recipes
+
 
 class Diet(models.Model):
     name = models.CharField(max_length=32)
@@ -121,6 +160,7 @@ class Ingredient(models.Model):
     # season?
     family = models.ForeignKey('IngredientFamily')
     nutriments = models.ManyToManyField('Nutriment', through='IngredientNutriment')
+    bad_diets = models.ManyToManyField('Diet')
 
     class Meta:
         ordering = ('name',)
@@ -139,6 +179,7 @@ class IngredientFamily(models.Model):
     name = models.CharField(max_length=64)
     ingredients = models.ManyToManyField('Ingredient')
     father = models.ForeignKey('IngredientFamily', null=True, default=None)
+    bad_diets = models.ManyToManyField('Diet')
 
     def __str__(self):
         return self.name
