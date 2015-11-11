@@ -51,7 +51,8 @@ angular.module('MenuGen').
                 var index = $scope.not_liked_ingreds.indexOf(ingred);
                 $scope.not_liked_ingreds.splice(index, 1);
                 // todo: update database
-            }
+                // $http.put(...) / patch
+            };
         }
     ]);
 

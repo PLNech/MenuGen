@@ -21,7 +21,24 @@ def home(request):
 
 @login_required
 def statistics(request):
-    return render(request, 'menus/statistics.html', {})
+    return render(request, 'menus/statistics.html', {
+        'nb_recipes': Recipe.objects.all().count(),
+        'nb_ingreds': Ingredient.objects.all().count(),
+        'nb_nut': Nutriment.objects.all().count(),
+        'nb_very_easy': Recipe.objects.filter(difficulty=0).count(),
+        'nb_easy': Recipe.objects.filter(difficulty=1).count(),
+        'nb_medium': Recipe.objects.filter(difficulty=2).count(),
+        'nb_difficult': Recipe.objects.filter(difficulty=3).count(),
+        'cat_amuse_gueule': Recipe.objects.filter(category='Amuse-gueule').count(),
+        'cat_confiserie': Recipe.objects.filter(category='Confiserie').count(),
+        'cat_conseil': Recipe.objects.filter(category='Conseil').count(),
+        'cat_accompagnement': Recipe.objects.filter(category='Accompagnement').count(),
+        'cat_dessert': Recipe.objects.filter(category='Dessert').count(),
+        'cat_entree': Recipe.objects.filter(category='Entrée').count(),
+        'cat_sauce': Recipe.objects.filter(category='Sauce').count(),
+        'cat_boisson': Recipe.objects.filter(category='Boisson').count(),
+        'cat_plat_principal': Recipe.objects.filter(category='Plat principal').count()
+    })
 
 @login_required
 def account(request):
