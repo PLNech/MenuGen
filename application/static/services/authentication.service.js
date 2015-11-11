@@ -24,10 +24,11 @@ function AuthenticationService($q, $http, $cookies, $rootScope) {
         'authPromise': null
     };
 
-    service.initialize = initialize;
-    service.request = request;
-    service.login = login;
-    service.logout = logout;
+    service.initialize           = initialize;
+    service.request              = request;
+    service.login                = login;
+    service.register             = register;
+    service.logout               = logout;
     service.authenticationStatus = authenticationStatus;
 
     return service;
@@ -129,7 +130,7 @@ function AuthenticationService($q, $http, $cookies, $rootScope) {
         return getAuthStatus.promise;
      }
 
-    function login(username,password) {
+    function login(username, password) {
         var authenticationService = this;
 
         return this.request({
@@ -146,6 +147,21 @@ function AuthenticationService($q, $http, $cookies, $rootScope) {
             }
             authenticationService.authenticated = true;
             $rootScope.$broadcast("djangoAuth.logged_in", data);
+        });
+    }
+
+    function register (username, password1, password2, more) {
+        var data = {
+            'username':username,
+            'password1':password1,
+            'password2':password2
+        }
+        data = angular.extend(data, more);
+
+        return this.request({
+            'method': "POST",
+            'url': "/registration/",
+            'data' :data
         });
     }
 

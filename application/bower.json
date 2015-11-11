@@ -7,6 +7,8 @@
     "angular-cookies": "1.4.7",
     "angular-sanitize": "1.4.7",
     "angular-ui-router": "0.2.x",
+    "angular-bootstrap": "0.14.0",
+    "angular-animate": "1.4.7",
     "bootstrap": ">=3.0"
   },
   "private": true

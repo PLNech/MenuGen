@@ -25,6 +25,26 @@ function config ($stateProvider, $urlRouterProvider, $urlMatcherFactory, $httpPr
                 }]
             }
         })
+        .state('login', {
+            url: '/login',
+            templateUrl: 'static/views/login.html',
+            controller: 'LoginController',
+            resolve: {
+                authenticated: ['AuthenticationService', function (AuthenticationService) {
+                    return AuthenticationService.authenticationStatus();
+                }]
+            }
+        })
+        .state('register', {
+            url: '/register',
+            templateUrl: 'static/views/register.html',
+            controller: 'RegisterController',
+            resolve: {
+                authenticated: ['AuthenticationService', function(AuthenticationService){
+                    return AuthenticationService.authenticationStatus();
+                }]
+            }
+        })
         .state('tastes', {
             url: '/tastes',
             templateUrl: 'static/views/tastes.html',

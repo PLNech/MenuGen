@@ -1,7 +1,122 @@
-{% extends '_base.html' %}
 {% load staticfiles %}
 
-{% block js %}
+<!DOCTYPE html>
+<html ng-app="MenuGen">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>MenuGen</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/bootstrap/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/libs/font-awesome.css' %}"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/libs/nanoscroller.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/compiled/theme_styles.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}"/>
+
+    <link rel="stylesheet" type="text/css" href='{% static 'bootstrap_overrides/tastes.css' %}' />
+    <link type="image/x-icon" href="{% static 'favicon.png' %}" rel="shortcut icon"/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css'>
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+{% block css %}
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap_overrides/modal.css' %}" />
+{% endblock %}
+
+
+<body class="theme-white fixed-footer fixed-header fixed-leftmenu">
+    <div id="theme-wrapper">
+        <div ng-controller="NavigationController">
+            <header class="navbar" id="header-navbar">
+                <div class="container">
+                    <a href="{% url 'landing' %}" id="logo" class="navbar-brand">
+                        <img src="{% static 'img/logo.png' %}" class="normal-logo logo-white">
+            <!--
+            <img src="img/logo.png" alt="" class="normal-logo logo-white"/>
+            <img src="img/logo-black.png" alt="" class="normal-logo logo-black"/>
+            <img src="img/logo-small.png" alt="" class="small-logo hidden-xs hidden-sm hidden"/>
+            -->
+                    <div class="raw-brand" style="padding-top: 5px; padding-left: 25px;">
+                {% comment %}<i class="fa fa-cogs"></i>
+                <strong>MenuGen</strong>{% endcomment %}
+                    </div>
+                    </a>
+                    <div class="clearfix">
+                        <button ng-show="authenticated" class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="fa fa-bars"></span>
+                        </button>
+                        <div class="nav-no-collapse navbar-left pull-left hidden-sm hidden-xs">
+                            <ul class="nav navbar-nav pull-left">
+                                <li>
+                                    <a class="btn" id="make-small-nav">
+                                        <i class="fa fa-bars"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="nav-no-collapse pull-right" id="header-nav">
+                                <ul ng-show="authenticated" class="nav navbar-nav pull-right" style="padding-top: 5px; padding-right: 20px;">
+                                    <div class="btn-group profile-dropdown" uib-dropdown is-open="status.isopen">
+                                      <a id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+                                          <img src="{% static 'vendor/img/default-avatar.png' %}" alt=""/>
+                                          <span class="hidden-xs">{{ user.username }}</span><b class="caret"></b>
+                                      </a>
+                                      <ul class="uib-dropdown-menu" role="menu" aria-labelledby="single-button">
+                                          <li role="menuitem"><a href="#"><i class="fa fa-user"></i>Profil</a></li>
+                                          <li role="menuitem"><a href="#"><i class="fa fa-cog"></i>Parametres</a></li>
+                                          <li class="divider"></li>
+                                          <li role="menuitem"><a ng-click="logout()" href="#/logout"><i class="fa fa-power-off"></i>Déconnection</a></li>
+                                      </ul>
+                                    </div>
+                                </ul>
+
+                                <div ng-hide="authenticated" style="padding-top: 5px; padding-right: 10px;">
+                                    <a class="btn btn-primary"
+                                       ng-click="openModal('md', 'static/views/login.html','LoginController')">
+                                        Connexion
+                                    </a>
+                                    <a class="btn btn-primary"
+                                       ng-click="openModal('md', 'static/views/register.html','RegisterController')">
+                                        Inscription
+                                    </a>
+                                </div>
+                            <div class="modal fade" id="auth-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="vertical-alignment-helper">
+                                    <div class="modal-dialog vertical-align-center modal-sm">
+                                        <div class="modal-content">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+
+        <div id="page-wrapper" class="container">
+            <div class="row">
+                <div id="content-wrapper" style="margin-left: 0;">
+                    <div class="row">
+                        <div id="ngview" ui-view></div>
+                    </div>
+                </div>
+                {% include '_footer.html' %}
+            </div>
+        </div>
+    </div>
+</body>
+
     <script type="text/javascript" src="{% static 'lib/jquery-2.1.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/angular/angular.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/angular-resource/angular-resource.min.js' %}"></script>
@@ -9,22 +124,14 @@
     <script type="text/javascript" src="{% static 'lib/angular-sanitize/angular-sanitize.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/angular-route.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/angular-ui-router.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'app.js' %}"></script>
     <script type="text/javascript" src="{% static 'services.js' %}"></script>
     <script type="text/javascript" src="{% static 'services/authentication.service.js' %}"></script>
     <script type="text/javascript" src="{% static 'services/validate.service.js' %}"></script>
+    <script type="text/javascript" src="{% static 'controllers/navigation.js' %}"></script>
     <script type="text/javascript" src="{% static 'controllers/landing.js' %}"></script>
+    <script type="text/javascript" src="{% static 'controllers/login.js' %}"></script>
+    <script type="text/javascript" src="{% static 'controllers/register.js' %}"></script>
     <script type="text/javascript" src="{% static 'controllers/tastes.js' %}"></script>
     {#    <script type="text/javascript" src="{% static 'js/script.js' %}"></script> <!-- Build with grunt? --> #}
-
-{% endblock %}
-
-{% block css %}
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/menu.css' %}"/>
-{% endblock %}
-
-{% block content %}
-    <div id="ngview" ui-view></div>
-{% endblock %}
