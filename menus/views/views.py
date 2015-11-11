@@ -21,6 +21,15 @@ def home(request):
 
 @login_required
 def statistics(request):
+    family_freq = {}
+    for i in Ingredient.objects.all():
+        try:
+            family_freq[i.family.name] = family_freq[i.family.name] + 1
+        except KeyError:
+            family_freq[i.family.name] = 1
+    freq_family = {v:k for k, v in family_freq.items()}
+    amount = sorted([k for k in freq_family.keys()])[-10:]
+    families = [freq_family[k] for k in amount]
     return render(request, 'menus/statistics.html', {
         'nb_recipes': Recipe.objects.all().count(),
         'nb_ingreds': Ingredient.objects.all().count(),
@@ -37,7 +46,9 @@ def statistics(request):
         'cat_entree': Recipe.objects.filter(category='Entrée').count(),
         'cat_sauce': Recipe.objects.filter(category='Sauce').count(),
         'cat_boisson': Recipe.objects.filter(category='Boisson').count(),
-        'cat_plat_principal': Recipe.objects.filter(category='Plat principal').count()
+        'cat_plat_principal': Recipe.objects.filter(category='Plat principal').count(),
+        'families': families[:10],
+        'amount': amount[:10]
     })
 
 @login_required

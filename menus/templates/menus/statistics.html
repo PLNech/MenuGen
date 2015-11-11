@@ -10,6 +10,9 @@
         <label for="mealTypesDoughnutChart">Catégories de recettes</label>
         <canvas id="mealTypesDoughnutChart" width="200" height="200"></canvas>
     </div>
+    <div class="row">
+        <canvas id="ingredientFamiliesBarChart" width="800" height="600"></canvas>
+    </div>
 
 {% endblock %}
 
@@ -103,5 +106,21 @@
         ];
         var ctxPPC = $("#mealTypesDoughnutChart").get(0).getContext("2d");
         new Chart(ctxPPC).Doughnut(data_categories);
+
+        var data_ingred_families = {
+            labels: [{% for f in families %}"{{ f }}",{% endfor %}],
+            datasets: [
+                {
+                    label: "Ingredient families",
+                    fillColor: "rgba(220,220,220,0.5)",
+                    strokeColor: "rgba(220,220,220,0.8)",
+                    highlightFill: "rgba(220,220,220,0.75)",
+                    highlightStroke: "rgba(220,220,220,1)",
+                    data: [{% for a in amount %}"{{ a }}",{% endfor %}]
+                }
+            ]
+        };
+        var ctxPPC = $("#ingredientFamiliesBarChart").get(0).getContext("2d");
+        new Chart(ctxPPC).Bar(data_ingred_families);
     </script>
 {% endblock %}
