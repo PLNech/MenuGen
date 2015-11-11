@@ -45,7 +45,7 @@ class Account(models.Model):
 
 
 class Profile(models.Model):
-    name = models.CharField(max_length=64, default='Sans nom')
+    name = models.CharField(max_length=64, default=default.NAME)
     birthday = models.DateField(blank=True, null=True, auto_now_add=True)
     weight = models.IntegerField(blank=True, null=True, default=default.WEIGHT)
     height = models.FloatField(blank=True, null=True, default=default.HEIGHT)
@@ -109,6 +109,7 @@ class Diet(models.Model):
 
     ingredients = models.ManyToManyField('Ingredient')
     ingredients_family = models.ManyToManyField('IngredientFamily')
+    active = False
 
     def __str__(self):
         return self.name

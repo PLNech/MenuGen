@@ -64,7 +64,8 @@ urlpatterns += patterns(
     url(r'^profiles/(?P<profile_id>[0-9]+)/edit$', 'edit', name='profile_edit'),
     url(r'^profiles/(?P<profile_id>[0-9]+)/remove$', 'remove', name='profile_remove'),
 
-    url(r'^update_physio$', 'update_physio', name='update_physio'),
+    url(r'^update_physio$', 'update_profile', name='update_physio'),
+    url(r'^update_profile$', 'update_profile', name='update_profile'),
     url(r'^update_tastes', 'update_tastes', name='update_tastes'),
     url(r'^physiology$', 'physiology', name='physiology'),
     url(r'^regimes$', 'regimes', name='regimes'),

@@ -1,4 +1,3 @@
-
 <div class="main-box clearfix">
     <div class="main-box-body clearfix">
         <div class="col-md-6">
@@ -6,9 +5,10 @@
             {% if health_regimes_list %}
                 <ul>
                     {% for regime in health_regimes_list %}
-                        <div class="checkbox regime">
+                        <div class="checkbox regime" data-diet="{{ regime.pk }}" onclick="update_diet(this)">
                             <label><input type="checkbox" value="">{{ regime.name }}</label>
-                            <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.desc }}</em></div>
+
+                            <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.description }}</em></div>
                         </div>
                     {% endfor %}
                 </ul>
@@ -21,9 +21,10 @@
             {% if value_regimes_list %}
                 <ul>
                     {% for regime in value_regimes_list %}
-                        <div class="checkbox regime">
-                            <label><input type="checkbox" value="">{{ regime.name }}</label>
-                            <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.desc }}</em></div>
+                        <div class="checkbox regime" data-diet="{{ regime.pk }}" onclick="update_diet(this)">
+                            <label><input type="checkbox" value="" {% if regime.active %} checked="checked" {% endif %}>{{ regime.name }}</label>
+
+                            <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.description }}</em></div>
                         </div>
                     {% endfor %}
                 </ul>
@@ -37,9 +38,10 @@
             {% if nutrients_regimes_list %}
                 <ul>
                     {% for regime in nutrients_regimes_list %}
-                        <div class="checkbox regime">
+                        <div class="checkbox regime" data-diet="{{ regime.pk }}" onclick="update_diet(this)">
                             <label><input type="checkbox" value="">{{ regime.name }}</label>
-                            <div class="regime_desc">{{ regime.desc }}</div>
+
+                            <div class="regime_desc">{{ regime.description }}</div>
                             <div class="btn-group btn-group-sm" role="group" aria-label="...">
                                 <button type="button" class="btn btn-default">Min</button>
                                 <button type="button" class="btn btn-default">Recomandé</button>
@@ -49,7 +51,7 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                <p>Aucun régime de ce type disponible pour le moment</p>
+                <p><i>Aucun régime de ce type disponible pour le moment</i></p>
             {% endif %}
         </div>
     </div>

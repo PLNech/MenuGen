@@ -1,10 +1,18 @@
 from datetime import datetime
+import logging
+
 from django.contrib.auth.decorators import login_required
+
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect
+
 from django.shortcuts import render, redirect, get_object_or_404
+
 from menus.forms import ProfileForm
 import menugen.defaults as default
-from menus.models import Recipe, Ingredient, Profile
+from menus.models import Recipe, Ingredient, Profile, Diet
+from menus.utils import json2obj
+
+logger = logging.getLogger("menus")
 
 
 @login_required
@@ -17,13 +25,13 @@ def index(request, ajax=False):
     if ajax:
         return {
             'user_profile': profile,
-            'guests':       guests,
-            'guests_nb':    guests_nb,
+            'guests': guests,
+            'guests_nb': guests_nb,
         }
     return render(request, 'profiles/guests/index.html', {
-        'user_profile':     profile,
-        'guests':           guests,
-        'guests_nb':        guests_nb,
+        'user_profile': profile,
+        'guests': guests,
+        'guests_nb': guests_nb,
     })
 
 
@@ -84,8 +92,9 @@ def remove(request, profile_id):
         p.delete()
         return HttpResponseRedirect('/profile')
 
-def update_physio(request):
-    """ This method is used as ajax call in order to update physio """
+
+def update_profile(request):
+    """ This method is used as ajax call in order to update user profile """
 
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
@@ -97,9 +106,10 @@ def update_physio(request):
     birthday = request.POST.get('birthday')
     name = request.POST.get('name')
     pk = request.POST.get('pk')
+    diets = request.POST.get('diets')
 
     if request.user.is_authenticated():
-        #p = request.user.account.profile
+        # p = request.user.account.profile
         p = get_object_or_404(Profile, pk=pk)
         # TODO : check propriety
         if name:
@@ -114,6 +124,16 @@ def update_physio(request):
             p.weight = weight
         elif activity:
             p.activity = activity
+        elif diets:
+            diets = json2obj(diets)
+
+            for key, checked in diets:
+                logger.info('Diet %s: %s' % (key, checked))
+                if Diet.objects.filter(pk=key).exists():
+                    if checked:
+                        p.diets.add(key)
+                    else:
+                        p.diets.remove(key)
         p.save()
 
     else:
@@ -129,8 +149,10 @@ def update_physio(request):
             request.session['weight'] = weight
         elif activity:
             request.session['activity'] = activity
+        elif diets:
+            request.session['activity'] = activity
 
-    return HttpResponse('ok')
+    return HttpResponse(diets)
 
 
 def update_tastes(request):
@@ -154,7 +176,7 @@ def update_tastes(request):
 
 
 def physiology(request, p=None, ajax=False):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and p is not None:
         physio = {
             'name': p.name,
             'sex': p.sex,
@@ -166,12 +188,12 @@ def physiology(request, p=None, ajax=False):
 
     else:
         physio = {
-            'name': request.session['name'] if 'name' in request.session else "",
-            'sex': request.session.get('sex') if 'sex' in request.session else default.SEX,
-            'birthday': request.session['birthday'] if 'birthday' in request.session else "",
-            'height': request.session.get('height') if 'height' in request.session else default.HEIGHT,
-            'weight': request.session.get('weight') if 'weight' in request.session else default.WEIGHT,
-            'activity': request.session.get('activity') if 'activity' in request.session else default.ACTIVITY,
+            'name': request.session.get('name', default.NAME),
+            'sex': request.session.get('sex', default.SEX),
+            'birthday': request.session.get('birthday', default.BIRTHDAY),
+            'height': request.session.get('height', default.HEIGHT),
+            'weight': request.session.get('weight', default.WEIGHT),
+            'activity': request.session.get('activity', default.ACTIVITY),
         }
 
     if ajax:
@@ -182,41 +204,35 @@ def physiology(request, p=None, ajax=False):
         })
 
 
-def regimes(request, ajax=False):
+def regimes(request, ajax=False, profile_id=None):
+    vege_diets = Diet.objects.filter(name__startswith='Végé')
     health_regimes_list = []
     value_regimes_list = []
+    profile = Profile.objects.get(pk=profile_id)
 
-    regime_sans_sel = {
-        'name': 'Hyposodé (sans sel)',
-        'desc': "Régime pour restreindre le plus possible les apports en sel dans l'alimentation."
-    }
+    for diet in vege_diets:
+        diet.active = profile.diets.filter(pk=diet.pk).exists()
+        logger.info("diet %s: %r" % (diet.name, diet.active))
+        value_regimes_list.append(diet)
+
+    logger.info("regime| Diets:")
+    logger.info(value_regimes_list)
+
     regime_hyper_prot = {
         'name': 'Hyperprotéiné',
-        'desc': "Régime amaigrissant fondé sur l'absorption de protéines aussi pures que possibles. Ce régime est fortement hypocalorique."
+        'description': "Régime amaigrissant fondé sur l'absorption de protéines aussi pures que possibles. Ce régime est fortement hypocalorique.",
+        'pk': -1,
+        'active': False
     }
     regime_sans_gluten = {
         'name': 'Sans gluten',
-        'desc': "Préconisé dans le cas de l'intolérance au gluten, ce régime permet d'éviter une réaction immunitaire à la gliadine."
-    }
-    regime_vegetarien = {
-        'name': 'Végétarien',
-        'desc': "Régime sans chair animale ni sous-produits d'animaux abattus."
-    }
-    regime_vegetalien = {
-        'name': 'Végétalien',
-        'desc': "Régime végétarien excluant également le lait, les œufs, le miel ainsi que leurs dérivés."
-    }
-    regime_halal = {
-        'name': 'Halal',
-        'desc': "Régime religieux impliquant l'interdiction de certains aliments."
+        'description': "Préconisé dans le cas de l'intolérance au gluten, ce régime permet d'éviter une réaction immunitaire à la gliadine.",
+        'pk': -2,
+        'active': False
     }
 
-    health_regimes_list.append(regime_sans_sel)
     health_regimes_list.append(regime_hyper_prot)
     health_regimes_list.append(regime_sans_gluten)
-    value_regimes_list.append(regime_vegetarien)
-    value_regimes_list.append(regime_vegetalien)
-    value_regimes_list.append(regime_halal)
 
     if ajax:
         return {
@@ -232,58 +248,57 @@ def regimes(request, ajax=False):
 
 @login_required
 def profile(request, profile_id=0):
-    r = regimes(request, True)
+    r = regimes(request, True, profile_id=profile_id)
     g = index(request, True)
 
     profile_id = int(profile_id) if profile_id != 0 else request.user.account.profile_id
     p = Profile.objects.get(pk=profile_id)
-    #p = get_object_or_404(Profile, pk=profile_id)
+    # p = get_object_or_404(Profile, pk=profile_id)
     # TODO : test propriety
 
     return render(request, 'profiles/_base.html', {
-        'physio':               physiology(request, p, True),
-        'health_regimes_list':  r['health_regimes_list'],
-        'value_regimes_list':   r['value_regimes_list'],
-        'user_profile':         g['user_profile'],
-        'guests':               g['guests'],
-        'guests_nb':            g['guests_nb'],
-        'pk':                   profile_id,
+        'physio': physiology(request, p, True),
+        'health_regimes_list': r['health_regimes_list'],
+        'value_regimes_list': r['value_regimes_list'],
+        'user_profile': g['user_profile'],
+        'guests': g['guests'],
+        'guests_nb': g['guests_nb'],
+        'pk': profile_id,
     })
 
 
 @login_required
 def tastes(request):
-    profile = request.user.account.profile;
+    profile = request.user.account.profile
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes.all()
     return render(request, 'profiles/tastes.html', {
-        'unlikes_recipes' : unlikes_recipes,
-        'unlikes_ingredients' : unlikes_ingredients,
+        'unlikes_recipes': unlikes_recipes,
+        'unlikes_ingredients': unlikes_ingredients,
     })
 
 
 @login_required
 def relike_recipe(request, recipe_id):
-    profile = request.user.account.profile;
+    profile = request.user.account.profile
     recipe = Recipe.objects.get(id=recipe_id)
     profile.unlikes_recipe.remove(recipe)
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes.all()
     return render(request, 'profiles/tastes.html', {
-        'unlikes_recipes' : unlikes_recipes,
-        'unlikes_ingredients' : unlikes_ingredients,
+        'unlikes_recipes': unlikes_recipes,
+        'unlikes_ingredients': unlikes_ingredients,
     })
 
 
 @login_required
 def relike_ingredient(request, ingredient_id):
-    profile = request.user.account.profile;
+    profile = request.user.account.profile
     ingredient = Ingredient.objects.get(id=ingredient_id)
     profile.unlikes.remove(ingredient)
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes.all()
     return render(request, 'profiles/tastes.html', {
-        'unlikes_recipes' : unlikes_recipes,
-        'unlikes_ingredients' : unlikes_ingredients,
+        'unlikes_recipes': unlikes_recipes,
+        'unlikes_ingredients': unlikes_ingredients,
     })
-

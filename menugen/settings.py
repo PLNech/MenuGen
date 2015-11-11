@@ -9,11 +9,12 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from django.conf import global_settings
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+from django.conf import global_settings
+import sys
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -27,7 +28,6 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -45,7 +45,6 @@ INSTALLED_APPS = (
 
     'allauth',
     'allauth.account',
-
 
     'django_extensions',
     'application',
@@ -68,7 +67,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'menugen.urls'
 
 WSGI_APPLICATION = 'menugen.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
@@ -101,6 +99,23 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        }
+    },
+    'loggers': {
+        'menus': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    }
+
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
@@ -116,7 +131,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'menus/templates'),
+)
+
+FIXTURE_DIRS = (
+    os.path.join(BASE_DIR, "application/static"),
 )
 
 REST_SESSION_LOGIN = False
@@ -142,14 +161,11 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-
-
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     "django.core.context_processors.request",
 )
-
 
 LOGIN_URL = "/sign-in"
 LOGIN_REDIRECT_URL = "/"
