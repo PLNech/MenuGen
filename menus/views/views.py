@@ -30,6 +30,12 @@ def statistics(request):
     freq_family = {v:k for k, v in family_freq.items()}
     amount = sorted([k for k in freq_family.keys()])[-10:]
     families = [freq_family[k] for k in amount]
+
+    pics = list()
+    for r in Recipe.objects.all()[:200]:
+        if r.picture:
+            pics.append(r.picture)
+
     return render(request, 'menus/statistics.html', {
         'nb_recipes': Recipe.objects.all().count(),
         'nb_ingreds': Ingredient.objects.all().count(),
@@ -48,7 +54,8 @@ def statistics(request):
         'cat_boisson': Recipe.objects.filter(category='Boisson').count(),
         'cat_plat_principal': Recipe.objects.filter(category='Plat principal').count(),
         'families': families[:10],
-        'amount': amount[:10]
+        'amount': amount[:10],
+        'pics': pics
     })
 
 @login_required
