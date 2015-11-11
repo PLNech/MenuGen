@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('MenuGen').
-    controller('LandingController', ['$scope', function ($scope, AuthenticationService) {
+    controller('LandingController', ['$scope', function ($scope) {
         $scope.username = "asd";
         console.log("End of controller execution.");
 
