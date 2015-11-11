@@ -6,55 +6,53 @@ var MenuGen = angular.module('MenuGen', [
     'MenuGen.services'
 ]);
 
-MenuGen.factory('authInterceptor', ['$injector', '$location', '$rootScope', '$q', '$window', function ($injector, $location, $rootScope, $q, $window) {
-    return {
-        request: function (config) {
-            config.headers = config.headers || {};
-            console.log("Stored session token:", $window.sessionStorage.token);
-            if ($window.sessionStorage.token && $window.sessionStorage.token !== "null") {
-                config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
-            }
-            return config;
-        },
-        response: function (response) {
-            if (response.status == 401) {
-                console.log("Got unauthorized while accessing " + response.config.url);
-                $injector.get("$state").go("landing", {destination: $location.path()});
-                console.log("Redirect after response 401.");
-            }
-            return response || $q.when(response);
-        },
-        'responseError': function (rejection, $state) {
-            if (rejection.status == 401) {
-                console.log("Rejection received while accessing " + rejection.config.url +
-                    ", redirecting to login screen...");
-                $window.sessionStorage.token = null;
-                $window.sessionStorage.username = null;
-                console.log("Redirect after rejection 401.");
-                $injector.get('$state').transitionTo('landing');
-            }
-            return $q.reject(rejection);
-        }
-    };
-}]);
+MenuGen.config(config);
+MenuGen.run(run);
 
-MenuGen.config([
-    '$stateProvider', '$urlRouterProvider', '$urlMatcherFactoryProvider', '$httpProvider',
-    function ($stateProvider, $urlRouterProvider, $urlMatcherFactory, $httpProvider) {
-        $urlRouterProvider.otherwise("/");
-        $urlMatcherFactory.caseInsensitive(true);
-        $httpProvider.interceptors.push('authInterceptor');
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$urlMatcherFactoryProvider', '$httpProvider'];
+function config ($stateProvider, $urlRouterProvider, $urlMatcherFactory, $httpProvider) {
+    $urlRouterProvider.otherwise("/");
+    $urlMatcherFactory.caseInsensitive(true);
 
-        $stateProvider
-            .state('landing', {
-                url: '^/',
-                templateUrl: 'static/views/landing.html',
-                controller: 'LandingController',
-                resolve: {}
-            })
-            .state('tastes', {
-                url: '/tastes',
-                templateUrl: 'static/views/tastes.html',
-                controller: 'TastesController'
-            });
-    }]);
+    $stateProvider
+        .state('landing', {
+            url: '^/',
+            templateUrl: 'static/views/landing.html',
+            controller: 'LandingController',
+            resolve: {
+                authenticated: ['AuthenticationService', function(AuthenticationService){
+                    return AuthenticationService.authenticationStatus();
+                }]
+            }
+        })
+        .state('login', {
+            url: '/login',
+            templateUrl: 'static/views/login.html',
+            controller: 'LoginController',
+            resolve: {
+                authenticated: ['AuthenticationService', function (AuthenticationService) {
+                    return AuthenticationService.authenticationStatus();
+                }]
+            }
+        })
+        .state('register', {
+            url: '/register',
+            templateUrl: 'static/views/register.html',
+            controller: 'RegisterController',
+            resolve: {
+                authenticated: ['AuthenticationService', function(AuthenticationService){
+                    return AuthenticationService.authenticationStatus();
+                }]
+            }
+        })
+        .state('tastes', {
+            url: '/tastes',
+            templateUrl: 'static/views/tastes.html',
+            controller: 'TastesController'
+        });
+}
+
+run.$inject = ['AuthenticationService'];
+function run(AuthenticationService){
+    AuthenticationService.initialize('//127.0.0.1:8000/rest-auth', false);
+}

@@ -51,7 +51,7 @@ class Profile(models.Model):
     height = models.FloatField(blank=True, null=True, default=default.HEIGHT)
     sex = models.CharField(max_length=16, choices=SEX, blank=True, null=True, default=default.SEX)
     activity = models.CharField(max_length=16, choices=ACTIVITY, blank=True, null=True, default=default.ACTIVITY)
-    picture = StdImageField(upload_to='media/images/profiles')
+    picture = StdImageField(upload_to='media/images/profiles', blank=True, null=True)
 
     unlikes = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
@@ -59,7 +59,7 @@ class Profile(models.Model):
     unlikes_recipe = models.ManyToManyField("Recipe")
     diets = models.ManyToManyField('Diet', related_name='diets')
 
-    modified = models.DateTimeField(default=timezone.now())
+    modified = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
@@ -84,7 +84,7 @@ class RecipeToIngredient(models.Model):
 class Recipe(models.Model):
     dom = models.TextField(blank=True, null=True)
     name = models.CharField(max_length=128)
-    picture = StdImageField(upload_to='media/images/recipe')
+    picture = StdImageField(upload_to='media/images/recipe', blank=True, null=True)
     origin_url = models.URLField()
     prep_time = models.IntegerField()
     cook_time = models.IntegerField()
@@ -105,7 +105,7 @@ class Recipe(models.Model):
 class Diet(models.Model):
     name = models.CharField(max_length=32)
     description = models.TextField()
-    picture = StdImageField(upload_to='media/images/diet')
+    picture = StdImageField(upload_to='media/images/diet', blank=True, null=True)
 
     ingredients = models.ManyToManyField('Ingredient')
     ingredients_family = models.ManyToManyField('IngredientFamily')
@@ -136,10 +136,7 @@ class IngredientNutriment(models.Model):
 
 class IngredientFamily(models.Model):
     name = models.CharField(max_length=64)
-    picture = StdImageField(upload_to='media/images/ingredient_family')
     ingredients = models.ManyToManyField('Ingredient')
-
-    # TODO (addition by Kevin) : seems necessary for hierarchy (to discuss)
     father = models.ForeignKey('IngredientFamily', null=True, default=None)
 
     def __str__(self):
