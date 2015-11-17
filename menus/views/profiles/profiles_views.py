@@ -266,9 +266,18 @@ def tastes(request):
     profile = request.user.account.profile
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes.all()
+
+    found_recipes = None
+    found_ingredients = None
+    if 'query' in request.POST and request.POST['query']:
+        found_recipes = Recipe.objects.filter(name__icontains=request.POST['query'])
+        found_ingredients = Ingredient.objects.filter(name__icontains=request.POST['query'])
+
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
+        'found_recipes': found_recipes,
+        'found_ingredients': found_ingredients
     })
 
 
