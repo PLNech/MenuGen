@@ -17,14 +17,14 @@ _local = threading.local()
 
 class MenuManager(Manager):
     @staticmethod
-    def get():
+    def get(request=None):
         caller = inspect.getouterframes(inspect.currentframe(), 2)[1][3]
         if 'MenuManager' not in _local.__dict__:
             if Config.print_manager:
                 print(Printer.err("MenuManager not found. initialising cache procedure..."))
 
             _local.MenuManager = MenuManager()
-            _local.MenuManager.init()
+            _local.MenuManager.init(request)
             items = _local.MenuManager.count()
 
             if Config.print_manager:
@@ -46,14 +46,27 @@ class MenuManager(Manager):
 
         return _local.MenuManager
 
+    @staticmethod
+    def delete():
+        _local.__dict__.pop('MenuManager', None)
+
+    @staticmethod
+    def new(request=None):
+        MenuManager.delete()
+        return MenuManager.get(request)
+
     def __init__(self):
         self.dishes = []
         self.names_count = {}
 
     def init(self, request=None):
         nb_dishes = Config.parameters[Config.KEY_NB_DISHES]
+        profile = None
         self.reset()
-        self.init_from_db(nb_dishes, request)
+        if request is not None:
+            account = request.user.account
+            profile = account.profile
+        self.init_from_db(nb_dishes, profile)
         if Config.print_manager:
             print("Initialised MenuManager with %i dishes." % len(self.dishes))
 
@@ -76,7 +89,7 @@ class MenuManager(Manager):
                 print("Dish %s." % dish)
 
     def init_from_db(self, nb_dishes, profile=None):
-        recipes = list(Recipe.for_profile(profile)[:nb_dishes])
+        recipes = list(Recipe.for_profile(profile, nb_dishes)[:nb_dishes])
         shuffle(recipes)
         for i in range(nb_dishes):
             recipe = recipes[i]
@@ -89,7 +102,7 @@ class MenuManager(Manager):
         self.dishes = []
 
     def add_item(self, dish, profile=None):
-        if profile and not profile.likes(dish):
+        if profile and not profile.likes_dish(dish):
             return False
         else:
             self.dishes.append(dish)

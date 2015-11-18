@@ -265,7 +265,7 @@ def profile(request, profile_id=0):
 def tastes(request):
     profile = request.user.account.profile
     unlikes_recipes = profile.unlikes_recipe.all()
-    unlikes_ingredients = profile.unlikes.all()
+    unlikes_ingredients = profile.unlikes_ingredient.all()
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
@@ -278,7 +278,7 @@ def relike_recipe(request, recipe_id):
     recipe = Recipe.objects.get(id=recipe_id)
     profile.unlikes_recipe.remove(recipe)
     unlikes_recipes = profile.unlikes_recipe.all()
-    unlikes_ingredients = profile.unlikes.all()
+    unlikes_ingredients = profile.unlikes_ingredient.all()
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
@@ -289,9 +289,9 @@ def relike_recipe(request, recipe_id):
 def relike_ingredient(request, ingredient_id):
     profile = request.user.account.profile
     ingredient = Ingredient.objects.get(id=ingredient_id)
-    profile.unlikes.remove(ingredient)
+    profile.unlikes_ingredient.remove(ingredient)
     unlikes_recipes = profile.unlikes_recipe.all()
-    unlikes_ingredients = profile.unlikes.all()
+    unlikes_ingredients = profile.unlikes_ingredient.all()
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,

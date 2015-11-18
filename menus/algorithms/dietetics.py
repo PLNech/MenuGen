@@ -52,7 +52,7 @@ class Calculator:
     @staticmethod
     def estimate_needs_profile(profile):
         print('birthday:', profile.birthday)
-        age = relativedelta(datetime.date.today(), profile.birthday).years
+        age = profile.age()
         return Calculator.estimate_needs(age, profile.height, profile.weight, profile.sex, profile.activity)
 
     @staticmethod
