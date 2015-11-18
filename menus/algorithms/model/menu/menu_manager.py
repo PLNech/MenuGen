@@ -1,13 +1,12 @@
 import inspect
-from menus.algorithms import adapter
 
+from menus.algorithms import adapter
 from menus.models import Recipe
 
 __author__ = 'PLNech'
 
 from random import randrange, shuffle
 import threading
-
 from menus.algorithms.utils.printer import Printer
 from menus.algorithms.model.manager import Manager
 from menus.algorithms.model.menu.dish import Dish

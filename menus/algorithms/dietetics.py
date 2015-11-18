@@ -64,10 +64,10 @@ class Calculator:
         :type size: int (cm)
         :type weight: int (kg)
         :type sex: str SEX_H / SEX_F
-        :type exercise: float EXERCISE_X
+        :type exercise: str EXERCISE_X
         :rtype: DieteticsNeeds
         """
-        print("Calculating objectives for a %i year-old %s of %icm and %ikg, exercising %sly..." %
+        print("Calculating objectives for a %d year-old %s of %dcm and %dkg, exercising %sly..." %
               (age, sex, size, weight, exercise))
 
         bmi = 10 * weight + 6.25 * size - 5 * age + Calculator.sex_handicaps[sex]
@@ -115,6 +115,9 @@ class DieteticsNeeds:
                (self.calories, self.proteins_min, self.proteins_max,
                 self.carbs_min, self.carbs_max,
                 self.fats_min, self.fats_max)
+
+    def __repr__(self):
+        return 'DieteticsNeeds: ' + str(self)
 
     def __add__(self, other):
         d = DieteticsNeeds(0)

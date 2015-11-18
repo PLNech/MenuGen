@@ -2,7 +2,7 @@ import datetime
 from menus.algorithms.dietetics import Calculator
 
 WEIGHT = 75
-HEIGHT = 1.7
+HEIGHT = 170
 AGE = 20
 BIRTHDAY = datetime.datetime.now() - datetime.timedelta(days=365 * AGE)
 NAME = 'Sans nom'

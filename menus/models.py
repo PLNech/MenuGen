@@ -26,11 +26,11 @@ SEX = (
 )
 
 ACTIVITY = (
-    (0, 'Sédentaire'),
-    (1, 'Légère'),
-    (2, 'Modérée'),
-    (3, 'Régulière'),
-    (4, 'Intense'),
+    ('low', 'Sédentaire'),
+    ('light', 'Légère'),
+    ('moderate', 'Modérée'),
+    ('active', 'Régulière'),
+    ('extreme', 'Intense'),
 )
 
 MEAL = (
@@ -50,15 +50,16 @@ class Account(models.Model):
 
 
 class Profile(models.Model):
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=64, default=default.NAME)
     birthday = models.DateField(blank=True, null=True, auto_now_add=True)
-    weight = models.IntegerField(blank=True, null=True, default=default.WEIGHT)
-    height = models.FloatField(blank=True, null=True, default=default.HEIGHT)
-    sex = models.CharField(max_length=16, choices=SEX, blank=True, null=True, default=default.SEX)
+    weight = models.IntegerField(default=default.WEIGHT)
+    height = models.FloatField(default=default.HEIGHT)
+    sex = models.CharField(max_length=16, choices=SEX, default=default.SEX)
     activity = models.CharField(max_length=16, choices=ACTIVITY, blank=True, null=True, default=default.ACTIVITY)
     picture = StdImageField(upload_to='media/images/profiles', blank=True, null=True)
 
-    unlikes = models.ManyToManyField('Ingredient')
+    unlikes_ingredient = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
 
     unlikes_recipe = models.ManyToManyField("Recipe")
