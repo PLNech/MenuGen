@@ -34,8 +34,7 @@
     }
 
     function update_diet(diet) {
-        var urlParts = document.location.href.split('/');
-        var profileId = urlParts[urlParts.length - 1];
+        var profileId = {{ profile.pk }};
         var dietDivs = $('div.regime.checkbox');
         var diets = [];
 

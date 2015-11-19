@@ -70,8 +70,8 @@ def generation(request):
     logger.info("Max dishes set to %d." % Config.parameters[Config.KEY_MAX_DISHES])
     Config.update_needs(needs, nb_days)
 
-    # Initialising MenuManager with appropriate meals for user
-    MenuManager.new(request)
+    # Initialising MenuManager with appropriate meals for profile(s)
+    MenuManager.new(profile_list)
     menu = run_standard(None, time.ctime())
     if len(menu.genes) < nb_meals_menu:
         pass  # FIXME: Remove after investigation

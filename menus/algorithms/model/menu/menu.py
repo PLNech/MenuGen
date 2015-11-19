@@ -212,7 +212,7 @@ class Menu(Individual):  # TODO Document!
                 else:
                     dish = ordered_dishes.pop()
                     did_used_ordered = True
-                    logger.info("Using smallest dish: %d." % dish.calories)
+                    logger.debug("Using smallest dish: %d." % dish.calories)
 
             # Now we have a valid dish, let's add it
             accu_calories += dish.calories

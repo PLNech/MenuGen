@@ -63,8 +63,8 @@ class Profile(models.Model):
 
     unlikes_ingredient = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
-
     unlikes_recipe = models.ManyToManyField("Recipe")
+
     diets = models.ManyToManyField('Diet', related_name='diets')
 
     modified = models.DateTimeField(default=timezone.now)
@@ -133,34 +133,66 @@ class Recipe(models.Model):
         return self.name
 
     @staticmethod
-    def for_profile(profile, maximum=1000):
+    def for_profiles(profile_list, maximum=1000):
         """
         Returns up to maximum ingredients matching profile's criteria
-        :type profile Profile
+        :type profile_list list
         :type maximum int
         :return:
         """
         count_recipes = Recipe.objects.count()
+        count_recipes_first = count_recipes
+        count_recipes_new = -42
+        profile_diets_pks = [profile.diets.values_list('pk') for profile in profile_list]
+        profile_bad_recipes_pks = [profile.unlikes_recipe.values_list('pk') for profile in profile_list]
+        profile_bad_families_pks = [profile.unlikes_family.values_list('pk') for profile in profile_list]
+        profile_bad_ingredients_pks = [profile.unlikes_ingredient.values_list('pk') for profile in profile_list]
 
-        if profile is None:
+        # Flattening lists and de-tupling items
+        profile_diets = list(set([item[0] for sublist in profile_diets_pks for item in sublist]))
+        profile_bad_ingredients = list(set([item[0] for sublist in profile_bad_ingredients_pks for item in sublist]))
+        profile_bad_families = list(set([item[0] for sublist in profile_bad_families_pks for item in sublist]))
+        profile_bad_recipes = list(set([item[0] for sublist in profile_bad_recipes_pks for item in sublist]))
+
+        if profile_list is None:
             recipes = Recipe.objects.order_by('?')
         else:
-            # TODO: Use diets too
-            logger.info('Excluding recipes for profile %d/%s from a corpus of %d recipes.' % (
-                profile.id, profile.name, count_recipes))
+            recipes = Recipe.objects
+            count_recipes = recipes.count()
 
-            recipes = Recipe.objects.exclude(pk__in=profile.unlikes_recipe.values_list('pk'))
-            logger.info('unlikes recipe : %d -> %d.' % (count_recipes, len(recipes)))
+            logger.info('Excluding recipes for profiles %s from a corpus of %d recipes.' % (
+                ", ".join([str(profile.id) + ": " + profile.name for profile in profile_list]), count_recipes))
+
+            # Diet Families
+            recipes = recipes.exclude(ingredients__family__bad_diets__pk__in=profile_diets)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes diet families : %d -> %d.' % (count_recipes, count_recipes_new))
+            count_recipes = count_recipes_new
+
+            # Diet Ingredients
+            recipes = recipes.exclude(ingredients__bad_diets__pk__in=profile_diets)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes diet ingredients : %d -> %d.' % (count_recipes, count_recipes_new))
+            count_recipes = count_recipes_new
+
+            # Profiles families
+            recipes = recipes.exclude(ingredients__family__pk__in=profile_bad_families)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes families : %d -> %d.' % (count_recipes, count_recipes_new))
             count_recipes = len(recipes)
 
-            recipes = recipes.exclude(ingredients__bad_profiles__pk=profile.pk)
-            logger.info('unlikes ingredients : %d -> %d.' % (count_recipes, len(recipes)))  # FIXME: Does it work?
+            # Profiles recipes
+            recipes = recipes.exclude(pk__in=profile_bad_recipes)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes recipe : %d -> %d.' % (count_recipes, count_recipes_new))
             count_recipes = len(recipes)
 
-            recipes = recipes.exclude(ingredients__family__in=profile.unlikes_family.all())
-            logger.info('unlikes families : %d -> %d.' % (count_recipes, len(recipes)))
+            # Profiles ingredients
+            recipes = recipes.exclude(ingredients__pk__in=profile_bad_ingredients)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes ingredients : %d -> %d.' % (count_recipes, count_recipes_new))  # FIXME: Does it work?
 
-            logger.info("Diets: reduced from %d to %d recipes." % (len(recipes), len(recipes)))
+            logger.info("for_profile: reduced from %d to %d recipes." % (count_recipes_first, count_recipes_new))
         return recipes[:maximum]
 
 

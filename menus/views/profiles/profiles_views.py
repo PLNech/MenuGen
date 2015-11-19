@@ -255,6 +255,7 @@ def profile(request, profile_id=0):
         'physio': physiology(request, p, True),
         'health_regimes_list': r['health_regimes_list'],
         'value_regimes_list': r['value_regimes_list'],
+        'profile': p,
         'user_profile': g['user_profile'],
         'guests': g['guests'],
         'guests_nb': g['guests_nb'],
