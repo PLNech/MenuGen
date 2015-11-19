@@ -207,6 +207,7 @@ def regimes(request, ajax=False, profile_id=None):
     health_regimes_list = []
     value_regimes_list = []
     profile = Profile.objects.get(pk=profile_id)
+    logger.info("Generating profile view for %s, given %d." % (profile.name, int(profile_id)))
 
     for diet in vege_diets:
         diet.active = profile.diets.filter(pk=diet.pk).exists()
@@ -242,10 +243,10 @@ def regimes(request, ajax=False, profile_id=None):
 
 @login_required
 def profile(request, profile_id=0):
+    profile_id = int(profile_id) if profile_id != 0 else request.user.account.profile_id
+
     r = regimes(request, True, profile_id=profile_id)
     g = index(request, True)
-
-    profile_id = int(profile_id) if profile_id != 0 else request.user.account.profile_id
     p = Profile.objects.get(pk=profile_id)
     # p = get_object_or_404(Profile, pk=profile_id)
     # TODO : test propriety
