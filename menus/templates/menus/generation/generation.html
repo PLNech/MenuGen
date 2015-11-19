@@ -3,7 +3,12 @@
 {% load staticfiles %}
 
 {% block content %}
-
+    <div class="modal fade" id="shoppingListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
     <div class="col-lg-12">
         <div id="content-header" class="clearfix">
             <div class="pull-left">
@@ -23,31 +28,14 @@
                         Sauvegarder et créer un compte <i class="fa fa-angle-double-right"></i>
                     </a>
 
-                    <!-- Shopping list accordion -->
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel" role="tab" id="heading">
-                            <a class="collapsed btn btn-success" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                <h4 class="panel-title"> Shopping list </h4>
-                            </a>
-                        </div>
-                        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading">
-                            <div class="panel-body">
-                                <table class="table table-striped">
-                                    <tbody>
-                                    {% for i in shopping_list %}
-                                        <tr>
-                                            <td>
-                                                {{ i }}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
 
                 {% else %}
+                    <a class="btn btn-default"
+                       data-toggle="modal"
+                       href="{% url 'generation_shopping_list' %}"
+                       data-target="#shoppingListModal">
+                        Liste de courses
+                    </a>
                     <a class="btn btn-warning"
                        href="{% url 'menu_new'%}"
                        role="button"

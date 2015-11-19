@@ -82,19 +82,22 @@ def generation(request):
     else:
         planning = generate_planning_from_list(nb_days, nb_meals, menu)
 
-    shopping_list = []
+    shopping_list = {}
     for meal_time in planning:
         for meal in meal_time:
             if meal:
                 print(meal)
                 main_course = meal['main_course']
                 for i in main_course.ingredients.all():
-                    shopping_list.append(i.name)
+                    try:
+                        shopping_list[i.name] = shopping_list[i.name] + 1
+                    except KeyError:
+                        shopping_list[i.name] = 1
+    request.session['shopping_list'] = shopping_list
 
     return render(request, 'menus/generation/generation.html', {
         'planning': planning,
-        'days_range': range(0, nb_days),
-        'shopping_list': shopping_list
+        'days_range': range(0, nb_days)
     })
 
 
@@ -114,6 +117,15 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
 
     meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
     return render(request, 'menus/generation/meal_details.html', {'meal': meal})
+
+
+def generation_shopping_list(request):
+    shopping_list = request.session.get('shopping_list', None)
+    print(">>>> SL")
+    print(shopping_list)
+    return render(request, 'menus/generation/shopping_list.html', {
+        'shopping_list': shopping_list
+    })
 
 
 @login_required

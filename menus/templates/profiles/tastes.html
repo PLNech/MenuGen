@@ -49,7 +49,7 @@
                         <tbody>
                             {% for recipe in unlikes_recipes %}
                                 <tr id="recipes" class="clickable-row" data-url="{% url 'relike_recipe' recipe_id=recipe.id %}" title="J'aime à nouveau!">
-                                    <td class="unlikes-relike">{{ recipe.name }}</td>
+                                    <td>{{ recipe.name }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
