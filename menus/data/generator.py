@@ -190,21 +190,23 @@ def generate_planning_from_list(nb_days, nb_meals_per_day, menu):
 
 
 def generate_planning_from_matrix(matrix, menu):
-    """
-    """
-    print("Generating from matrix: %i/%i" % (len(menu.genes), numpy.sum(matrix)))
-    planning = []
-    random.shuffle(menu.genes)
+    matrix_meal_count = int(numpy.sum(matrix))
+    print("Generating from matrix: menu has %d genes, matrix contains %d meals -> %d dishes." %
+          (len(menu.genes), matrix_meal_count, matrix_meal_count * 3))
 
-    for y in range(len(matrix)):
+    planning = []
+    gene_list = menu.genes[:]
+    random.shuffle(gene_list)
+
+    for x in range(len(matrix)):
         row = []
-        for x in range(len(matrix[y])):
+        for y in range(len(matrix[x])):
             menu_item = None
-            if matrix[y][x]:
-                print("Filling matrix in %i*%i: %i" % (x, y, matrix[y][x]))
-                dish = menu.genes.pop()
-                dish2 = menu.genes.pop()
-                dish3 = menu.genes.pop()
+            if matrix[x][y]:
+                print("Filling matrix at [%d][%d]..." % (x, y))
+                dish = gene_list.pop()
+                dish2 = gene_list.pop()
+                dish3 = gene_list.pop()
                 menu_item = {'starter': adapter.dish2recipe(dish),
                              'main_course': adapter.dish2recipe(dish2),
                              'dessert': adapter.dish2recipe(dish3)}

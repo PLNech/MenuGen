@@ -26,13 +26,13 @@
                 <table class="table table-striped">
                     <tbody>
                     {% for recipe in found_recipes %}
-                        <tr>
-                            <td>{{ recipe.name }}</td>
+                        <tr class="clickable-row" data-url="{% url 'unlike_recipe' recipe_id=recipe.id %}" title="Je n'aime pas">
+                            <td class="fa fa-cutlery"> {{ recipe.name }}</td>
                         </tr>
                     {% endfor %}
                     {% for ingred in found_ingredients %}
-                        <tr>
-                            <td>{{ ingred.name }}</td>
+                        <tr class="clickable-row" data-url="{% url 'unlike_ingredient' ingredient_id=ingred.id %}" title="Je n'aime pas">
+                            <td class="fa fa-apple"> {{ ingred.name }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

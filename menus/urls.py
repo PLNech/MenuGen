@@ -70,6 +70,8 @@ urlpatterns += patterns(
     url(r'^physiology$', 'physiology', name='physiology'),
     url(r'^regimes$', 'regimes', name='regimes'),
     url(r'^tastes$', 'tastes', name='tastes'),
+    url(r'^tastes/unlike_recipe/(?P<recipe_id>\d+)$', 'unlike_recipe', name='unlike_recipe'),
+    url(r'^tastes/unlike_ingredient/(?P<ingredient_id>\d+)$', 'unlike_ingredient', name='unlike_ingredient'),
     url(r'^tastes/relike_recipe/(?P<recipe_id>\d+)$', 'relike_recipe', name='relike_recipe'),
     url(r'^tastes/relike_ingredient/(?P<ingredient_id>\d+)$', 'relike_ingredient', name='relike_ingredient'),
 )

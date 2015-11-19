@@ -23,8 +23,10 @@ class Population:
             if Config.print_population:
                 print("Initialising population of size %i" % size)
             for i in range(size):
+                generated = False
                 new_individual = Menu()
-                new_individual.generate()
+                while not generated:
+                    generated = new_individual.generate()
 
                 self.save_at(i, new_individual)
             if Config.print_population:

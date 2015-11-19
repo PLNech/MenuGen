@@ -1,7 +1,9 @@
+import datetime
 import logging
 
-from django.db import models
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
+from django.db import models
 from django.utils import timezone
 from stdimage.models import StdImageField
 
@@ -26,11 +28,11 @@ SEX = (
 )
 
 ACTIVITY = (
-    (0, 'Sédentaire'),
-    (1, 'Légère'),
-    (2, 'Modérée'),
-    (3, 'Régulière'),
-    (4, 'Intense'),
+    ('low', 'Sédentaire'),
+    ('light', 'Légère'),
+    ('moderate', 'Modérée'),
+    ('active', 'Régulière'),
+    ('extreme', 'Intense'),
 )
 
 MEAL = (
@@ -50,15 +52,16 @@ class Account(models.Model):
 
 
 class Profile(models.Model):
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=64, default=default.NAME)
     birthday = models.DateField(blank=True, null=True, auto_now_add=True)
-    weight = models.IntegerField(blank=True, null=True, default=default.WEIGHT)
-    height = models.FloatField(blank=True, null=True, default=default.HEIGHT)
-    sex = models.CharField(max_length=16, choices=SEX, blank=True, null=True, default=default.SEX)
+    weight = models.IntegerField(default=default.WEIGHT)
+    height = models.FloatField(default=default.HEIGHT)
+    sex = models.CharField(max_length=16, choices=SEX, default=default.SEX)
     activity = models.CharField(max_length=16, choices=ACTIVITY, blank=True, null=True, default=default.ACTIVITY)
     picture = StdImageField(upload_to='media/images/profiles', blank=True, null=True)
 
-    unlikes = models.ManyToManyField('Ingredient')
+    unlikes_ingredient = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
 
     unlikes_recipe = models.ManyToManyField("Recipe")
@@ -69,11 +72,34 @@ class Profile(models.Model):
     def __str__(self):
         return self.name
 
-    def likes(self, dish):
-        for d in self.unlikes_dishes.all():
-            if d.name == dish.name:
-                return False
-                # TODO: Use unlikes ingredients
+    def __repr__(self):
+        return "%s: %d year-old %s of %dcm and %dkg, exercising %sly." \
+               " Unlikes %d ingredients, %d families, and %d recipes. Follows %d diets." % (
+                   str(self), self.age(), self.sex, self.height, self.weight, self.activity,
+                   self.unlikes_ingredient.count(), self.unlikes_ingredient.count(), self.unlikes_ingredient.count(),
+                   self.diets.count())
+
+    def age(self):
+        return relativedelta(datetime.date.today(), self.birthday).years
+
+    def likes_dish(self, dish):
+        try:
+            recipe = Recipe.objects.get(name=dish.name)
+        except Recipe.DoesNotExist:
+            return True
+        return self.likes_recipe(recipe)
+
+    def likes_recipe(self, recipe):
+        # If i dislike this dish, return false
+        if self.unlikes_recipe.filter(name=recipe.name).exists():
+            return False
+        # If i dislike any ingredient, return false
+        if recipe.ingredients.filter(bad_profiles__id=self.id).exists():
+            return False
+
+        # If i dislike any ingredient's family, return false
+        if recipe.ingredients.filter(family__in=self.unlikes_family.all()).exists():
+            return False
         return True
 
 
@@ -107,38 +133,35 @@ class Recipe(models.Model):
         return self.name
 
     @staticmethod
-    def for_profile(profile):
+    def for_profile(profile, maximum=1000):
         """
+        Returns up to maximum ingredients matching profile's criteria
         :type profile Profile
+        :type maximum int
         :return:
         """
-        recipes = Recipe.objects.all()[:1000]  # FIXME: Remove when solved
-        listRecipes = []
+        count_recipes = Recipe.objects.count()
 
         if profile is None:
-            # FIXME: Remove hardfix
-            vege_diets = Diet.objects.filter(name__startswith='Végé').all()
-            for key, recipe in enumerate(recipes):
-                shouldBreak = False
-                validRecipe = True
-                for ingredient in recipe.ingredients.all():
-                    if shouldBreak:
-                        break
-                    for diet in ingredient.bad_diets.all():
-                        if diet in vege_diets:
-                            validRecipe = False
-                            shouldBreak = True
-                            break
-                    if validRecipe:
-                        listRecipes.append(recipe)
-                logger.info("Finished recipe %d." % key)
-            logger.info("returning %d recipes." % len(listRecipes))
-            return listRecipes
+            recipes = Recipe.objects.order_by('?')
         else:
-            logger.info('profile:%r.' % profile)
-            # recipes_but_diet = Recipe.objects.exclude(ingredients__bad_diets__in=profile.diets.all())
-            # logger.info("Diets: reduced from %d to %d recipes." % (len(recipes), len(recipes_but_diet)))
-            return recipes
+            # TODO: Use diets too
+            logger.info('Excluding recipes for profile %d/%s from a corpus of %d recipes.' % (
+                profile.id, profile.name, count_recipes))
+
+            recipes = Recipe.objects.exclude(pk__in=profile.unlikes_recipe.values_list('pk'))
+            logger.info('unlikes recipe : %d -> %d.' % (count_recipes, len(recipes)))
+            count_recipes = len(recipes)
+
+            recipes = recipes.exclude(ingredients__bad_profiles__pk=profile.pk)
+            logger.info('unlikes ingredients : %d -> %d.' % (count_recipes, len(recipes)))  # FIXME: Does it work?
+            count_recipes = len(recipes)
+
+            recipes = recipes.exclude(ingredients__family__in=profile.unlikes_family.all())
+            logger.info('unlikes families : %d -> %d.' % (count_recipes, len(recipes)))
+
+            logger.info("Diets: reduced from %d to %d recipes." % (len(recipes), len(recipes)))
+        return recipes[:maximum]
 
 
 class Diet(models.Model):
@@ -161,6 +184,7 @@ class Ingredient(models.Model):
     family = models.ForeignKey('IngredientFamily')
     nutriments = models.ManyToManyField('Nutriment', through='IngredientNutriment')
     bad_diets = models.ManyToManyField('Diet')
+    bad_profiles = models.ManyToManyField('Profile')
 
     class Meta:
         ordering = ('name',)
