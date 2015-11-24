@@ -6,6 +6,7 @@ from menus.algorithms.model.individual import Individual
 from menus.algorithms.model.menu.dish import Dish
 from menus.algorithms.model.menu.menu_manager import MenuManager
 from menus.algorithms.utils.config import Config
+from utils.decorators import memoize
 
 __author__ = 'PLNech'
 logger = logging.getLogger("menus")
@@ -166,11 +167,12 @@ class Menu(Individual):  # TODO Document!
         self.genes = []
 
         accu_calories = 0
-        over_size = Config.parameters[Config.KEY_OBJECTIVE_CALORIES] * Config.parameters[Config.KEY_OVERWEIGHT_FACTOR]
         genes_length = Config.parameters[Config.KEY_MAX_DISHES]
-        available_dishes = manager.dishes[:]
-        shuffle(available_dishes)
-        ordered_dishes = sorted(available_dishes, key=lambda x: x.calories, reverse=True)
+
+        objective_calories = Config.parameters[Config.KEY_OBJECTIVE_CALORIES]
+        over_size = objective_calories * Config.parameters[Config.KEY_OVERWEIGHT_FACTOR]
+
+        init_dishes, available_dishes, ordered_dishes = self.init_dishes(manager, objective_calories)
 
         for _ in range(genes_length):
             did_used_ordered = False  # Did we use ordered list ? (if yes, it is useless to try the next smallest)
@@ -178,7 +180,7 @@ class Menu(Individual):  # TODO Document!
             dish = available_dishes.pop()
             while accu_calories + dish.calories > over_size:
                 logger.debug("Dish too calorific (%d + %d = %d > %d)! Let's try a small one..." %
-                            (accu_calories, dish.calories, accu_calories + dish.calories, over_size))
+                             (accu_calories, dish.calories, accu_calories + dish.calories, over_size))
                 if len(available_dishes) is 0:
                     logger.error("Not enough dishes but no more available... Generation failed.")
                     return False
@@ -189,7 +191,7 @@ class Menu(Individual):  # TODO Document!
 
                     # Reset ordered dishes
                     did_used_ordered = False
-                    ordered_dishes = sorted(manager.dishes[:], key=lambda x: x.calories, reverse=True)
+                    ordered_dishes = sorted(init_dishes, key=lambda x: x.calories, reverse=True)
 
                     # Get biggest dish in menu
                     max_cal = 0
@@ -227,6 +229,15 @@ class Menu(Individual):  # TODO Document!
 
         logger.debug("Finished generating a menu of %dx calories through %d dishes." % (accu_calories, len(self.genes)))
         return True
+
+    @memoize
+    def init_dishes(self, manager, objective_calories):
+        init_dishes = [dish for dish in manager.dishes[:] if dish.calories <= 0.8 * objective_calories]
+        available_dishes = init_dishes
+        shuffle(available_dishes)
+        ordered_dishes = sorted(available_dishes, key=lambda x: x.calories, reverse=True)
+        logger.info("Initialised dishes lists for menu generation.")
+        return init_dishes, available_dishes, ordered_dishes
 
     @staticmethod
     def nutrient_fitness(quantity, objective):
