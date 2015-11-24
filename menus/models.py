@@ -8,6 +8,7 @@ from django.utils import timezone
 from stdimage.models import StdImageField
 
 import menugen.defaults as default
+from menus.utils import list_pk
 
 EASE = (
     (0, 'Très facile'),
@@ -69,6 +70,13 @@ class Profile(models.Model):
 
     modified = models.DateTimeField(default=timezone.now)
 
+    def key(self):
+        return "n:%s|d:%s|f:%s|r:%s|i:%s" % (self.name,
+                                             list_pk(self.diets),
+                                             list_pk(self.unlikes_family),
+                                             list_pk(self.unlikes_recipe),
+                                             list_pk(self.unlikes_ingredient))
+
     def __str__(self):
         return self.name
 
@@ -76,7 +84,7 @@ class Profile(models.Model):
         return "%s: %d year-old %s of %dcm and %dkg, exercising %sly." \
                " Unlikes %d ingredients, %d families, and %d recipes. Follows %d diets." % (
                    str(self), self.age(), self.sex, self.height, self.weight, self.activity,
-                   self.unlikes_ingredient.count(), self.unlikes_ingredient.count(), self.unlikes_ingredient.count(),
+                   self.unlikes_ingredient.count(), self.unlikes_family.count(), self.unlikes_recipe.count(),
                    self.diets.count())
 
     def age(self):
