@@ -163,7 +163,6 @@ class Menu(Individual):  # TODO Document!
         :return: True if the generation was successful
         :rtype bool
         """
-        manager = MenuManager.get()
         self.genes = []
 
         accu_calories = 0
@@ -172,18 +171,22 @@ class Menu(Individual):  # TODO Document!
         objective_calories = Config.parameters[Config.KEY_OBJECTIVE_CALORIES]
         over_size = objective_calories * Config.parameters[Config.KEY_OVERWEIGHT_FACTOR]
 
-        init_dishes, available_dishes, ordered_dishes = self.init_dishes(manager, objective_calories)
+        init_dishes, available_dishes, ordered_dishes = self.initialise_dishes(objective_calories)
+        init_dishes = init_dishes.copy()
+        available_dishes = available_dishes.copy()
+        ordered_dishes = ordered_dishes.copy()
 
         for _ in range(genes_length):
             did_used_ordered = False  # Did we use ordered list ? (if yes, it is useless to try the next smallest)
-
-            dish = available_dishes.pop()
+            try:
+                dish = available_dishes.pop()
+            except IndexError:
+                return self.gen_error("No more dishes, and we didn't fill all genes... Generation failed.")
             while accu_calories + dish.calories > over_size:
                 logger.debug("Dish too calorific (%d + %d = %d > %d)! Let's try a small one..." %
                              (accu_calories, dish.calories, accu_calories + dish.calories, over_size))
                 if len(available_dishes) is 0:
-                    logger.error("Not enough dishes but no more available... Generation failed.")
-                    return False
+                    return self.gen_error("No more dish available, and we need a smaller one... Generation failed.")
                 if did_used_ordered:
                     logger.debug("Smallest dish was too big. "
                                  "Let's remove meal's biggest dish and add two small ones instead...")
@@ -212,8 +215,15 @@ class Menu(Individual):  # TODO Document!
                     # Then select a small dish to use as valid dish for this iteration
                     dish = ordered_dishes.pop()
                 else:
-                    dish = ordered_dishes.pop()
-                    did_used_ordered = True
+                    try:
+                        dish = ordered_dishes.pop()
+                        did_used_ordered = True
+                    except IndexError:
+                        try:
+                            dish = available_dishes.pop()
+                            did_used_ordered = False
+                        except IndexError:
+                            return self.gen_error("Not enough dishes while popping... Generation failed.")
                     logger.debug("Using smallest dish: %d." % dish.calories)
 
             # Now we have a valid dish, let's add it
@@ -230,13 +240,17 @@ class Menu(Individual):  # TODO Document!
         logger.debug("Finished generating a menu of %dx calories through %d dishes." % (accu_calories, len(self.genes)))
         return True
 
+    def gen_error(self, msg):
+        logger.error(msg)
+        return False
+
     @memoize
-    def init_dishes(self, manager, objective_calories):
+    def initialise_dishes(self, objective_calories, manager=MenuManager.get()):
         init_dishes = [dish for dish in manager.dishes[:] if dish.calories <= 0.8 * objective_calories]
         available_dishes = init_dishes
         shuffle(available_dishes)
         ordered_dishes = sorted(available_dishes, key=lambda x: x.calories, reverse=True)
-        logger.info("Initialised dishes lists for menu generation.")
+        logger.error("Initialised dishes lists for menu generation.")
         return init_dishes, available_dishes, ordered_dishes
 
     @staticmethod
