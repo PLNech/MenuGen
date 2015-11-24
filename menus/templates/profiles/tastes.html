@@ -15,8 +15,28 @@
             <div class="main-box clearfix">
                 <header class="main-box-header clearfix">Rechercher</header>
                 <div class="main-box-body clearfix">
-                    <input type="text" class="form-control" id="search" placeholder="Aliment ou recette">
+                    <form class="form-horizontal" action="{% url 'tastes' %}" method="POST">
+                        <div class="col-sm-8">
+                            <input type="text" id="search" name="query" class="form-control" placeholder="Aliment ou recette">
+                        </div>
+                        {% csrf_token %}
+                        <button class="btn btn-default" type="submit">Rechercher</button>
+                    </form>
                 </div>
+                <table class="table table-striped">
+                    <tbody>
+                    {% for recipe in found_recipes %}
+                        <tr class="clickable-row" data-url="{% url 'unlike_recipe' recipe_id=recipe.id %}" title="Je n'aime pas">
+                            <td class="fa fa-cutlery"> {{ recipe.name }}</td>
+                        </tr>
+                    {% endfor %}
+                    {% for ingred in found_ingredients %}
+                        <tr class="clickable-row" data-url="{% url 'unlike_ingredient' ingredient_id=ingred.id %}" title="Je n'aime pas">
+                            <td class="fa fa-apple"> {{ ingred.name }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -29,7 +49,7 @@
                         <tbody>
                             {% for recipe in unlikes_recipes %}
                                 <tr id="recipes" class="clickable-row" data-url="{% url 'relike_recipe' recipe_id=recipe.id %}" title="J'aime à nouveau!">
-                                    <td class="unlikes-relike">{{ recipe.name }}</td>
+                                    <td>{{ recipe.name }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

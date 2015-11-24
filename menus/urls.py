@@ -31,6 +31,8 @@ urlpatterns += patterns(
     'menus.views.generation.post_generation_views',
 
     url(r'^generation$', 'generation', name='generation'),
+    url(r'^generation/shopping_list$', 'generation_shopping_list', name='generation_shopping_list'),
+    url(r'^generation/shopping_list_pdf$', 'shopping_list_pdf', name='shopping_list_pdf'),
     url(r'^generation/meal_details/(?P<starter_id>\d+)-(?P<main_course_id>\d+)-(?P<dessert_id>\d+)$',
         'generation_meal_details',
         name='generation_meal_details'),
@@ -70,6 +72,8 @@ urlpatterns += patterns(
     url(r'^physiology$', 'physiology', name='physiology'),
     url(r'^regimes$', 'regimes', name='regimes'),
     url(r'^tastes$', 'tastes', name='tastes'),
+    url(r'^tastes/unlike_recipe/(?P<recipe_id>\d+)$', 'unlike_recipe', name='unlike_recipe'),
+    url(r'^tastes/unlike_ingredient/(?P<ingredient_id>\d+)$', 'unlike_ingredient', name='unlike_ingredient'),
     url(r'^tastes/relike_recipe/(?P<recipe_id>\d+)$', 'relike_recipe', name='relike_recipe'),
     url(r'^tastes/relike_ingredient/(?P<ingredient_id>\d+)$', 'relike_ingredient', name='relike_ingredient'),
 )

@@ -2,8 +2,10 @@ import datetime
 import logging
 import time
 from functools import reduce
+from reportlab.pdfgen import canvas
 
 import numpy
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.shortcuts import render
@@ -89,19 +91,22 @@ def generation(request):
     else:
         planning = generate_planning_from_list(nb_days, nb_meals, menu)
 
-    shopping_list = []
+    shopping_list = {}
     for meal_time in planning:
         for meal in meal_time:
             if meal:
                 print(meal)
                 main_course = meal['main_course']
                 for i in main_course.ingredients.all():
-                    shopping_list.append(i.name)
+                    try:
+                        shopping_list[i.name] = shopping_list[i.name] + 1
+                    except KeyError:
+                        shopping_list[i.name] = 1
+    request.session['shopping_list'] = shopping_list
 
     return render(request, 'menus/generation/generation.html', {
         'planning': planning,
-        'days_range': range(0, nb_days),
-        'shopping_list': shopping_list
+        'days_range': range(0, nb_days)
     })
 
 
@@ -121,6 +126,36 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
 
     meal = {'starter': starter, 'main_course': main, 'dessert': dessert}
     return render(request, 'menus/generation/meal_details.html', {'meal': meal})
+
+
+def generation_shopping_list(request):
+    shopping_list = request.session.get('shopping_list', None)
+    return render(request, 'menus/generation/shopping_list.html', {
+        'shopping_list': shopping_list
+    })
+
+
+def shopping_list_pdf(request):
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="liste_de_courses.pdf"'
+
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    shopping_list = request.session.get('shopping_list', None)
+    p.drawString(300, 800, "Liste de courses")
+    i = 700
+    for ingred, quantity in shopping_list.items():
+        p.drawString(100, i, "- " + str(quantity) + " " + ingred)
+        i -= 20
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+    return response
 
 
 @login_required

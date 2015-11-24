@@ -268,9 +268,18 @@ def tastes(request):
     profile = request.user.account.profile
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes_ingredient.all()
+
+    found_recipes = None
+    found_ingredients = None
+    if 'query' in request.POST and request.POST['query']:
+        found_recipes = Recipe.objects.filter(name__icontains=request.POST['query'])
+        found_ingredients = Ingredient.objects.filter(name__icontains=request.POST['query'])
+
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
+        'found_recipes': found_recipes,
+        'found_ingredients': found_ingredients
     })
 
 
@@ -294,6 +303,35 @@ def relike_ingredient(request, ingredient_id):
     profile.unlikes_ingredient.remove(ingredient)
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes_ingredient.all()
+    return render(request, 'profiles/tastes.html', {
+        'unlikes_recipes': unlikes_recipes,
+        'unlikes_ingredients': unlikes_ingredients,
+    })
+
+@login_required
+def unlike_recipe(request, recipe_id):
+    recipe = Recipe.objects.get(id=recipe_id)
+    profile = request.user.account.profile;
+    profile.unlikes_recipe.add(recipe);
+
+    unlikes_recipes = profile.unlikes_recipe.all()
+    unlikes_ingredients = profile.unlikes_ingredient.all()
+
+    return render(request, 'profiles/tastes.html', {
+        'unlikes_recipes': unlikes_recipes,
+        'unlikes_ingredients': unlikes_ingredients,
+    })
+
+
+@login_required
+def unlike_ingredient(request, ingredient_id):
+    ingredient = Ingredient.objects.get(id=ingredient_id)
+    profile = request.user.account.profile;
+    profile.unlikes_ingredient.add(ingredient)
+
+    unlikes_recipes = profile.unlikes_recipe.all()
+    unlikes_ingredients = profile.unlikes_ingredient.all()
+
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,

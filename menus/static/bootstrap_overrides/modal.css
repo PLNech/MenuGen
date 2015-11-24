@@ -18,11 +18,20 @@
     margin: 0 auto;
     pointer-events: all;
 }
+/*
 .modal-content a {
     color: white;
     text-decoration: none;
 }
 .modal-content a:hover {
     color: white;
+}*/
+
+.modal-content a {
+    color: #484848;
+    text-decoration: none;
 }
 
+.modal-content a:hover {
+    color: #484848;
+}
