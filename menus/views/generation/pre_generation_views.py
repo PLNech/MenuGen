@@ -1,4 +1,6 @@
 import logging
+
+from django.core import serializers
 from django.http import HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render
 from menus.models import Profile
@@ -56,6 +58,7 @@ def generate_placements_detail(request):
 
 def update_gen_criteria(request):
     """ This method is used as ajax call in order to update the pre-generation """
+    logger.info('Updating gen info.')
 
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
@@ -97,16 +100,19 @@ def update_gen_criteria(request):
         request.session.modified = True
 
     if 'profiles' in request.POST:
+        logger.info('Received profiles!')
         profiles = request.POST.get('profiles')
         request.session['profiles'] = []
         profiles = json2obj(profiles)
         for profileData in profiles:
             try:
-                profile = Profile.objects.filter(pk=profileData.id).get()
+                profile = Profile.objects.filter(pk=profileData.id)
+                profile_data = serializers.serialize("json", profile)
+                logger.info("Json profile: %s." % profile_data)
                 if profileData.checked:
-                    request.session['profiles'].append(profile)
-                elif profile in request.session['profiles']:
-                    request.session['profiles'].remove(profile)
+                    request.session['profiles'].append(profile_data)
+                elif profile_data in request.session['profiles']:
+                    request.session['profiles'].remove(profile_data)
             except Profile.DoesNotExist:
                 pass
         logger.info("%d profiles loaded." % len(request.session['profiles']))

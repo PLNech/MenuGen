@@ -5,15 +5,12 @@ from functools import reduce
 
 import numpy
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.shortcuts import render
 
 import menugen.defaults as defaults
-from menus.algorithms.dietetics import Calculator
-from menus.algorithms.model.menu.menu_manager import MenuManager
-from menus.algorithms.run import run_standard
-from menus.algorithms.utils.config import Config
-from menus.data.generator import generate_planning_from_list, generate_planning_from_matrix
-from menus.models import Recipe, Profile, Ingredient
+from menus.data.generator import generate_planning_from_matrix
+from menus.models import Recipe, Ingredient
 
 logger = logging.getLogger("menus")
 
@@ -25,6 +22,12 @@ def generation(request):
         or
         WhateverAlgo2(request.session['budget'], request.session['difficulty'], request.session['nb_days'])
         """
+    from menus.algorithms.dietetics import Calculator
+    from menus.models import Profile
+    from menus.algorithms.utils.config import Config
+    from menus.algorithms.model.menu.menu_manager import MenuManager
+    from menus.algorithms.run import run_standard
+    from menus.data.generator import generate_planning_from_list
 
     """ TODO:
     Here should be called the algorithm
@@ -51,12 +54,16 @@ def generation(request):
     user_height = int(float(request.session.get('height', defaults.HEIGHT / 100)) * 100)
     user_sex = Calculator.SEX_F if request.session.get('sex') is 1 else Calculator.SEX_H
     user_birthday = datetime.date(year=today.year - user_age, month=today.month, day=today.day)
-    if request is not None:
-        account = request.user.account
-        profile = account.profile
-        profile_list = list(account.guests.all())
-        profile_list.append(profile)
-        logger.info('Crafted profile list from user profiles.')
+
+    if request is not None and 'profiles' in request.session:
+        logger.info('Profiles found in session.')
+        profile_list = []
+        for profile_str in request.session['profiles']:
+            for p in serializers.deserialize("json", profile_str):
+                profile = p.object
+            logger.info("Profile found: %s." % profile.name)
+            profile_list.append(profile)
+        logger.info('Crafted profile list from %d user-selected profiles.' % len(profile_list))
     else:
         profile_list = [Profile(weight=user_weight, height=user_height, birthday=user_birthday, sex=user_sex,
                                 activity=user_exercise)]
