@@ -99,8 +99,7 @@ class MenuManager(Manager):
         self.dishes = []
 
     def add_item(self, dish, profile_list=None):
-        profiles_disliking_dish = [profile for profile in profile_list if not profile.likes_dish(dish)]
-        if len(profiles_disliking_dish) is not 0:
+        if profile_list is not None and len([p for p in profile_list if not p.likes_dish(dish)]) != 0:
             return False
         else:
             self.dishes.append(dish)
