@@ -1,7 +1,5 @@
 import logging
-
 import unidecode
-
 from menus.algorithms.model.menu.dish import Dish
 from menus.models import Recipe, IngredientNutriment, Nutriment, RecipeToIngredient
 
@@ -62,7 +60,7 @@ def recipe2dish(recipe):
                      ing.name, ing_cal, ing_prot, ing_fat, ing_carb)
         dish += Dish(name=ing.name, calories=ing_cal, proteins=ing_prot, fats=ing_fat, carbohydrates=ing_carb)
     logger.debug("Nutrients: %.3f cal, %.3f prot, %.3f fat, %.3f carb.\n------------", dish.calories, dish.proteins,
-                dish.fats, dish.carbohydrates)
+                 dish.fats, dish.carbohydrates)
     return dish
 
 
@@ -74,14 +72,18 @@ def calculate_nutrients(association, name, unit=None):
         nutriment = nutriment_objects.get(name=name, unit_per_100g=unit)
     else:
         nutriment = nutriment_objects.get(name=name)
-
-    ascii_unit = None if association.unit is None else unidecode.unidecode(association.unit)
-
     link = ingredient_nutriment_objects.get(ingredient=association.ingredient, nutriment=nutriment)
 
-    if ascii_unit in unit_coeff_dict:
-        coeff = unit_coeff_dict[ascii_unit]
-    else:
-        logger.error("The following unit could not be quantified: {}.", ascii_unit)
+    if association.unit is None:
         coeff = 1
+    else:
+        ascii_unit = unidecode.unidecode(association.unit)
+        unit_lower = ascii_unit.lower()
+        if unit_lower in unit_coeff_dict:
+            coeff = unit_coeff_dict[unit_lower]
+        else:
+            logger.error("Could not quantify r:%s * i:%s (\"%s\"): %s." % (association.recipe.name,
+                                                                           association.ingredient.name,
+                                                                           association.scraped_text, ascii_unit))
+            coeff = 1
     return coeff * link.quantity * association.quantity / association.recipe.amount
