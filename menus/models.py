@@ -69,11 +69,34 @@ class Profile(models.Model):
 
     modified = models.DateTimeField(default=timezone.now)
 
-    def key_recipe_criteria(self):
+    def my_key_recipe_criteria(self):
         return "d:%s|f:%s|r:%s|i:%s" % (list_pk(self.diets),
                                         list_pk(self.unlikes_family),
                                         list_pk(self.unlikes_recipe),
                                         list_pk(self.unlikes_ingredient))
+
+    @staticmethod
+    def key_recipe_criteria(profiles):
+        diets = None
+        families = None
+        recipes = None
+        ings = None
+        logger.info("Creating key for %d profiles." % len(profiles))
+
+        for profile in profiles:
+            p_diets = profile.diets.all()
+            p_family = profile.unlikes_family.all()
+            p_recipe = profile.unlikes_recipe.all()
+            p_ings = profile.unlikes_ingredient.all()
+            diets = diets | p_diets if diets else p_diets
+            families = families | p_family if families else p_family
+            recipes = recipes | p_recipe if recipes else p_recipe
+            ings = ings | p_ings if ings else p_ings
+
+        return "d:%s|f:%s|r:%s|i:%s" % (list_pk(diets),
+                                        list_pk(families),
+                                        list_pk(recipes),
+                                        list_pk(ings))
 
     def __str__(self):
         return self.name
@@ -150,7 +173,7 @@ class Recipe(models.Model):
             recipes = Recipe.objects.order_by('?')
         else:
             profile_list.sort(key=lambda p: p.name)
-            key_profiles_criteria = "recipes_" + ",".join([p.key_recipe_criteria() for p in profile_list])
+            key_profiles_criteria = "recipes_" + Profile.key_recipe_criteria(profile_list)
 
             # Cache lookup to avoid recalculation of recipe criteria
             recipes = cache.get(key_profiles_criteria)
