@@ -58,7 +58,6 @@ def generation(request):
     user_birthday = datetime.date(year=today.year - user_age, month=today.month, day=today.day)
 
     if request is not None and 'profiles' in request.session:
-        logger.info('Profiles found in session.')
         profile_list = []
         for profile_str in request.session['profiles']:
             for p in serializers.deserialize("json", profile_str):

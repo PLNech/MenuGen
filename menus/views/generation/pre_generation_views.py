@@ -1,5 +1,4 @@
 import logging
-
 from django.core import serializers
 from django.http import HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render
@@ -19,7 +18,7 @@ def generate(request):
     if 'nb_days' not in request.session:
         request.session['nb_days'] = 7
     if 'matrix' not in request.session:
-        request.session['matrix'] = [[1 for x in range(7)] for x in range(2)]
+        request.session['matrix'] = [[1 for _ in range(7)] for _ in range(2)]
 
     return render(request, 'menus/generate/generate.html',
                   {'days_range': range(0, request.session['nb_days']),
@@ -58,8 +57,6 @@ def generate_placements_detail(request):
 
 def update_gen_criteria(request):
     """ This method is used as ajax call in order to update the pre-generation """
-    logger.info('Updating gen info.')
-
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
 
@@ -100,7 +97,6 @@ def update_gen_criteria(request):
         request.session.modified = True
 
     if 'profiles' in request.POST:
-        logger.info('Received profiles!')
         profiles = request.POST.get('profiles')
         request.session['profiles'] = []
         profiles = json2obj(profiles)
@@ -108,7 +104,6 @@ def update_gen_criteria(request):
             try:
                 profile = Profile.objects.filter(pk=profileData.id)
                 profile_data = serializers.serialize("json", profile)
-                logger.info("Json profile: %s." % profile_data)
                 if profileData.checked:
                     request.session['profiles'].append(profile_data)
                 elif profile_data in request.session['profiles']:
