@@ -1,12 +1,11 @@
 import datetime
 import logging
-
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.db import models
 from django.utils import timezone
 from stdimage.models import StdImageField
-
 import menugen.defaults as default
 from menus.utils import list_pk
 
@@ -70,12 +69,11 @@ class Profile(models.Model):
 
     modified = models.DateTimeField(default=timezone.now)
 
-    def key(self):
-        return "n:%s|d:%s|f:%s|r:%s|i:%s" % (self.name,
-                                             list_pk(self.diets),
-                                             list_pk(self.unlikes_family),
-                                             list_pk(self.unlikes_recipe),
-                                             list_pk(self.unlikes_ingredient))
+    def key_recipe_criteria(self):
+        return "d:%s|f:%s|r:%s|i:%s" % (list_pk(self.diets),
+                                        list_pk(self.unlikes_family),
+                                        list_pk(self.unlikes_recipe),
+                                        list_pk(self.unlikes_ingredient))
 
     def __str__(self):
         return self.name
@@ -148,23 +146,34 @@ class Recipe(models.Model):
         :type maximum int
         :return:
         """
-        count_recipes = Recipe.objects.count()
-        count_recipes_first = count_recipes
-        count_recipes_new = -42
-        profile_diets_pks = [profile.diets.values_list('pk') for profile in profile_list]
-        profile_bad_recipes_pks = [profile.unlikes_recipe.values_list('pk') for profile in profile_list]
-        profile_bad_families_pks = [profile.unlikes_family.values_list('pk') for profile in profile_list]
-        profile_bad_ingredients_pks = [profile.unlikes_ingredient.values_list('pk') for profile in profile_list]
-
-        # Flattening lists and de-tupling items
-        profile_diets = list(set([item[0] for sublist in profile_diets_pks for item in sublist]))
-        profile_bad_ingredients = list(set([item[0] for sublist in profile_bad_ingredients_pks for item in sublist]))
-        profile_bad_families = list(set([item[0] for sublist in profile_bad_families_pks for item in sublist]))
-        profile_bad_recipes = list(set([item[0] for sublist in profile_bad_recipes_pks for item in sublist]))
-
         if profile_list is None:
             recipes = Recipe.objects.order_by('?')
         else:
+            profile_list.sort(key=lambda p: p.name)
+            key_profiles_criteria = "recipes_" + ",".join([p.key_recipe_criteria() for p in profile_list])
+
+            # Cache lookup to avoid recalculation of recipe criteria
+            recipes = cache.get(key_profiles_criteria)
+            if recipes is not None:
+                logger.info(
+                    "Found recipe list (%d recipes) in cache for key \"%s\"." % (len(recipes), key_profiles_criteria))
+                return recipes[:maximum]
+
+            logger.info("Calculating profiles for key \"%s\"." % key_profiles_criteria)
+
+            count_recipes = Recipe.objects.count()
+            count_recipes_first = count_recipes
+            profile_diets_pks = [profile.diets.values_list('pk') for profile in profile_list]
+            profile_bad_recipes_pks = [profile.unlikes_recipe.values_list('pk') for profile in profile_list]
+            profile_bad_families_pks = [profile.unlikes_family.values_list('pk') for profile in profile_list]
+            profile_bad_ings_pks = [profile.unlikes_ingredient.values_list('pk') for profile in profile_list]
+
+            # Flattening lists and de-tupling items
+            profile_diets = list(set([item[0] for sublist in profile_diets_pks for item in sublist]))
+            profile_bad_ings = list(set([item[0] for sublist in profile_bad_ings_pks for item in sublist]))
+            profile_bad_families = list(set([item[0] for sublist in profile_bad_families_pks for item in sublist]))
+            profile_bad_recipes = list(set([item[0] for sublist in profile_bad_recipes_pks for item in sublist]))
+
             recipes = Recipe.objects
             count_recipes = recipes.count()
 
@@ -196,11 +205,14 @@ class Recipe(models.Model):
             count_recipes = len(recipes)
 
             # Profiles ingredients
-            recipes = recipes.exclude(ingredients__pk__in=profile_bad_ingredients)
+            recipes = recipes.exclude(ingredients__pk__in=profile_bad_ings)
             count_recipes_new = len(recipes)
             logger.info('unlikes ingredients : %d -> %d.' % (count_recipes, count_recipes_new))  # FIXME: Does it work?
 
             logger.info("for_profile: reduced from %d to %d recipes." % (count_recipes_first, count_recipes_new))
+
+            cache.set(key_profiles_criteria, recipes, None)
+            logger.info("Updated cache value for %s." % key_profiles_criteria)
         return recipes[:maximum]
 
 

@@ -134,5 +134,12 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
 )
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'menugen',
+    }
+}
+
 LOGIN_URL = "/sign-in"
 LOGIN_REDIRECT_URL = "/"
