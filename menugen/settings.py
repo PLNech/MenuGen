@@ -138,6 +138,13 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'menugen',
+    },
+    'memcached': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'KEY_FUNCTION': 'hashlib.md5',
+        'LOCATION': [
+            '127.0.0.1:11211',
+        ]
     }
 }
 

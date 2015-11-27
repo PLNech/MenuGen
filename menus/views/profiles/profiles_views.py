@@ -1,18 +1,17 @@
-from datetime import datetime
 import logging
+from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
-
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect
-
 from django.shortcuts import render, redirect, get_object_or_404
 
-from menus.forms import ProfileForm
 import menugen.defaults as default
+from menus.forms import ProfileForm
 from menus.models import Recipe, Ingredient, Profile, Diet
 from menus.utils import json2obj
 
 logger = logging.getLogger("menus")
+
 
 @login_required
 def index(request, ajax=False):
@@ -132,6 +131,10 @@ def update_profile(request):
                         p.diets.add(key)
                     else:
                         p.diets.remove(key)
+            # Updating recipe list for profile
+            logger.info("Calculating recipe list matching new diet criteria...")
+            Recipe.for_profile_async(p)
+            logger.info("Thread running.")
         p.save()
 
     else:
@@ -307,6 +310,7 @@ def relike_ingredient(request, ingredient_id):
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
     })
+
 
 @login_required
 def unlike_recipe(request, recipe_id):

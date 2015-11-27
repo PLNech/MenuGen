@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db import models
 from django.utils import timezone
+from djutils.decorators import async
 from stdimage.models import StdImageField
 import menugen.defaults as default
 from menus.utils import list_pk
@@ -160,6 +161,17 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def for_profile_async(profile, maximum=1000):
+        return Recipe.for_profiles_async([profile, ], maximum)
+
+    @staticmethod
+    @async
+    def for_profiles_async(profiles_list, maximum=1000):
+        logger.info("Beginning asynchronous recipe list generation.")
+        Recipe.for_profiles(profiles_list, maximum)
+        logger.info("Finished asynchronous recipe list generation.")
 
     @staticmethod
     def for_profiles(profile_list, maximum=1000):
