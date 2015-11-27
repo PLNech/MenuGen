@@ -94,11 +94,10 @@ def generation(request):
     for meal_time in planning:
         for meal in meal_time:
             if meal:
-                print(meal)
                 main_course = meal['main_course']
                 for i in main_course.ingredients.all():
                     try:
-                        shopping_list[i.name] = shopping_list[i.name] + 1
+                        shopping_list[i.name] += 1
                     except KeyError:
                         shopping_list[i.name] = 1
     request.session['shopping_list'] = shopping_list
