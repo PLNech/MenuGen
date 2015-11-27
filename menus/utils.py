@@ -13,6 +13,6 @@ def json2obj(data):
 def list_pk(queryset):
     items = queryset.all()
     if len(items):
-        return ",".join([str(i.pk) for i in items])
+        return ",".join([str(i.pk) for i in sorted(items, key=lambda i: i.pk)])
     else:
         return "None"
