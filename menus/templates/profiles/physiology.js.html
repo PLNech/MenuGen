@@ -34,6 +34,7 @@
     }
 
     function update_diet(diet) {
+        var profileId = {{ profile.pk }};
         var dietDivs = $('div.regime.checkbox');
         var diets = [];
 
@@ -41,24 +42,23 @@
             var diet = $(this);
             var id = diet.data('diet');
             var checked = diet.find('input[type=checkbox]').prop('checked');
-            console.log(diet, id + ':', checked);
+            //console.log(diet, id + ':', checked);
             diets.push({id: id, checked: checked});
         });
 
         diets = JSON.stringify(diets);
         var data_dico = {
             'diets': diets,
-            'pk': '{{ pk }}'
+            'pk': profileId
         };
-        console.log('dico: ', data_dico);
+        //console.log('dico: ', data_dico);
 
         $.ajax({
             url: '{% url 'update_profile' %}',
             type: "POST",
             data: data_dico,
-            success: function (json) {
-                console.log(json);
-                console.log("success");
+            success: function () {
+                console.log("Updated diets for profile " + profileId + ".");
             },
 
             // handle a non-successful response

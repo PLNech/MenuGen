@@ -1,18 +1,17 @@
-from datetime import datetime
 import logging
+from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
-
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect
-
 from django.shortcuts import render, redirect, get_object_or_404
 
-from menus.forms import ProfileForm
 import menugen.defaults as default
+from menus.forms import ProfileForm
 from menus.models import Recipe, Ingredient, Profile, Diet
 from menus.utils import json2obj
 
 logger = logging.getLogger("menus")
+
 
 @login_required
 def index(request, ajax=False):
@@ -132,6 +131,10 @@ def update_profile(request):
                         p.diets.add(key)
                     else:
                         p.diets.remove(key)
+            # Updating recipe list for profile
+            logger.info("Calculating recipe list matching new diet criteria...")
+            Recipe.for_profile_async(p)
+            logger.info("Thread running.")
         p.save()
 
     else:
@@ -207,6 +210,7 @@ def regimes(request, ajax=False, profile_id=None):
     health_regimes_list = []
     value_regimes_list = []
     profile = Profile.objects.get(pk=profile_id)
+    logger.info("Generating profile view for %s, given %d." % (profile.name, int(profile_id)))
 
     for diet in vege_diets:
         diet.active = profile.diets.filter(pk=diet.pk).exists()
@@ -242,10 +246,10 @@ def regimes(request, ajax=False, profile_id=None):
 
 @login_required
 def profile(request, profile_id=0):
+    profile_id = int(profile_id) if profile_id != 0 else request.user.account.profile_id
+
     r = regimes(request, True, profile_id=profile_id)
     g = index(request, True)
-
-    profile_id = int(profile_id) if profile_id != 0 else request.user.account.profile_id
     p = Profile.objects.get(pk=profile_id)
     # p = get_object_or_404(Profile, pk=profile_id)
     # TODO : test propriety
@@ -254,6 +258,7 @@ def profile(request, profile_id=0):
         'physio': physiology(request, p, True),
         'health_regimes_list': r['health_regimes_list'],
         'value_regimes_list': r['value_regimes_list'],
+        'profile': p,
         'user_profile': g['user_profile'],
         'guests': g['guests'],
         'guests_nb': g['guests_nb'],
@@ -305,6 +310,7 @@ def relike_ingredient(request, ingredient_id):
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
     })
+
 
 @login_required
 def unlike_recipe(request, recipe_id):

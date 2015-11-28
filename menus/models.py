@@ -1,13 +1,14 @@
 import datetime
 import logging
-
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.db import models
 from django.utils import timezone
+from djutils.decorators import async
 from stdimage.models import StdImageField
-
 import menugen.defaults as default
+from menus.utils import list_pk
 
 EASE = (
     (0, 'Très facile'),
@@ -63,11 +64,40 @@ class Profile(models.Model):
 
     unlikes_ingredient = models.ManyToManyField('Ingredient')
     unlikes_family = models.ManyToManyField('IngredientFamily')
-
     unlikes_recipe = models.ManyToManyField("Recipe")
+
     diets = models.ManyToManyField('Diet', related_name='diets')
 
     modified = models.DateTimeField(default=timezone.now)
+
+    def my_key_recipe_criteria(self):
+        return "d:%s|f:%s|r:%s|i:%s" % (list_pk(self.diets),
+                                        list_pk(self.unlikes_family),
+                                        list_pk(self.unlikes_recipe),
+                                        list_pk(self.unlikes_ingredient))
+
+    @staticmethod
+    def key_recipe_criteria(profiles):
+        diets = None
+        families = None
+        recipes = None
+        ings = None
+        logger.info("Creating key for %d profiles." % len(profiles))
+
+        for profile in profiles:
+            p_diets = profile.diets.all()
+            p_family = profile.unlikes_family.all()
+            p_recipe = profile.unlikes_recipe.all()
+            p_ings = profile.unlikes_ingredient.all()
+            diets = diets | p_diets if diets else p_diets
+            families = families | p_family if families else p_family
+            recipes = recipes | p_recipe if recipes else p_recipe
+            ings = ings | p_ings if ings else p_ings
+
+        return "d:%s|f:%s|r:%s|i:%s" % (list_pk(diets),
+                                        list_pk(families),
+                                        list_pk(recipes),
+                                        list_pk(ings))
 
     def __str__(self):
         return self.name
@@ -76,7 +106,7 @@ class Profile(models.Model):
         return "%s: %d year-old %s of %dcm and %dkg, exercising %sly." \
                " Unlikes %d ingredients, %d families, and %d recipes. Follows %d diets." % (
                    str(self), self.age(), self.sex, self.height, self.weight, self.activity,
-                   self.unlikes_ingredient.count(), self.unlikes_ingredient.count(), self.unlikes_ingredient.count(),
+                   self.unlikes_ingredient.count(), self.unlikes_family.count(), self.unlikes_recipe.count(),
                    self.diets.count())
 
     def age(self):
@@ -133,34 +163,91 @@ class Recipe(models.Model):
         return self.name
 
     @staticmethod
-    def for_profile(profile, maximum=1000):
+    def for_profile_async(profile, maximum=1000):
+        return Recipe.for_profiles_async([profile, ], maximum)
+
+    @staticmethod
+    @async
+    def for_profiles_async(profiles_list, maximum=1000):
+        logger.info("Beginning asynchronous recipe list generation.")
+        Recipe.for_profiles(profiles_list, maximum)
+        logger.info("Finished asynchronous recipe list generation.")
+
+    @staticmethod
+    def for_profiles(profile_list, maximum=1000):
         """
         Returns up to maximum ingredients matching profile's criteria
-        :type profile Profile
+        :type profile_list list
         :type maximum int
         :return:
         """
-        count_recipes = Recipe.objects.count()
-
-        if profile is None:
+        if profile_list is None:
             recipes = Recipe.objects.order_by('?')
         else:
-            # TODO: Use diets too
-            logger.info('Excluding recipes for profile %d/%s from a corpus of %d recipes.' % (
-                profile.id, profile.name, count_recipes))
+            profile_list.sort(key=lambda p: p.name)
+            key_profiles_criteria = "recipes_" + Profile.key_recipe_criteria(profile_list)
 
-            recipes = Recipe.objects.exclude(pk__in=profile.unlikes_recipe.values_list('pk'))
-            logger.info('unlikes recipe : %d -> %d.' % (count_recipes, len(recipes)))
+            # Cache lookup to avoid recalculation of recipe criteria
+            recipes = cache.get(key_profiles_criteria)
+            if recipes is not None:
+                logger.info(
+                    "Found recipe list (%d recipes) in cache for key \"%s\"." % (len(recipes), key_profiles_criteria))
+                return recipes[:maximum]
+
+            logger.info("Calculating profiles for key \"%s\"." % key_profiles_criteria)
+
+            count_recipes = Recipe.objects.count()
+            count_recipes_first = count_recipes
+            profile_diets_pks = [profile.diets.values_list('pk') for profile in profile_list]
+            profile_bad_recipes_pks = [profile.unlikes_recipe.values_list('pk') for profile in profile_list]
+            profile_bad_families_pks = [profile.unlikes_family.values_list('pk') for profile in profile_list]
+            profile_bad_ings_pks = [profile.unlikes_ingredient.values_list('pk') for profile in profile_list]
+
+            # Flattening lists and de-tupling items
+            profile_diets = list(set([item[0] for sublist in profile_diets_pks for item in sublist]))
+            profile_bad_ings = list(set([item[0] for sublist in profile_bad_ings_pks for item in sublist]))
+            profile_bad_families = list(set([item[0] for sublist in profile_bad_families_pks for item in sublist]))
+            profile_bad_recipes = list(set([item[0] for sublist in profile_bad_recipes_pks for item in sublist]))
+
+            recipes = Recipe.objects
+            count_recipes = recipes.count()
+
+            logger.info('Excluding recipes for profiles %s from a corpus of %d recipes.' % (
+                ", ".join([str(profile.id) + ": " + profile.name for profile in profile_list]), count_recipes))
+
+            # Diet Families
+            recipes = recipes.exclude(ingredients__family__bad_diets__pk__in=profile_diets)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes diet families : %d -> %d.' % (count_recipes, count_recipes_new))
+            count_recipes = count_recipes_new
+
+            # Diet Ingredients
+            recipes = recipes.exclude(ingredients__bad_diets__pk__in=profile_diets)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes diet ingredients : %d -> %d.' % (count_recipes, count_recipes_new))
+            count_recipes = count_recipes_new
+
+            # Profiles families
+            recipes = recipes.exclude(ingredients__family__pk__in=profile_bad_families)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes families : %d -> %d.' % (count_recipes, count_recipes_new))
             count_recipes = len(recipes)
 
-            recipes = recipes.exclude(ingredients__bad_profiles__pk=profile.pk)
-            logger.info('unlikes ingredients : %d -> %d.' % (count_recipes, len(recipes)))  # FIXME: Does it work?
+            # Profiles recipes
+            recipes = recipes.exclude(pk__in=profile_bad_recipes)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes recipe : %d -> %d.' % (count_recipes, count_recipes_new))
             count_recipes = len(recipes)
 
-            recipes = recipes.exclude(ingredients__family__in=profile.unlikes_family.all())
-            logger.info('unlikes families : %d -> %d.' % (count_recipes, len(recipes)))
+            # Profiles ingredients
+            recipes = recipes.exclude(ingredients__pk__in=profile_bad_ings)
+            count_recipes_new = len(recipes)
+            logger.info('unlikes ingredients : %d -> %d.' % (count_recipes, count_recipes_new))  # FIXME: Does it work?
 
-            logger.info("Diets: reduced from %d to %d recipes." % (len(recipes), len(recipes)))
+            logger.info("for_profile: reduced from %d to %d recipes." % (count_recipes_first, count_recipes_new))
+
+            cache.set(key_profiles_criteria, recipes, None)
+            logger.info("Updated cache value for %s." % key_profiles_criteria)
         return recipes[:maximum]
 
 

@@ -21,8 +21,6 @@ def run(run_name, init_fittest=None):
     :rtype: menus.algorithms.model.individual.Individual
     """
     # New run
-    manager = MenuManager.get()
-    nb_dishes = len(manager.dishes)
     stats.new_run(run_name, Config.parameters[Config.KEY_NB_GENERATION])
     population = Population(Config.parameters[Config.KEY_POPULATION_SIZE])
 
@@ -186,8 +184,6 @@ def init_log(log_filename):
 
 def run_standard(init_fittest=None, run_name="run"):
     nb_runs = Config.parameters[Config.KEY_RUN_NUMBER]
-    nb_gens = Config.parameters[Config.KEY_NB_GENERATION]
-    nb_pop = Config.parameters[Config.KEY_POPULATION_SIZE]
 
     for run_i in range(0, nb_runs):
         if nb_runs > 1:

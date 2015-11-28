@@ -1,8 +1,10 @@
 import datetime
+import logging
+
 from dateutil.relativedelta import relativedelta
 
 __author__ = 'PLNech'
-
+logger = logging.getLogger("menus")
 
 class Calculator:
     EXERCISE_LOW = 'low'
@@ -67,18 +69,18 @@ class Calculator:
         :type exercise: str EXERCISE_X
         :rtype: DieteticsNeeds
         """
-        print("Calculating objectives for a %d year-old %s of %dcm and %dkg, exercising %sly..." %
+        logger.info("Calculating objectives for a %d year-old %s of %dcm and %dkg, exercising %sly..." %
               (age, sex, size, weight, exercise))
 
         bmi = 10 * weight + 6.25 * size - 5 * age + Calculator.sex_handicaps[sex]
         calories = bmi * Calculator.exercise_calories_ratio[exercise]
         needs = DieteticsNeeds(calories)
 
-        print("Basal metabolic rate estimated at %.1f kcal/day." % bmi)
-        print("Real calorific needs estimated at %.1f kcal/day." % calories)
-        print("Proteinic needs estimated between %.1f and %1.f g/day." % (needs.proteins_min, needs.proteins_max))
-        print("Carbohydrates needs estimated between %.1f and %1.f g/day." % (needs.carbs_min, needs.carbs_max))
-        print("Fatty needs estimated between %.1f and %1.f g/day." % (needs.fats_min, needs.fats_max))
+        logger.debug("Basal metabolic rate estimated at %.1f kcal/day." % bmi)
+        logger.debug("Real calorific needs estimated at %.1f kcal/day." % calories)
+        logger.debug("Proteinic needs estimated between %.1f and %1.f g/day." % (needs.proteins_min, needs.proteins_max))
+        logger.debug("Carbohydrates needs estimated between %.1f and %1.f g/day." % (needs.carbs_min, needs.carbs_max))
+        logger.debug("Fatty needs estimated between %.1f and %1.f g/day." % (needs.fats_min, needs.fats_max))
 
         return needs
 

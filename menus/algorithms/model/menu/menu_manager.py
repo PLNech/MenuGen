@@ -17,14 +17,14 @@ _local = threading.local()
 
 class MenuManager(Manager):
     @staticmethod
-    def get(request=None):
+    def get(profile_list=None):
         caller = inspect.getouterframes(inspect.currentframe(), 2)[1][3]
         if 'MenuManager' not in _local.__dict__:
             if Config.print_manager:
                 print(Printer.err("MenuManager not found. initialising cache procedure..."))
 
             _local.MenuManager = MenuManager()
-            _local.MenuManager.init(request)
+            _local.MenuManager.init(profile_list)
             items = _local.MenuManager.count()
 
             if Config.print_manager:
@@ -51,22 +51,19 @@ class MenuManager(Manager):
         _local.__dict__.pop('MenuManager', None)
 
     @staticmethod
-    def new(request=None):
+    def new(profile_list=None):
         MenuManager.delete()
-        return MenuManager.get(request)
+        return MenuManager.get(profile_list)
 
     def __init__(self):
         self.dishes = []
         self.names_count = {}
 
-    def init(self, request=None):
+    def init(self, profile_list=None):
         nb_dishes = Config.parameters[Config.KEY_NB_DISHES]
         profile = None
         self.reset()
-        if request is not None:
-            account = request.user.account
-            profile = account.profile
-        self.init_from_db(nb_dishes, profile)
+        self.init_from_db(nb_dishes, profile_list)
         if Config.print_manager:
             print("Initialised MenuManager with %i dishes." % len(self.dishes))
 
@@ -88,25 +85,25 @@ class MenuManager(Manager):
             if Config.print_manager:
                 print("Dish %s." % dish)
 
-    def init_from_db(self, nb_dishes, profile=None):
-        recipes = list(Recipe.for_profile(profile, nb_dishes)[:nb_dishes])
+    def init_from_db(self, nb_dishes, profile_list=None):
+        recipes = list(Recipe.for_profiles(profile_list, nb_dishes)[:nb_dishes])
         shuffle(recipes)
         for i in range(nb_dishes):
             recipe = recipes[i]
             dish = adapter.recipe2dish(recipe)  # TODO: Link with nutritional information
-            self.add_item(dish, profile)
+            self.add_item(dish, profile_list)
             if Config.print_manager:
                 print("Dish %s." % dish)
 
     def reset(self):
         self.dishes = []
 
-    def add_item(self, dish, profile=None):
-        if profile and not profile.likes_dish(dish):
+    def add_item(self, dish, profile_list=None):
+        if profile_list is not None and len([p for p in profile_list if not p.likes_dish(dish)]) != 0:
             return False
         else:
             self.dishes.append(dish)
-            return True
+        return True
 
     def get_item(self, index):
         return self.dishes[index]

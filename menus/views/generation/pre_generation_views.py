@@ -1,4 +1,5 @@
 import logging
+from django.core import serializers
 from django.http import HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render
 from menus.models import Profile
@@ -17,7 +18,7 @@ def generate(request):
     if 'nb_days' not in request.session:
         request.session['nb_days'] = 7
     if 'matrix' not in request.session:
-        request.session['matrix'] = [[1 for x in range(7)] for x in range(2)]
+        request.session['matrix'] = [[1 for _ in range(7)] for _ in range(2)]
 
     return render(request, 'menus/generate/generate.html',
                   {'days_range': range(0, request.session['nb_days']),
@@ -56,7 +57,6 @@ def generate_placements_detail(request):
 
 def update_gen_criteria(request):
     """ This method is used as ajax call in order to update the pre-generation """
-
     if not request.is_ajax() or not request.method == 'POST':
         return HttpResponseNotAllowed(['POST'])
 
@@ -102,11 +102,12 @@ def update_gen_criteria(request):
         profiles = json2obj(profiles)
         for profileData in profiles:
             try:
-                profile = Profile.objects.filter(pk=profileData.id).get()
+                profile = Profile.objects.filter(pk=profileData.id)
+                profile_data = serializers.serialize("json", profile)
                 if profileData.checked:
-                    request.session['profiles'].append(profile)
-                elif profile in request.session['profiles']:
-                    request.session['profiles'].remove(profile)
+                    request.session['profiles'].append(profile_data)
+                elif profile_data in request.session['profiles']:
+                    request.session['profiles'].remove(profile_data)
             except Profile.DoesNotExist:
                 pass
         logger.info("%d profiles loaded." % len(request.session['profiles']))
