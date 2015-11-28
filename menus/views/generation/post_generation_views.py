@@ -3,6 +3,7 @@ import logging
 import time
 from functools import reduce
 from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 import numpy
 from django.http import HttpResponse
@@ -134,13 +135,15 @@ def shopping_list_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="liste_de_courses.pdf"'
 
     # Create the PDF object, using the response object as its "file."
-    p = canvas.Canvas(response)
+    p = canvas.Canvas(response, pagesize=letter)
+
+    shopping_list = request.session.get('shopping_list', None)
+    width, height = letter
 
     # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    shopping_list = request.session.get('shopping_list', None)
-    p.drawString(300, 800, "Liste de courses")
-    i = 700
+    p.roundRect(250, height - 120, 200, 50, 20)
+    p.drawString(300, height - 100, "Liste de courses")
+    i = height - 150
     for ingred, quantity in shopping_list.items():
         p.drawString(100, i, "- " + str(quantity) + " " + ingred)
         i -= 20
