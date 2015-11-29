@@ -6,7 +6,7 @@ from menus.algorithms.model.individual import Individual
 from menus.algorithms.model.menu.dish import Dish
 from menus.algorithms.model.menu.menu_manager import MenuManager
 from menus.algorithms.utils.config import Config
-from utils.decorators import memoize
+from menus.algorithms.utils.decorators import memoize
 
 __author__ = 'PLNech'
 logger = logging.getLogger("menus")
