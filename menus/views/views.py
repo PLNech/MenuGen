@@ -32,7 +32,7 @@ def statistics(request):
     families = [freq_family[k] for k in amount]
 
     pics = list()
-    for r in Recipe.objects.all()[:200]:
+    for r in Recipe.objects.all()[:500]:
         if r.picture:
             pics.append(r.picture)
 

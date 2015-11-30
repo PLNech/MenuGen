@@ -11,6 +11,7 @@
         </div>
     </div>
 
+    <!-- pie charts -->
     <div class="row">
         <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
@@ -31,6 +32,8 @@
             </div>
         </div>
     </div>
+
+    <!-- bar chart -->
     <div class="row">
         <div class="col-sm-6 col-md-12">
             <div class="thumbnail">
@@ -39,12 +42,14 @@
             </div>
         </div>
     </div>
+
+    <!-- pics gallery -->
+    <h2>Toutes les recettes</h2>
     <div class="row">
-        {% for pic in pics %}
-        <div class="col-xs-6 col-md-3">
-            <p><img class="img-thumbnail" width="171" height="180" src="{{ pic }}"/></p>
+        <div id="gallery">
+            <div class="body">
+            </div>
         </div>
-        {% endfor %}
     </div>
 
 {% endblock %}
@@ -178,5 +183,45 @@
         };
         var ctxPPC = $("#ingredientFamiliesBarChart").get(0).getContext("2d");
         new Chart(ctxPPC).Bar(data_ingred_families);
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            PhotoWall.init({
+                el:             '#gallery'               // Gallery element
+                ,zoom:          false                     // Use zoom
+                ,zoomAction:    'mouseenter'             // Zoom on action
+                ,zoomTimeout:   500                      // Timeout before zoom
+                ,zoomDuration:  100                      // Zoom duration time
+                ,showBox:       true                     // Enable fullscreen mode
+                ,padding:       10                       // padding between images in gallery
+                ,lineMaxHeight: 150                      // Max set height of pictures line
+                                                         // (may be little bigger due to resize to fit line)
+            });
+
+            var PhotosArray = new Array(
+                {% for pic in pics %}
+                    {% if not forloop.last %}
+                    {
+                        id:{{ forloop.counter0 }},img:'{{ pic }}',width:500,height:400,
+                        th:{src:'{{ pic }}',width:50,height:40,
+                            zoom_src:'{{ pic }}',zoom_factor:4
+                        }
+                    },
+                    {% endif %}
+                {% endfor %}
+                {% with pics|last as pic %}
+                    {
+                        id:200,img:'{{ pic }}',width:500,height:400,
+                        th:{src:'{{ pic }}',width:50,height:40,
+                            zoom_src:'{{ pic }}',zoom_factor:4
+                        }
+                    }
+                {% endwith %}
+            );
+
+            PhotoWall.load(PhotosArray);
+        });
+
     </script>
 {% endblock %}
