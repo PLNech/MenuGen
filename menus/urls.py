@@ -6,7 +6,7 @@ urlpatterns = patterns(
     url(r'^$', 'landing', name='landing'),
     url(r'^home$', 'home', name='home'),
 
-    url(r'^statistics$', 'statistics', name='statistics'),
+    url(r'^menugendata$', 'statistics', name='statistics'),
     url(r'^account$', 'account', name='account'),
     url(r'^generation/cta$', 'call_to_action', name='call_to_action'),
 )
