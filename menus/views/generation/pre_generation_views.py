@@ -33,7 +33,8 @@ def generate_select_profile(request):
     guests = list(guests)
     logger.info("GuestList: %r" % guests)
     guests.append(user.account.profile)
-    return render(request, 'menus/generate/select_profile.html', {'profiles': guests})
+    return render(request, 'menus/generate/select_profile.html', {'profiles': guests,
+                                                                  'user_profile': user.account.profile})
 
 
 def generate_placements_detail(request):
