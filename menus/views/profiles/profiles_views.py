@@ -209,12 +209,13 @@ def regimes(request, ajax=False, profile_id=None):
     vege_diets = Diet.objects.filter(name__startswith='Végé')
     health_regimes_list = []
     value_regimes_list = []
-    profile = Profile.objects.get(pk=profile_id)
-    logger.info("Generating profile view for %s, given %d." % (profile.name, int(profile_id)))
+    if profile_id is not None:
+        profile = Profile.objects.get(pk=profile_id)
+        logger.info("Generating profile view for %s, given %d." % (profile.name, int(profile_id)))
 
-    for diet in vege_diets:
-        diet.active = profile.diets.filter(pk=diet.pk).exists()
-        value_regimes_list.append(diet)
+        for diet in vege_diets:
+            diet.active = profile.diets.filter(pk=diet.pk).exists()
+            value_regimes_list.append(diet)
 
     regime_hyper_prot = {
         'name': 'Hyperprotéiné',
