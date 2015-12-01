@@ -106,8 +106,10 @@ class Profile(models.Model):
         return "%s: %d year-old %s of %dcm and %dkg, exercising %sly." \
                " Unlikes %d ingredients, %d families, and %d recipes. Follows %d diets." % (
                    str(self), self.age(), self.sex, self.height, self.weight, self.activity,
-                   self.unlikes_ingredient.count(), self.unlikes_family.count(), self.unlikes_recipe.count(),
-                   self.diets.count())
+                   0 if self._state.adding else self.unlikes_ingredient.count(),
+                   0 if self._state.adding else self.unlikes_family.count(),
+                   0 if self._state.adding else self.unlikes_recipe.count(),
+                   0 if self._state.adding else self.diets.count())
 
     def age(self):
         return relativedelta(datetime.date.today(), self.birthday).years
