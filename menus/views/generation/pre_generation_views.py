@@ -1,7 +1,9 @@
 import logging
+
 from django.core import serializers
 from django.http import HttpResponseNotAllowed, HttpResponse
 from django.shortcuts import render
+
 from menus.models import Profile
 from menus.utils import json2obj
 

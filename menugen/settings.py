@@ -10,9 +10,9 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 
 from django.conf import global_settings
-import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -94,16 +94,32 @@ USE_TZ = True
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
+            'formatter': 'simple'
+        },
+        'logfile': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(os.curdir, 'menugen.log'),
+            'formatter': 'verbose'
         }
     },
     'loggers': {
         'menus': {
             'handlers': ['console'],
             'level': 'INFO',
+            'propagate': False,
         }
     }
 

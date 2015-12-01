@@ -1,15 +1,18 @@
-__author__ = 'PLNech'
-
-from copy import deepcopy
+import logging
 from collections import defaultdict
+from copy import deepcopy
 from math import sqrt
 
 from menus.algorithms.model.factories import choose_method
 from menus.algorithms.model.menu.menu import Menu
-from menus.algorithms.utils.config import Config
 from menus.algorithms.utils.calc import Calc
+from menus.algorithms.utils.config import Config
 from menus.algorithms.utils.printer import Printer
 from menus.algorithms.utils.singleton import singleton
+
+__author__ = 'PLNech'
+
+logger = logging.getLogger("menus")
 
 
 class Statistics:
@@ -83,15 +86,15 @@ class StatKeeper(singleton):
     @staticmethod
     def new_run(run_name, nb_turns):
         if run_name in StatKeeper.runs:
-            print(Printer.err("Error: a run named %s already exists: %s" %
-                              (run_name, str(StatKeeper.get_run(run_name)))))
+            logger.info(Printer.err("Error: a run named %s already exists: %s" %
+                                    (run_name, str(StatKeeper.get_run(run_name)))))
             exit(1)
         StatKeeper.runs[run_name] = Run(run_name, nb_turns)
 
     @staticmethod
     def save_progress(run_name, generation, genes):
         if run_name not in StatKeeper.runs:
-            print(Printer.err("Error: no run named %s." % run_name))
+            logger.err("Error: no run named %s." % run_name)
             exit(1)
         StatKeeper.get_run(run_name).add(generation, genes)
 
@@ -102,7 +105,7 @@ class StatKeeper(singleton):
         :rtype: Run
         """
         if run_name not in StatKeeper.runs:
-            print(Printer.err("Error: no run named %s." % run_name))
+            logger.err("Error: no run named %s." % run_name)
             exit(1)
         return StatKeeper.runs[run_name]
 
@@ -111,7 +114,7 @@ class StatKeeper(singleton):
         StatKeeper.runs.clear()
 
     @staticmethod
-    def print_progress(run_name):
+    def get_progress(run_name):
         run = StatKeeper.get_run(run_name)
         return str(run)
 
@@ -162,29 +165,15 @@ class StatKeeper(singleton):
     @staticmethod
     def print_run_stats(efficacy_str, efficiency_str, init_fittest, final_fittest, run_name):
         final_result = final_fittest.print_score()
-        print("Run ended.")
-        print("Progress evolution of %s:\n%s" % (run_name, StatKeeper.print_progress(run_name)))
-        print("Final %s: %s." % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
-                                 final_result))
-        return choose_method(StatKeeper.print_run_stats_trip,
-                             StatKeeper.print_run_stats_menu,
-                             (efficacy_str, efficiency_str, init_fittest, final_fittest))
-
-    @staticmethod
-    def print_run_stats_trip(efficacy_str, efficiency_str, init_fittest, final_fittest):
-        print("Final path:\n%s." % Printer.print_path(final_fittest))
-        print("Efficacy: new path is %s%% shorter than older one. (%s -> %s)"
-              % (efficacy_str, init_fittest.get_score(), final_fittest.get_score()))
-        print("Efficiency: we gained an average of %s units per iteration.\n"
-              % efficiency_str)
-
-    @staticmethod
-    def print_run_stats_menu(efficacy_str, efficiency_str, init_fittest, final_fittest):
-        print("Final menu:\n%s." % Printer.print_menu(final_fittest))
-        print("Efficacy: new menu is %s better than older one. (%s -> %s)"
-              % (efficacy_str, init_fittest.get_score(), final_fittest.get_score()))
-        print("Efficiency: we gained an average improvement of %s per iteration.\n"
-              % efficiency_str)
+        logger.info("Run ended.")
+        logger.info("Progress evolution of %s:\n%s" % (run_name, StatKeeper.get_progress(run_name)))
+        logger.info("Final %s: %s." % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
+                                       final_result))
+        logger.info("Final menu:\n%s." % Printer.print_menu(final_fittest))
+        logger.info("Efficacy: new menu is %s better than older one. (%s -> %s)"
+                    % (efficacy_str, init_fittest.get_score(), final_fittest.get_score()))
+        logger.info("Efficiency: we gained an average improvement of %s per iteration.\n"
+                    % efficiency_str)
 
     @staticmethod
     def print_statistics(init_score):
@@ -211,18 +200,18 @@ class StatKeeper(singleton):
         normalised_mode_str = "%+.2f%%" % (100 * mode_length / init_score)
         score_unit = Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]]
 
-        print("Efficacy: solutions were on average %s better than first one. (%d -> %d: %d)"
-              % (Printer.green(avg_efficacy_str), init_score, average, mean_length))
-        print("Efficiency: average progress of %s per iteration (%s)."
-              % (Printer.green(avg_efficiency_str), normalised_efficiency_str))
-        print("Total %s: average %.2f, median %.2f, mode %.2f."
-              % (score_unit, average, statistics.median, statistics.mode))
-        print("Gained %s: average %s, median %s, mode %s."
-              % (score_unit, normalised_mean_str, normalised_median_str, normalised_mode_str))
-        print("Standard deviation of solutions %ss: %s."
-              % (score_unit, normalised_deviation_str))
-        print("Median absolute deviation of solutions %ss: %s."
-              % (score_unit, normalised_mad_str))
+        logger.info("Efficacy: solutions were on average %s better than first one. (%d -> %d: %d)"
+                    % (Printer.green(avg_efficacy_str), init_score, average, mean_length))
+        logger.info("Efficiency: average progress of %s per iteration (%s)."
+                    % (Printer.green(avg_efficiency_str), normalised_efficiency_str))
+        logger.info("Total %s: average %.2f, median %.2f, mode %.2f."
+                    % (score_unit, average, statistics.median, statistics.mode))
+        logger.info("Gained %s: average %s, median %s, mode %s."
+                    % (score_unit, normalised_mean_str, normalised_median_str, normalised_mode_str))
+        logger.info("Standard deviation of solutions %ss: %s."
+                    % (score_unit, normalised_deviation_str))
+        logger.info("Median absolute deviation of solutions %ss: %s."
+                    % (score_unit, normalised_mad_str))
 
     @staticmethod
     def calculate_effs(init_score, final_score):
