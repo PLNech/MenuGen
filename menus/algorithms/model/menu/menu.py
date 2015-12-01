@@ -240,7 +240,8 @@ class Menu(Individual):  # TODO Document!
         logger.debug("Finished generating a menu of %dx calories through %d dishes." % (accu_calories, len(self.genes)))
         return True
 
-    def gen_error(self, msg):
+    @staticmethod
+    def gen_error(msg):
         logger.error(msg)
         return False
 
