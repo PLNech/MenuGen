@@ -134,8 +134,7 @@ class Printer:
         dimension = Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]]
         logger.info(
             "Run %s, Generation %i - best %s found yet: %.2f - %s" % (run_name, generation, dimension, best_score,
-                                                                      best_str),
-            end="\r")
+                                                                      best_str))
 
     @staticmethod
     def print_final(initial_value, best_value, run_name):

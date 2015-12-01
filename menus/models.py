@@ -129,7 +129,7 @@ class Profile(models.Model):
         if self.unlikes_recipe.filter(name=recipe.name).exists():
             return False
         # If i dislike any ingredient, return false
-        if recipe.ingredients.filter(bad_profiles__id=self.id).exists():
+        if recipe.ingredients.filter(bad_profiles__id=self.pk).exists():
             return False
         # If i dislike any ingredient's family, return false
         if recipe.ingredients.filter(family__in=self.unlikes_family.all()).exists():
