@@ -33,42 +33,50 @@
         });
     }
 
+    var delay_after_last = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        }
+    })();
+
     function update_diet(diet) {
-        var profileId = {{ profile.pk }};
-        var dietDivs = $('div.regime.checkbox');
-        var diets = [];
+        delay_after_last(function () {
+            var profileId = {{ profile.pk }};
+            var dietDivs = $('div.regime.checkbox');
+            var diets = [];
 
-        dietDivs.each(function () {
-            var diet = $(this);
-            var id = diet.data('diet');
-            var checked = diet.find('input[type=checkbox]').prop('checked');
-            //console.log(diet, id + ':', checked);
-            diets.push({id: id, checked: checked});
-        });
+            dietDivs.each(function () {
+                var diet = $(this);
+                var id = diet.data('diet');
+                var checked = diet.find('input[type=checkbox]').prop('checked');
+                diets.push({id: id, checked: checked});
+            });
 
-        diets = JSON.stringify(diets);
-        var data_dico = {
-            'diets': diets,
-            'pk': profileId
-        };
-        //console.log('dico: ', data_dico);
+            diets = JSON.stringify(diets);
+            var data_dico = {
+                'diets': diets,
+                'pk': profileId
+            };
 
-        $.ajax({
-            url: '{% url 'update_profile' %}',
-            type: "POST",
-            data: data_dico,
-            success: function () {
-                console.log("Updated diets for profile " + profileId + ".");
-            },
+            $.ajax({
+                url: '{% url 'update_profile' %}',
+                type: "POST",
+                data: data_dico,
+                success: function () {
+                    console.log("Updated diets for profile " + profileId + ".");
+                },
 
-            // handle a non-successful response
-            error: function (xhr, errmsg, err) {
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-                        " <a href='#' class='close'>&times;</a></div>");
-                console.log(xhr.status + ": " + xhr.responseText);
-                console.log(err, +": " + errmsg);
-            }
-        });
+                // handle a non-successful response
+                error: function (xhr, errmsg, err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                            " <a href='#' class='close'>&times;</a></div>");
+                    console.log(xhr.status + ": " + xhr.responseText);
+                    console.log(err, +": " + errmsg);
+                }
+            });
+        }, 3000);
     }
 
 </script>
