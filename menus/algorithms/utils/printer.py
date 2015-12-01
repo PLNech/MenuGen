@@ -3,7 +3,7 @@ __author__ = 'PLNech'
 from menus.algorithms.utils.config import Config
 
 
-class Printer():
+class Printer:
     HEADER = '\033[95m'
     BLUE = '\033[94m'
     GREEN = '\033[92m'

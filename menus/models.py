@@ -114,7 +114,7 @@ class Profile(models.Model):
 
     def likes_dish(self, dish):
         try:
-            recipe = Recipe.objects.get(name=dish.name)
+            recipe = Recipe.objects.filter(name=dish.name).first()
         except Recipe.DoesNotExist:
             return True
         return self.likes_recipe(recipe)
