@@ -122,13 +122,15 @@ class Profile(models.Model):
         return self.likes_recipe(recipe)
 
     def likes_recipe(self, recipe):
+        # if i am not a real profile, return true
+        if self._state.adding:
+            return True
         # If i dislike this dish, return false
         if self.unlikes_recipe.filter(name=recipe.name).exists():
             return False
         # If i dislike any ingredient, return false
         if recipe.ingredients.filter(bad_profiles__id=self.id).exists():
             return False
-
         # If i dislike any ingredient's family, return false
         if recipe.ingredients.filter(family__in=self.unlikes_family.all()).exists():
             return False
