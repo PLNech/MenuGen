@@ -11,38 +11,22 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <div class="main-box clearfix">
-                <header class="main-box-header clearfix">Rechercher</header>
+                <header class="main-box-header clearfix"><h2>Rechercher</h2></header>
                 <div class="main-box-body clearfix">
-                    <form class="form-horizontal" action="{% url 'tastes' %}" method="POST">
-                        <div class="col-sm-8">
-                            <input type="text" id="search" name="query" class="form-control" placeholder="Aliment ou recette">
-                        </div>
-                        {% csrf_token %}
-                        <button class="btn btn-default" type="submit">Rechercher</button>
-                    </form>
+                    <div class="col-sm-12">
+                        <input type="text" id="search" name="query" class="form-control" placeholder="Aliment ou catégorie">
+                    </div>
                 </div>
-                <table class="table table-striped">
-                    <tbody>
-                    {% for recipe in found_recipes %}
-                        <tr class="clickable-row" data-url="{% url 'unlike_recipe' recipe_id=recipe.id %}" title="Je n'aime pas">
-                            <td class="fa fa-cutlery"> {{ recipe.name }}</td>
-                        </tr>
-                    {% endfor %}
-                    {% for ingred in found_ingredients %}
-                        <tr class="clickable-row" data-url="{% url 'unlike_ingredient' ingredient_id=ingred.id %}" title="Je n'aime pas">
-                            <td class="fa fa-apple"> {{ ingred.name }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                <div id="results">
+                </div>
             </div>
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <div class="main-box clearfix">
-                <header class="main-box-header clearfix">Recettes que je n'aime pas</header>
+                <header class="main-box-header clearfix"><h2>Recettes que je n'aime pas</h2></header>
                 <div class="main-box-body clearfix">
                     <input type="text" class="form-control" id="filter-recipes" placeholder="filtrer">
                     <table class="table table-striped">
@@ -58,9 +42,9 @@
             </div>
         </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <div class="main-box clearfix">
-                <header class="main-box-header clearfix">Aliments que je n'aime pas</header>
+                <header class="main-box-header clearfix"><h2>Aliments que je n'aime pas</h2></header>
                 <div class="main-box-body clearfix">
                     <input type="text" class="form-control" id="filter-ingredients" placeholder="filtrer">
                     <table class="table table-striped">
@@ -75,6 +59,25 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-3">
+            <div class="main-box clearfix">
+                <header class="main-box-header clearfix"><h2>Familles que je n'aime pas</h2></header>
+                <div class="main-box-body clearfix">
+                    <input type="text" class="form-control" id="filter-families" placeholder="filtrer">
+                    <table class="table table-striped">
+                        <tbody>
+                        {% for family in unlikes_families %}
+                            <tr id="families" class="clickable-row" data-url="{% url 'relike_family' family_id=family.id %}" title="J'aime à nouveau!">
+                                <td>{{ family.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock %}
 
@@ -103,12 +106,60 @@
             }).hide();
         });
 
+        // filter ingredient families
+        var $rows_families = $('tr#families td');
+        $('#filter-families').keyup(function () {
+            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+            $rows_families.show().filter(function () {
+                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
+        });
+
         // clickable row
         jQuery(document).ready(function($) {
             $(".clickable-row").click(function() {
                 window.document.location = $(this).data("url");
             });
         });
+
+        // AJAX auto search
+        var timer = null;
+        $('#search').keydown(function(){
+            clearTimeout(timer);
+            timer = setTimeout(update_results, 2000)
+        });
+
+        function update_results() {
+            var query = document.getElementById("search").value;
+            var data_dico = {
+                'query': query
+            };
+            $.ajax({
+                url: '{% url 'update_tastes' %}',
+                type: "POST",
+                data: data_dico,
+                success: function (data) {
+                    $('#results').html(data);
+
+                    // clickable row
+                    jQuery(document).ready(function($) {
+                        $(".clickable-row").click(function() {
+                            window.document.location = $(this).data("url");
+                        });
+                    });
+                },
+
+                // handle a non-successful response
+                error: function (xhr, errmsg, err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
+                            " <a href='#' class='close'>&times;</a></div>");
+                    console.log(xhr.status + ": " + xhr.responseText);
+                    console.log(err, +": " + errmsg);
+                }
+            });
+        }
     </script>
 
 {% endblock %}

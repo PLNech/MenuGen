@@ -3,11 +3,11 @@ from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 
 import menugen.defaults as default
 from menus.forms import ProfileForm
-from menus.models import Recipe, Ingredient, Profile, Diet
+from menus.models import Recipe, Ingredient, Profile, Diet, IngredientFamily
 from menus.utils import json2obj
 
 logger = logging.getLogger("menus")
@@ -156,26 +156,6 @@ def update_profile(request):
     return HttpResponse(diets)
 
 
-def update_tastes(request):
-    """ This method is used as ajax call in order to update physio """
-
-    if not request.is_ajax() or not request.method == 'POST':
-        return HttpResponseNotAllowed(['POST'])
-
-    # if 'liked' in request.POST:
-    # request.session['liked_aliments'].append(request.POST.get('liked'))
-    # if 'disliked' in request.POST:
-    #     l = request.session['disliked_aliments']
-    #     print(l)
-    #     print(request.POST.get('disliked'))
-    #     request.session['disliked_aliments'] = l.append(request.POST.get('disliked'))
-    #
-    # print(request.POST)
-    # print(request.session['disliked_aliments'])
-
-    return HttpResponse('tastes updated successfully')
-
-
 def physiology(request, p=None, ajax=False):
     if request.user.is_authenticated() and p is not None:
         physio = {
@@ -271,19 +251,35 @@ def tastes(request):
     profile = request.user.account.profile
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes_ingredient.all()
+    unlikes_families = profile.unlikes_family.all()
 
-    found_recipes = None
-    found_ingredients = None
-    if 'query' in request.POST and request.POST['query']:
-        found_recipes = Recipe.objects.filter(name__icontains=request.POST['query'])
-        found_ingredients = Ingredient.objects.filter(name__icontains=request.POST['query'])
 
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
-        'found_recipes': found_recipes,
+        'unlikes_families': unlikes_families
+    })
+
+
+@login_required
+def update_tastes(request):
+    """ Update search results in tastes """
+    if not request.is_ajax() or not request.method == 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    query = request.POST.get('query')
+    found_families = IngredientFamily.objects.filter(name__icontains=query)
+    found_ingredients = Ingredient.objects.filter(name__icontains=query)
+
+    #return render(request, 'profiles/tastes_results.html', {
+    #    'found_families': found_families,
+    #    'found_ingredients': found_ingredients
+    #})
+    return render_to_response( 'profiles/tastes_results.html', {
+        'found_families': found_families,
         'found_ingredients': found_ingredients
     })
+    #return HttpResponse(found_families, found_ingredients)
 
 
 @login_required
@@ -293,9 +289,26 @@ def relike_recipe(request, recipe_id):
     profile.unlikes_recipe.remove(recipe)
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes_ingredient.all()
+    unlikes_families = profile.unlikes_family.all()
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
+        'unlikes_families': unlikes_families
+    })
+
+
+@login_required
+def relike_family(request, family_id):
+    profile = request.user.account.profile
+    family = IngredientFamily.objects.get(id=family_id)
+    profile.unlikes_family.remove(family)
+    unlikes_recipes = profile.unlikes_recipe.all()
+    unlikes_ingredients = profile.unlikes_ingredient.all()
+    unlikes_families = profile.unlikes_family.all()
+    return render(request, 'profiles/tastes.html', {
+        'unlikes_recipes': unlikes_recipes,
+        'unlikes_ingredients': unlikes_ingredients,
+        'unlikes_families': unlikes_families
     })
 
 
@@ -306,9 +319,11 @@ def relike_ingredient(request, ingredient_id):
     profile.unlikes_ingredient.remove(ingredient)
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes_ingredient.all()
+    unlikes_families = profile.unlikes_family.all()
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
+        'unlikes_families': unlikes_families
     })
 
 
@@ -320,10 +335,12 @@ def unlike_recipe(request, recipe_id):
 
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes_ingredient.all()
+    unlikes_families = profile.unlikes_family.all()
 
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
+        'unlikes_families': unlikes_families
     })
 
 
@@ -335,8 +352,27 @@ def unlike_ingredient(request, ingredient_id):
 
     unlikes_recipes = profile.unlikes_recipe.all()
     unlikes_ingredients = profile.unlikes_ingredient.all()
+    unlikes_families = profile.unlikes_family.all()
 
     return render(request, 'profiles/tastes.html', {
         'unlikes_recipes': unlikes_recipes,
         'unlikes_ingredients': unlikes_ingredients,
+        'unlikes_families': unlikes_families
+    })
+
+
+@login_required
+def unlike_ingredient_family(request, family_id):
+    family = IngredientFamily.objects.get(id=family_id)
+    profile = request.user.account.profile;
+    profile.unlikes_family.add(family)
+
+    unlikes_recipes = profile.unlikes_recipe.all()
+    unlikes_ingredients = profile.unlikes_ingredient.all()
+    unlikes_families = profile.unlikes_family.all()
+
+    return render(request, 'profiles/tastes.html', {
+        'unlikes_recipes': unlikes_recipes,
+        'unlikes_ingredients': unlikes_ingredients,
+        'unlikes_families': unlikes_families
     })

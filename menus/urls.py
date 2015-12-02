@@ -68,14 +68,16 @@ urlpatterns += patterns(
 
     url(r'^update_physio$', 'update_profile', name='update_physio'),
     url(r'^update_profile$', 'update_profile', name='update_profile'),
-    url(r'^update_tastes', 'update_tastes', name='update_tastes'),
     url(r'^physiology$', 'physiology', name='physiology'),
     url(r'^regimes$', 'regimes', name='regimes'),
     url(r'^tastes$', 'tastes', name='tastes'),
+    url(r'^update_tastes', 'update_tastes', name='update_tastes'),
     url(r'^tastes/unlike_recipe/(?P<recipe_id>\d+)$', 'unlike_recipe', name='unlike_recipe'),
     url(r'^tastes/unlike_ingredient/(?P<ingredient_id>\d+)$', 'unlike_ingredient', name='unlike_ingredient'),
+    url(r'^tastes/unlike_family/(?P<family_id>\d+)$', 'unlike_ingredient_family', name='unlike_ingredient_family'),
     url(r'^tastes/relike_recipe/(?P<recipe_id>\d+)$', 'relike_recipe', name='relike_recipe'),
     url(r'^tastes/relike_ingredient/(?P<ingredient_id>\d+)$', 'relike_ingredient', name='relike_ingredient'),
+    url(r'^tastes/relike_family/(?P<family_id>\d+)$', 'relike_family', name='relike_family'),
 )
 
 """
