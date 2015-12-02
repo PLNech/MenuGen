@@ -81,6 +81,7 @@ def run(run_name, init_fittest=None):
         stats.print_run_stats(efficacy_str, efficiency_str, init_fittest, final_fittest, run_name)
 
     logger.info("Final fittest: %r." % final_fittest)
+    logger.info("Final variety: %r." % final_fittest.fitness_variety)
     return final_fittest
 
 

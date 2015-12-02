@@ -21,6 +21,7 @@ class Menu(Individual):  # TODO Document!
         else:
             self.genes = []
 
+        self.fitness_variety = 0
         self.fitness = 0
         self.fitness_calories = 0
         self.fitness_proteins = 0
@@ -110,11 +111,17 @@ class Menu(Individual):  # TODO Document!
         accu_proteins = 0
         accu_carbs = 0
         accu_fats = 0
+        dish_map = dict()
         for dish in self.genes:
+            dish_map[str(dish)] = dish
             accu_calories += dish.calories
             accu_proteins += dish.proteins
             accu_carbs += dish.carbohydrates
             accu_fats += dish.fats
+
+        count_genes = len(self.genes)
+
+        self.fitness_variety = len(dish_map) / count_genes
 
         self.calories = accu_calories
         self.proteins = accu_proteins
@@ -128,10 +135,10 @@ class Menu(Individual):  # TODO Document!
 
         fitness_nutrition = (1 + self.fitness_proteins + self.fitness_carbohydrates + self.fitness_fats) / 4
 
-        fitness_amount = min(len(self.genes) / Config.parameters[Config.KEY_MAX_DISHES],
-                             Config.parameters[Config.KEY_MAX_DISHES] / len(self.genes))
+        fitness_amount = min(count_genes / Config.parameters[Config.KEY_MAX_DISHES],
+                             Config.parameters[Config.KEY_MAX_DISHES] / count_genes)
 
-        self.fitness = (fitness_nutrition ** 2) * fitness_amount * self.fitness_calories
+        self.fitness = (fitness_nutrition ** 2) * fitness_amount * self.fitness_calories * self.fitness_variety
         return self.fitness
 
     def print_score(self):
@@ -237,7 +244,7 @@ class Menu(Individual):  # TODO Document!
             except ValueError:
                 pass
 
-        logger.debug("Finished generating a menu of %dx calories through %d dishes." % (accu_calories, len(self.genes)))
+        logger.debug("Finished generating a menu of %d calories through %d dishes." % (accu_calories, len(self.genes)))
         return True
 
     @staticmethod
@@ -251,7 +258,7 @@ class Menu(Individual):  # TODO Document!
         available_dishes = init_dishes
         shuffle(available_dishes)
         ordered_dishes = sorted(available_dishes, key=lambda x: x.calories, reverse=True)
-        logger.error("Initialised dishes lists for menu generation.")
+        logger.info("Initialised dishes lists for menu generation.")
         return init_dishes, available_dishes, ordered_dishes
 
     @staticmethod
