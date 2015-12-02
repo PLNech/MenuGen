@@ -82,9 +82,12 @@ class Profile(models.Model):
         families = None
         recipes = None
         ings = None
+        count_anonymous = 0
         logger.info("Creating key for %d profiles." % len(profiles))
-
         for profile in profiles:
+            if profile._state.adding:
+                count_anonymous += 1
+                continue
             p_diets = profile.diets.all()
             p_family = profile.unlikes_family.all()
             p_recipe = profile.unlikes_recipe.all()
@@ -94,10 +97,11 @@ class Profile(models.Model):
             recipes = recipes | p_recipe if recipes else p_recipe
             ings = ings | p_ings if ings else p_ings
 
-        return "d:%s|f:%s|r:%s|i:%s" % (list_pk(diets),
+        return "d:%s|f:%s|r:%s|i:%s|%s" % (list_pk(diets),
                                         list_pk(families),
                                         list_pk(recipes),
-                                        list_pk(ings))
+                                        list_pk(ings),
+                                        "a:%d" % count_anonymous if count_anonymous is not None else "")
 
     def __str__(self):
         return self.name
@@ -106,8 +110,10 @@ class Profile(models.Model):
         return "%s: %d year-old %s of %dcm and %dkg, exercising %sly." \
                " Unlikes %d ingredients, %d families, and %d recipes. Follows %d diets." % (
                    str(self), self.age(), self.sex, self.height, self.weight, self.activity,
-                   self.unlikes_ingredient.count(), self.unlikes_family.count(), self.unlikes_recipe.count(),
-                   self.diets.count())
+                   0 if self._state.adding else self.unlikes_ingredient.count(),
+                   0 if self._state.adding else self.unlikes_family.count(),
+                   0 if self._state.adding else self.unlikes_recipe.count(),
+                   0 if self._state.adding else self.diets.count())
 
     def age(self):
         return relativedelta(datetime.date.today(), self.birthday).years
@@ -120,13 +126,15 @@ class Profile(models.Model):
         return self.likes_recipe(recipe)
 
     def likes_recipe(self, recipe):
+        # if i am not a real profile, return true
+        if self._state.adding:
+            return True
         # If i dislike this dish, return false
         if self.unlikes_recipe.filter(name=recipe.name).exists():
             return False
         # If i dislike any ingredient, return false
-        if recipe.ingredients.filter(bad_profiles__id=self.id).exists():
+        if recipe.ingredients.filter(bad_profiles__id=self.pk).exists():
             return False
-
         # If i dislike any ingredient's family, return false
         if recipe.ingredients.filter(family__in=self.unlikes_family.all()).exists():
             return False
@@ -198,10 +206,18 @@ class Recipe(models.Model):
 
             count_recipes = Recipe.objects.count()
             count_recipes_first = count_recipes
-            profile_diets_pks = [profile.diets.values_list('pk') for profile in profile_list]
-            profile_bad_recipes_pks = [profile.unlikes_recipe.values_list('pk') for profile in profile_list]
-            profile_bad_families_pks = [profile.unlikes_family.values_list('pk') for profile in profile_list]
-            profile_bad_ings_pks = [profile.unlikes_ingredient.values_list('pk') for profile in profile_list]
+
+            profile_diets_pks = []
+            profile_bad_recipes_pks = []
+            profile_bad_families_pks = []
+            profile_bad_ings_pks = []
+
+            for profile in profile_list:
+                if profile._state.adding is False:
+                    profile_diets_pks.append(profile.diets.values_list('pk'))
+                    profile_bad_recipes_pks.append(profile.unlikes_recipe.values_list('pk'))
+                    profile_bad_families_pks.append(profile.unlikes_family.values_list('pk'))
+                    profile_bad_ings_pks.append(profile.unlikes_ingredient.values_list('pk'))
 
             # Flattening lists and de-tupling items
             profile_diets = list(set([item[0] for sublist in profile_diets_pks for item in sublist]))

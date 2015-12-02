@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os
 import sys
 
@@ -11,6 +12,7 @@ from menus.algorithms.model.population import Population
 from menus.algorithms.model.factories import is_better_than
 
 stats = StatKeeper
+logger = logging.getLogger('menus')
 
 
 def run(run_name, init_fittest=None):
@@ -20,6 +22,7 @@ def run(run_name, init_fittest=None):
     :type init_fittest: menus.algorithms.model.individual.Individual
     :rtype: menus.algorithms.model.individual.Individual
     """
+    logger.info("Simulation is running.")
     # New run
     stats.new_run(run_name, Config.parameters[Config.KEY_NB_GENERATION])
     population = Population(Config.parameters[Config.KEY_POPULATION_SIZE])
@@ -70,17 +73,15 @@ def run(run_name, init_fittest=None):
     solution_type = Config.parameters[Config.KEY_SOLUTION_TYPE]
 
     efficacy, efficiency = stats.calculate_effs(init_score, final_score)
-    efficacy_str_raw = "%+.1f%%" % (efficacy * 100)
-    efficacy_str_color = Printer.if_positive(efficacy_str_raw, efficacy)
+    efficacy_str = "%+.1f%%" % (efficacy * 100)
     efficiency_format = "%2d" if solution_type is "Trip" else "%+.3f"
-    efficiency_str_raw = efficiency_format % (efficiency * 100)
-    efficiency_str_color = Printer.if_positive(efficiency_str_raw, efficiency)
-
+    efficiency_str = efficiency_format % (efficiency * 100)
     if Config.print_each_run:
-        stats.print_run_stats(efficacy_str_color, efficiency_str_color, init_fittest, final_fittest, run_name)
+        logger.info("Printing each run!")
+        stats.print_run_stats(efficacy_str, efficiency_str, init_fittest, final_fittest, run_name)
 
-    print("Final fittest:")
-    print(final_fittest)
+    logger.info("Final fittest: %r." % final_fittest)
+    logger.info("Final variety: %r." % final_fittest.fitness_variety)
     return final_fittest
 
 
@@ -190,7 +191,7 @@ def run_standard(init_fittest=None, run_name="run"):
             run_name = str(run_i)
         final_fittest = run(run_name, init_fittest)
 
-    print("Simulation ended.")
+    logger.info("Simulation ended.")
 
     if nb_runs > 1 and init_fittest is not None:
         StatKeeper.print_statistics(init_fittest.get_score())
@@ -219,7 +220,7 @@ if __name__ == "__main__":
     main_pop = Population(1)
     main_first = main_pop.get_at(0)
     if not Config.print_each_run:
-        print("Initial %s: %i." % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
+        logger.info("Initial %s: %i." % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
                                    main_first.get_score()))
 
     algorithm.setup()

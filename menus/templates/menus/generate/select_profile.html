@@ -12,9 +12,11 @@
                     <li class="profile unread clickable-row" data-href="email-detail.html">
                         <div class="chbox" data-profile-id="{{ profile.pk }}">
                             <div class="checkbox-nice">
-                                <input type="checkbox" id="m-checkbox-{{ forloop.counter }}">
-                                <label for="m-checkbox-{{ forloop.counter }}" {% if user.profile.name == profile.name %} checked="checked" {% endif %}></label>
-{#                                FIXME: Select if profile is me #}
+                                <input type="checkbox" id="m-checkbox-{{ forloop.counter }}"
+                                        {% if user_profile.id == profile.id %} checked
+                                        {% endif %}>
+                                <label for="m-checkbox-{{ forloop.counter }}"></label>
+                                {#                                FIXME: Select if profile is me #}
                             </div>
                         </div>
                         <div class="message">
@@ -69,7 +71,15 @@
         });
     }
 
-    $('li.profile').on('click', function () {
+    var delay_after_last = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        }
+    })();
+
+    $('li.profile').on('click', delay_after_last(function () {
         var profileDivs = $('div.chbox');
         var profiles = [];
         var checkbox = $(this).find('input[type=checkbox]');
@@ -81,7 +91,7 @@
             var checkbox = profileDiv.find('input[type=checkbox]');
             var checked = checkbox.prop('checked');
             console.log(id, ":", checked);
-            profiles.push({id:id, checked:checked})
+            profiles.push({id: id, checked: checked})
         });
         profiles = JSON.stringify(profiles);
         var data_dico = {
@@ -90,6 +100,6 @@
         };
         console.log('data:', data_dico);
         update_pre_generation(data_dico);
-    })
+    }, 3000));
 
 </script>

@@ -1,6 +1,10 @@
 __author__ = 'PLNech'
 
+import logging
+
 from menus.algorithms.utils.config import Config
+
+logger = logging.getLogger("menus")
 
 
 class Printer:
@@ -128,15 +132,15 @@ class Printer:
         best_score = best_individual.get_score()
         best_str = Printer.print_menu(best_individual)
         dimension = Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]]
-        print("Run %s, Generation %i - best %s found yet: %.2f - %s" % (run_name, generation, dimension, best_score,
-                                                                        best_str),
-              end="\r")
+        logger.info(
+            "Run %s, Generation %i - best %s found yet: %.2f - %s" % (run_name, generation, dimension, best_score,
+                                                                      best_str))
 
     @staticmethod
     def print_final(initial_value, best_value, run_name):
         solution_type = Config.parameters[Config.KEY_SOLUTION_TYPE]
         improvement = best_value - initial_value
-        print("Run %s - best %s found: %.2f%s. (%+.2f%%)" % (
+        logger.info("Run %s - best %s found: %.2f%s. (%+.2f%%)" % (
             run_name, Config.score_dimensions[solution_type],
             best_value, Config.score_units[solution_type],
             improvement))
@@ -152,5 +156,6 @@ class Printer:
 
     @staticmethod
     def print_run_init(init_length, init_fittest):
-        print("Initial %s: %i." % ((Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]]), init_length))
-        print("Initial menu:\n%s" % Printer.print_menu(init_fittest))
+        logger.info(
+            "Initial %s: %i." % ((Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]]), init_length))
+        logger.info("Initial menu:\n%s" % Printer.print_menu(init_fittest))
