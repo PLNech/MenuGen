@@ -106,27 +106,31 @@ class Profile(models.Model):
         return "%s: %d year-old %s of %dcm and %dkg, exercising %sly." \
                " Unlikes %d ingredients, %d families, and %d recipes. Follows %d diets." % (
                    str(self), self.age(), self.sex, self.height, self.weight, self.activity,
-                   self.unlikes_ingredient.count(), self.unlikes_family.count(), self.unlikes_recipe.count(),
-                   self.diets.count())
+                   0 if self._state.adding else self.unlikes_ingredient.count(),
+                   0 if self._state.adding else self.unlikes_family.count(),
+                   0 if self._state.adding else self.unlikes_recipe.count(),
+                   0 if self._state.adding else self.diets.count())
 
     def age(self):
         return relativedelta(datetime.date.today(), self.birthday).years
 
     def likes_dish(self, dish):
         try:
-            recipe = Recipe.objects.get(name=dish.name)
+            recipe = Recipe.objects.filter(name=dish.name).first()
         except Recipe.DoesNotExist:
             return True
         return self.likes_recipe(recipe)
 
     def likes_recipe(self, recipe):
+        # if i am not a real profile, return true
+        if self._state.adding:
+            return True
         # If i dislike this dish, return false
         if self.unlikes_recipe.filter(name=recipe.name).exists():
             return False
         # If i dislike any ingredient, return false
-        if recipe.ingredients.filter(bad_profiles__id=self.id).exists():
+        if recipe.ingredients.filter(bad_profiles__id=self.pk).exists():
             return False
-
         # If i dislike any ingredient's family, return false
         if recipe.ingredients.filter(family__in=self.unlikes_family.all()).exists():
             return False

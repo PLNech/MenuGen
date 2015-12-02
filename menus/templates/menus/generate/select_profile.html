@@ -71,7 +71,15 @@
         });
     }
 
-    $('li.profile').on('click', function () {
+    var delay_after_last = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        }
+    })();
+
+    $('li.profile').on('click', delay_after_last(function () {
         var profileDivs = $('div.chbox');
         var profiles = [];
         var checkbox = $(this).find('input[type=checkbox]');
@@ -92,6 +100,6 @@
         };
         console.log('data:', data_dico);
         update_pre_generation(data_dico);
-    })
+    }, 3000));
 
 </script>

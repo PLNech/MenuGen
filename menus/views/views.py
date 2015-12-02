@@ -28,11 +28,11 @@ def statistics(request):
         except KeyError:
             family_freq[i.family.name] = 1
     freq_family = {v:k for k, v in family_freq.items()}
-    amount = sorted([k for k in freq_family.keys()])[-10:]
+    amount = sorted([k for k in freq_family.keys()])[-11:]
     families = [freq_family[k] for k in amount]
 
     pics = list()
-    for r in Recipe.objects.all()[:200]:
+    for r in Recipe.objects.all()[:500]:
         if r.picture:
             pics.append(r.picture)
 
@@ -53,8 +53,11 @@ def statistics(request):
         'cat_sauce': Recipe.objects.filter(category='Sauce').count(),
         'cat_boisson': Recipe.objects.filter(category='Boisson').count(),
         'cat_plat_principal': Recipe.objects.filter(category='Plat principal').count(),
-        'families': families[:10],
-        'amount': amount[:10],
+        'price_0': Recipe.objects.filter(price=0).count(),
+        'price_1': Recipe.objects.filter(price=1).count(),
+        'price_2': Recipe.objects.filter(price=2).count(),
+        'families': families[:5] + families[6:11], # remove "enquêtes INCA"
+        'amount': amount[:4] + amount[5:11],
         'pics': pics
     })
 

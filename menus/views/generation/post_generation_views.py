@@ -3,6 +3,7 @@ import logging
 import time
 from functools import reduce
 from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 import numpy
 from django.http import HttpResponse
@@ -18,6 +19,7 @@ logger = logging.getLogger("menus")
 
 
 def generation(request):
+    logging.info("Generation!")
     """ Profile values are accessible from current session
         ex:
         WhateverAlgo(request.session['sex'], request.session['age'], request.session['height'], request.session['weight'])
@@ -57,18 +59,27 @@ def generation(request):
     user_sex = Calculator.SEX_F if request.session.get('sex') is 1 else Calculator.SEX_H
     user_birthday = datetime.date(year=today.year - user_age, month=today.month, day=today.day)
 
-    if request is not None and 'profiles' in request.session:
-        profile_list = []
-        for profile_str in request.session['profiles']:
-            for p in serializers.deserialize("json", profile_str):
-                profile = p.object
-            logger.info("Profile found: %s." % profile.name)
-            profile_list.append(profile)
-        logger.info('Crafted profile list from %d user-selected profiles.' % len(profile_list))
+    if request is not None and hasattr(request, 'user') and hasattr(request.user, 'profile'):
+        # We have a real user, did it specify profiles?
+        if 'profiles' in request.session:
+            # Using selected profiles
+            profile_list = []
+            for profile_str in request.session['profiles']:
+                for p in serializers.deserialize("json", profile_str):
+                    profile = p.object
+                logger.info("Profile found: %s." % profile.name)
+                profile_list.append(profile)
+            logger.info('Crafted profile list from %d user-selected profiles.' % len(profile_list))
+        else:
+            # Using only user's profile
+            logger.info('Crafted profile list from user profile.')
+            profile_list = [request.user.profile]
     else:
+        # Using user input or default values
         profile_list = [Profile(weight=user_weight, height=user_height, birthday=user_birthday, sex=user_sex,
                                 activity=user_exercise)]
         logger.info('Crafted profile list from request data.')
+    logger.info('End of profile choice.')
     logger.info('Profiles at generation: %r.' % profile_list)
     needs_list = [Calculator.estimate_needs_profile(profile) for profile in profile_list]
     needs = reduce(lambda x, y: x + y, needs_list)
@@ -80,7 +91,7 @@ def generation(request):
 
     # Initialising MenuManager with appropriate meals for profile(s)
     MenuManager.new(profile_list)
-    menu = run_standard(None, time.ctime())
+    menu = run_standard(run_name=time.ctime())
     if len(menu.genes) < nb_meals_menu:
         pass  # FIXME: Remove after investigation
 
@@ -139,13 +150,15 @@ def shopping_list_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="liste_de_courses.pdf"'
 
     # Create the PDF object, using the response object as its "file."
-    p = canvas.Canvas(response)
+    p = canvas.Canvas(response, pagesize=letter)
+
+    shopping_list = request.session.get('shopping_list', None)
+    width, height = letter
 
     # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    shopping_list = request.session.get('shopping_list', None)
-    p.drawString(300, 800, "Liste de courses")
-    i = 700
+    p.roundRect(250, height - 120, 200, 50, 20)
+    p.drawString(300, height - 100, "Liste de courses")
+    i = height - 150
     for ingred, quantity in shopping_list.items():
         p.drawString(100, i, "- " + str(quantity) + " " + ingred)
         i -= 20
