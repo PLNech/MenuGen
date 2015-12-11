@@ -1,6 +1,8 @@
 import logging
 from random import shuffle
 
+from django.core.cache import cache
+
 from menus.algorithms.dietetics import DieteticsNeeds
 from menus.algorithms.model.individual import Individual
 from menus.algorithms.model.menu.dish import Dish
@@ -252,13 +254,23 @@ class Menu(Individual):  # TODO Document!
         logger.error(msg)
         return False
 
-    @memoize
     def initialise_dishes(self, objective_calories, manager=MenuManager.get()):
-        init_dishes = [dish for dish in manager.dishes[:] if dish.calories <= 0.8 * objective_calories]
-        available_dishes = init_dishes
-        shuffle(available_dishes)
-        ordered_dishes = sorted(available_dishes, key=lambda x: x.calories, reverse=True)
-        logger.info("Initialised dishes lists for menu generation.")
+        if cache.get('did_init_dishes', False):
+            init_dishes = cache.get('init_dishes', [])
+            available_dishes = cache.get('available_dishes', [])
+            ordered_dishes = cache.get('ordered_dishes', [])
+            logger.info("Recovered dishes lists from cache.")
+        else:
+            init_dishes = [dish for dish in manager.dishes[:] if dish.calories <= 0.8 * objective_calories]
+            available_dishes = init_dishes
+            shuffle(available_dishes)
+            ordered_dishes = sorted(available_dishes, key=lambda x: x.calories, reverse=True)
+
+            cache.set('init_dishes', init_dishes)
+            cache.set('available_dishes', available_dishes)
+            cache.set('ordered_dishes', ordered_dishes)
+            logger.info("Initialised dishes lists for menu generation.")
+
         return init_dishes, available_dishes, ordered_dishes
 
     @staticmethod
