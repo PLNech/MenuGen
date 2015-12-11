@@ -185,7 +185,7 @@ class Recipe(models.Model):
         :type maximum int
         :return:
         """
-        if profile_list is None:
+        if profile_list is None or any(p._state.adding for p in profile_list):
             recipes = Recipe.objects.order_by('?')
         else:
             profile_list.sort(key=lambda p: p.name)
