@@ -74,8 +74,8 @@ class Config:
     draw_results = False  # Should we draw results of each run?
     draw_all = False  # Should we draw all steps of each run?
 
-    print_each_run = False  # Should we print results for each run?
-    print_generation = True  # Should we print details of each generation?
+    print_each_run = True  # Should we print results for each run?
+    print_generation = False  # Should we print details of each generation?
     print_population = False  # Should we print the generated population?
     print_selection = False  # Should we print the selection of individuals?
     print_crossover = False  # Should we print the crossover of individuals?

@@ -61,7 +61,6 @@ class MenuManager(Manager):
 
     def init(self, profile_list=None):
         nb_dishes = Config.parameters[Config.KEY_NB_DISHES]
-        profile = None
         self.reset()
         self.init_from_db(nb_dishes, profile_list)
         if Config.print_manager:

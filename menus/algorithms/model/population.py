@@ -71,8 +71,12 @@ class Population:
         :rtype: Individual
         """
         fittest = self.population[0]
+        current_best = fittest.get_fitness()
         for i in range(self.get_size() - 1):
             individual_i = self.get_at(i)
-            if fittest.get_fitness() <= individual_i.get_fitness():
+
+            current_candidate = individual_i.get_fitness()
+            if current_best < current_candidate:
                 fittest = individual_i
+                current_best = current_candidate
         return fittest
