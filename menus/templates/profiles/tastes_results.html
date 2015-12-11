@@ -1,0 +1,24 @@
+<table class="table table-striped">
+    <tbody>
+    {% if found_families %}
+        <tr>
+            <td><strong>Familles d'ingrédients</strong></td>
+        </tr>
+    {% endif %}
+    {% for family in found_families %}
+        <tr class="clickable-row" data-url="{% url 'unlike_ingredient_family' family_id=family.id %}" title="Je n'aime pas">
+            <td> {{ family.name }}</td>
+        </tr>
+    {% endfor %}
+    {% if found_ingredients %}
+        <tr>
+            <td><strong>Ingrédients</strong></td>
+        </tr>
+    {% endif %}
+    {% for ingred in found_ingredients %}
+        <tr class="clickable-row" data-url="{% url 'unlike_ingredient' ingredient_id=ingred.id %}" title="Je n'aime pas">
+            <td> {{ ingred.name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -82,9 +82,12 @@ class Profile(models.Model):
         families = None
         recipes = None
         ings = None
+        count_anonymous = 0
         logger.info("Creating key for %d profiles." % len(profiles))
-
         for profile in profiles:
+            if profile._state.adding:
+                count_anonymous += 1
+                continue
             p_diets = profile.diets.all()
             p_family = profile.unlikes_family.all()
             p_recipe = profile.unlikes_recipe.all()
@@ -94,10 +97,11 @@ class Profile(models.Model):
             recipes = recipes | p_recipe if recipes else p_recipe
             ings = ings | p_ings if ings else p_ings
 
-        return "d:%s|f:%s|r:%s|i:%s" % (list_pk(diets),
+        return "d:%s|f:%s|r:%s|i:%s|%s" % (list_pk(diets),
                                         list_pk(families),
                                         list_pk(recipes),
-                                        list_pk(ings))
+                                        list_pk(ings),
+                                        "a:%d" % count_anonymous if count_anonymous is not None else "")
 
     def __str__(self):
         return self.name
@@ -202,10 +206,18 @@ class Recipe(models.Model):
 
             count_recipes = Recipe.objects.count()
             count_recipes_first = count_recipes
-            profile_diets_pks = [profile.diets.values_list('pk') for profile in profile_list]
-            profile_bad_recipes_pks = [profile.unlikes_recipe.values_list('pk') for profile in profile_list]
-            profile_bad_families_pks = [profile.unlikes_family.values_list('pk') for profile in profile_list]
-            profile_bad_ings_pks = [profile.unlikes_ingredient.values_list('pk') for profile in profile_list]
+
+            profile_diets_pks = []
+            profile_bad_recipes_pks = []
+            profile_bad_families_pks = []
+            profile_bad_ings_pks = []
+
+            for profile in profile_list:
+                if profile._state.adding is False:
+                    profile_diets_pks.append(profile.diets.values_list('pk'))
+                    profile_bad_recipes_pks.append(profile.unlikes_recipe.values_list('pk'))
+                    profile_bad_families_pks.append(profile.unlikes_family.values_list('pk'))
+                    profile_bad_ings_pks.append(profile.unlikes_ingredient.values_list('pk'))
 
             # Flattening lists and de-tupling items
             profile_diets = list(set([item[0] for sublist in profile_diets_pks for item in sublist]))

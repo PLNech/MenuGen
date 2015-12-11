@@ -4,6 +4,7 @@ from django.core.cache import cache
 
 from menus.algorithms.model.menu.dish import Dish
 from menus.models import Recipe, IngredientNutriment, Nutriment, RecipeToIngredient
+from django.core.cache import cache
 
 __author__ = 'PLNech'
 logger = logging.getLogger('menus')
@@ -46,10 +47,15 @@ def recipe2dish(recipe):
     :type recipe Recipe
     :return: Dish
     """
-    key = "recipe2dish_" + recipe.name.replace(" ", "")
-    cached_dish = cache.get(key, False)
-    if cached_dish:
+    key = "recipe2dish_%i" % recipe.id
+    cached_dish = cache.get(key)
+    if cached_dish is not None:
         return cached_dish
+    dish = cache.get(key)
+    if dish is not None:
+        logger.info("recipe2dish: found cached version of %s." % key)
+        return dish
+
     dish = Dish(recipe.name, recipe.id)
 
     logger.debug("Handling recipe: %s." % dish.name)
@@ -66,7 +72,8 @@ def recipe2dish(recipe):
         dish += Dish(name=ing.name, calories=ing_cal, proteins=ing_prot, fats=ing_fat, carbohydrates=ing_carb)
     logger.debug("Nutrients: %.3f cal, %.3f prot, %.3f fat, %.3f carb.\n------------", dish.calories, dish.proteins,
                  dish.fats, dish.carbohydrates)
-    cache.set(key, dish)
+    cache.set(key, dish, None)
+    logger.info("Cache updated for %s." % key)
     return dish
 
 
