@@ -1,10 +1,13 @@
+import logging
+import time
+
 __author__ = 'PLNech'
 
 from menus.algorithms.model.menu.menu import Menu
-from menus.algorithms.model.menu.menu_manager import MenuManager
-
 from menus.algorithms.model.individual import Individual
 from menus.algorithms.utils.config import Config
+
+logger = logging.getLogger('menus')
 
 
 class Population:

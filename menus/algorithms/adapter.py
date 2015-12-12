@@ -1,10 +1,10 @@
 import logging
+
 import unidecode
 from django.core.cache import cache
 
 from menus.algorithms.model.menu.dish import Dish
 from menus.models import Recipe, IngredientNutriment, Nutriment, RecipeToIngredient
-from django.core.cache import cache
 
 __author__ = 'PLNech'
 logger = logging.getLogger('menus')
@@ -97,3 +97,10 @@ def calculate_nutrients(association, name, unit=None):
                                                                            association.scraped_text, ascii_unit))
             coeff = 1
     return coeff * link.quantity * association.quantity / association.recipe.amount
+
+
+def cache_all_recipes():
+    recipes = Recipe.objects.all()
+    for i, r in enumerate(recipes):
+        recipe2dish(r)
+        logging.info("Cached %i out of %i." % (i, recipes.count()))

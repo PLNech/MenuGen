@@ -119,7 +119,7 @@ LOGGING = {
     'loggers': {
         'menus': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False,
         }
     }
@@ -160,6 +160,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         # 'LOCATION': '/var/tmp/MenuGenCache',                                    # GNU/Linux
         'LOCATION': os.path.join(os.path.expandvars('%TMP%'), 'MenuGenCache'),  # Windows
+        'MAX_ENTRIES': 50000
     },
     'memcached': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
