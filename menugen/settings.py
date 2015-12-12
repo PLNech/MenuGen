@@ -152,9 +152,14 @@ TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
 )
 
 CACHES = {
-    'default': {
+    'memory': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'menugen',
+    },
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        # 'LOCATION': '/var/tmp/MenuGenCache',                                    # GNU/Linux
+        'LOCATION': os.path.join(os.path.expandvars('%TMP%'), 'MenuGenCache'),  # Windows
     },
     'memcached': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',

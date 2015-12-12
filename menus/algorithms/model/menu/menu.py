@@ -266,9 +266,9 @@ class Menu(Individual):  # TODO Document!
             shuffle(available_dishes)
             ordered_dishes = sorted(available_dishes, key=lambda x: x.calories, reverse=True)
 
-            cache.set('init_dishes', init_dishes)
-            cache.set('available_dishes', available_dishes)
-            cache.set('ordered_dishes', ordered_dishes)
+            cache.set('init_dishes', init_dishes, None)
+            cache.set('available_dishes', available_dishes, None)
+            cache.set('ordered_dishes', ordered_dishes, None)
             logger.info("Initialised dishes lists for menu generation.")
 
         return init_dishes, available_dishes, ordered_dishes

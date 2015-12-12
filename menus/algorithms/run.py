@@ -4,12 +4,11 @@ import os
 import sys
 
 from menus.algorithms import algorithm
-from menus.algorithms.model.menu.menu_manager import MenuManager
-from menus.algorithms.utils.config import Config
-from menus.algorithms.stats import StatKeeper
-from menus.algorithms.utils.printer import Printer
-from menus.algorithms.model.population import Population
 from menus.algorithms.model.factories import is_better_than
+from menus.algorithms.model.population import Population
+from menus.algorithms.stats import StatKeeper
+from menus.algorithms.utils.config import Config
+from menus.algorithms.utils.printer import Printer
 
 stats = StatKeeper
 logger = logging.getLogger('menus')
@@ -221,7 +220,7 @@ if __name__ == "__main__":
     main_first = main_pop.get_at(0)
     if not Config.print_each_run:
         logger.info("Initial %s: %i." % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
-                                   main_first.get_score()))
+                                         main_first.get_score()))
 
     algorithm.setup()
     # run_test("mutation_rate", 0.25, 0.5)

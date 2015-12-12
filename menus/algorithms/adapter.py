@@ -50,15 +50,12 @@ def recipe2dish(recipe):
     key = "recipe2dish_%i" % recipe.id
     cached_dish = cache.get(key)
     if cached_dish is not None:
-        return cached_dish
-    dish = cache.get(key)
-    if dish is not None:
         logger.info("recipe2dish: found cached version of %s." % key)
-        return dish
+        return cached_dish
 
     dish = Dish(recipe.name, recipe.id)
 
-    logger.debug("Handling recipe: %s." % dish.name)
+    logger.debug("Handling recipe: %s (%i)." % (dish.name, recipe.id))
     for ing in recipe.ingredients.all():
         association = recipe2ingredients_objects.filter(recipe=recipe, ingredient=ing)[0]
         logger.debug("%s %s of %s.", association.quantity, association.unit, ing.name)
@@ -73,7 +70,7 @@ def recipe2dish(recipe):
     logger.debug("Nutrients: %.3f cal, %.3f prot, %.3f fat, %.3f carb.\n------------", dish.calories, dish.proteins,
                  dish.fats, dish.carbohydrates)
     cache.set(key, dish, None)
-    logger.info("Cache updated for %s." % key)
+    logger.info("Cached value of %s." % key)
     return dish
 
 
