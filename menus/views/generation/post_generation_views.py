@@ -120,14 +120,24 @@ def generation(request):
                         shopping_list[i.name]['units'][association.unit] = association.quantity
     request.session['shopping_list'] = shopping_list
 
-    # stats
+    # stats + pics
     recipes = []
+    pics = []
     for meal_time in planning:
         for meal in meal_time:
             if meal:
-                recipes.append(meal['main_course'])
-                recipes.append(meal['starter'])
-                recipes.append(meal['dessert'])
+                starter = meal['starter']
+                recipes.append(starter)
+                if starter.picture:
+                    pics.append(starter.picture)
+                main_course = meal['main_course']
+                recipes.append(main_course)
+                if main_course.picture:
+                    pics.append(main_course.picture)
+                dessert = meal['dessert']
+                recipes.append(dessert)
+                if dessert.picture:
+                    pics.append(dessert.picture)
 
     return render(request, 'menus/generation/generation.html', {
         'planning': planning,
@@ -147,7 +157,8 @@ def generation(request):
         'cat_plat_principal': len([r for r in recipes if r.category == 'Plat principal']),
         'price_0': len([r for r in recipes if r.price == 0]),
         'price_1': len([r for r in recipes if r.price == 1]),
-        'price_2': len([r for r in recipes if r.price == 2])
+        'price_2': len([r for r in recipes if r.price == 2]),
+        'pics' : pics
     })
 
 
