@@ -21,7 +21,6 @@ def generate(request):
         request.session['nb_days'] = 7
     if 'matrix' not in request.session:
         request.session['matrix'] = [[1 for _ in range(7)] for _ in range(2)]
-
     return render(request, 'menus/generate/generate.html',
                   {'days_range': range(0, request.session['nb_days']),
                    'nb_days': request.session['nb_days'],

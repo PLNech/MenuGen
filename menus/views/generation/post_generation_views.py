@@ -2,14 +2,14 @@ import datetime
 import logging
 import time
 from functools import reduce
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
 
 import numpy
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.http import HttpResponse
 from django.shortcuts import render
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 import menugen.defaults as defaults
 from menus.data.generator import generate_planning_from_matrix
@@ -173,8 +173,8 @@ def shopping_list_pdf(request):
 def unlike_recipe_message(request, recipe_id):
     """ Message after unliking a recipe """
     recipe = Recipe.objects.get(id=recipe_id)
-    profile = request.user.account.profile;
-    profile.unlikes_recipe.add(recipe);
+    profile = request.user.account.profile
+    profile.unlikes_recipe.add(recipe)
     return render(request, 'menus/generation/unlike_recipe_popup.html', {
         'recipe_name': recipe.name
     })
@@ -184,7 +184,7 @@ def unlike_recipe_message(request, recipe_id):
 def unlike_ingredient_message(request, ingredient_id):
     """ Message after unliking an ingredient """
     ingredient = Ingredient.objects.get(id=ingredient_id)
-    profile = request.user.account.profile;
+    profile = request.user.account.profile
     profile.unlikes_ingredient.add(ingredient)
     return render(request, 'menus/generation/unlike_ingredient_popup.html', {
         'ingredient_name': ingredient.name
