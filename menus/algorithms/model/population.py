@@ -20,9 +20,9 @@ class Population:
         :rtype Population
         """
         self.population = [None] * size
-        manager = MenuManager.get()
 
         if initialise:
+            time_start = time.time()
             if Config.print_population:
                 print("Initialising population of size %i" % size)
             for i in range(size):
@@ -34,6 +34,11 @@ class Population:
                 self.save_at(i, new_individual)
             if Config.print_population:
                 print("Population generated: \n%s\n." % str(self))
+            time_end = time.time() - time_start
+            if time_end > 3:
+                logger.error("Population took %.3f seconds to generate." % time_end)
+            else:
+                logger.info("Population took %.3f seconds to generate." % time_end)
 
     def __str__(self):
         pop_str = ""
