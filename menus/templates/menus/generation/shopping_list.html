@@ -1,5 +1,7 @@
+{% load utils_extras %}
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+    </button>
     <h4 class="modal-title" id="aModalLabel"> Liste de courses </h4>
 </div>
 <div class="modal-body">
@@ -14,10 +16,14 @@
                 <th>Quantité</th>
                 <th>Ingrédient</th>
             </tr>
-            {% for ingred, quantity in shopping_list.items %}
+            {% for name, item in shopping_list.items %}
                 <tr>
-                    <td> {{ quantity }} </td>
-                    <td> {{ ingred }} </td>
+                    <td>
+                        {% for key in item.units %}
+                            {{ item.units | index:key | shopping_amount }} {{ key | shopping_unit }}
+                        {% endfor %}
+                    </td>
+                    <td> {{ name }}</td>
                 </tr>
             {% endfor %}
             </tbody>

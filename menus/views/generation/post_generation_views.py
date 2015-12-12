@@ -107,10 +107,17 @@ def generation(request):
             if meal:
                 main_course = meal['main_course']
                 for i in main_course.ingredients.all():
-                    try:
-                        shopping_list[i.name] += 1
-                    except KeyError:
-                        shopping_list[i.name] = 1
+                    association = main_course.recipetoingredient_set.get_queryset().filter(ingredient=i).get()
+                    logger.error("Shopping list: recipe %s contains %s %s of %s." % (
+                        main_course.name, association.quantity, association.unit, i.name))
+                    if i.name in shopping_list:
+                        if association.unit in shopping_list[i.name]:
+                            shopping_list[i.name]['units'][association.unit] += association.quantity
+                        else:
+                            shopping_list[i.name]['units'][association.unit] = association.quantity
+                    else:
+                        shopping_list[i.name] = {'name': i.name, 'units': {}}
+                        shopping_list[i.name]['units'][association.unit] = association.quantity
     request.session['shopping_list'] = shopping_list
 
     return render(request, 'menus/generation/generation.html', {
