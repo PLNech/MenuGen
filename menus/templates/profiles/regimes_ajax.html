@@ -8,7 +8,7 @@
                         <div class="checkbox regime" data-diet="{{ regime.pk }}" onclick="update_diet(this)">
                             <label><input type="checkbox" value="">{{ regime.name }}</label>
 
-                            <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.description }}</em></div>
+                            <div class="regime_desc"><em>{{ regime.description }}</em></div>
                         </div>
                     {% endfor %}
                 </ul>
@@ -22,17 +22,26 @@
                 <ul>
                     {% for regime in value_regimes_list %}
                         <div class="checkbox regime" data-diet="{{ regime.pk }}" onclick="update_diet(this)">
-                            <label><input type="checkbox" value="" {% if regime.active %} checked="checked" {% endif %}>{{ regime.name }}</label>
+                            <label><input type="checkbox" value="" {% if regime.active %}
+                                          checked="checked" {% endif %}>{{ regime.name }}</label>
 
-                            <div class="regime_desc" style="color: #7F8C97"><em>{{ regime.description }}</em></div>
+                            <div class="regime_desc"><em>{{ regime.description }}</em></div>
                         </div>
                     {% endfor %}
+                </ul>
+                <ul>
+                    <div class="checkbox regime" data-diet="-1">
+                        <label><input type="checkbox" value="">Halal</label>
+
+                        <div class="regime_desc" style=""><em>Régime alimentaire n'autorisant que les aliments
+                            compatibles avec les prescriptions religieuses musulmanes.</em></div>
+                    </div>
                 </ul>
             {% else %}
                 <p>Aucun régime de ce type disponible pour le moment</p>
             {% endif %}
         </div>
-
+        <!--
         <div class="col-md-12">
             <h3>Nutriments</h3>
             {% if nutrients_regimes_list %}
@@ -54,5 +63,6 @@
                 <p><i>Aucun régime de ce type disponible pour le moment</i></p>
             {% endif %}
         </div>
+        -->
     </div>
 </div>
