@@ -108,16 +108,19 @@ def generation(request):
                 main_course = meal['main_course']
                 for i in main_course.ingredients.all():
                     association = main_course.recipetoingredient_set.get_queryset().filter(ingredient=i).get()
+                    quantity = association.quantity
                     logger.error("Shopping list: recipe %s contains %s %s of %s." % (
-                        main_course.name, association.quantity, association.unit, i.name))
+                        main_course.name, quantity, association.unit, i.name))
                     if i.name in shopping_list:
                         if association.unit in shopping_list[i.name]:
-                            shopping_list[i.name]['units'][association.unit] += association.quantity
+                            shopping_list[i.name]['units'][association.unit] += quantity
+                            shopping_list[i.name]['total'] += quantity  # TODO: Consider a coeff to account for unit
                         else:
-                            shopping_list[i.name]['units'][association.unit] = association.quantity
+                            shopping_list[i.name]['units'][association.unit] = quantity
+                            shopping_list[i.name]['total'] = quantity
                     else:
-                        shopping_list[i.name] = {'name': i.name, 'units': {}}
-                        shopping_list[i.name]['units'][association.unit] = association.quantity
+                        shopping_list[i.name] = {'name': i.name, 'units': {}, 'plurals': {}, 'total': quantity or 0}
+                        shopping_list[i.name]['units'][association.unit] = quantity
     request.session['shopping_list'] = shopping_list
 
     return render(request, 'menus/generation/generation.html', {

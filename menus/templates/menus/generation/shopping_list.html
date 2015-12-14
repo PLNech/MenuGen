@@ -20,7 +20,10 @@
                 <tr>
                     <td>
                         {% for key in item.units %}
-                            {{ item.units | index:key | shopping_amount }} {{ key | shopping_unit }}
+                            <div id="{{ name | slug }}_{{ key | slug }}">
+                                <span id="amount_{{ key | slug }}">{{ item.units | index:key | shopping_amount }}</span>
+                                <span id="unit_{{ key | slug }}">{{ key | shopping_unit:item.units}}</span>
+                            </div>
                         {% endfor %}
                     </td>
                     <td> {{ name }}</td>
