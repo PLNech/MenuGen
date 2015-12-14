@@ -16,13 +16,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/compiled/theme_styles.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}"/>
     {% block css %}
-        <link rel="stylesheet" type="text/css" href='{% static 'bootstrap_overrides/tastes.css' %}' />
-        <link rel="stylesheet" type="text/css" href='{% static 'landing/css/landing-page.css' %}' />
-        <link rel="stylesheet" type="text/css" href='{% static 'landing/font-awesome/css/font-awesome.min.css' %}' />
-{#        <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">#}
+        <link rel="stylesheet" type="text/css" href='{% static 'bootstrap_overrides/tastes.css' %}'/>
+        <link rel="stylesheet" type="text/css" href='{% static 'landing/css/landing-page.css' %}'/>
+        <link rel="stylesheet" type="text/css" href='{% static 'landing/font-awesome/css/font-awesome.min.css' %}'/>
+        {#        <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">#}
     {% endblock %}
     <link type="image/x-icon" href="{% static 'favicon.png' %}" rel="shortcut icon"/>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400'
+          rel='stylesheet' type='text/css'>
 
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
@@ -32,91 +33,104 @@
 
 <body class="theme-white fixed-footer fixed-header fixed-leftmenu">
 
-{% include '_header.html' %}
+    {% include '_header.html' %}
 
-<a name="about"></a>
-<div class="intro-header">
-    <div class="container">
+    <a name="about"></a>
 
-        <div class="row">
-            <div class="col-lg-offset-3 col-lg-6">
-                <div class="intro-message">
-{% comment %}
+    <div class="intro-header">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-offset-3 col-lg-6">
+                    <div class="intro-message">
+                        {% comment %}
                     <h1>MenuGen</h1>
 {% endcomment %}
-                    <img src="{% static 'img/logo.png' %}">
-                    <h1>MenuGen</h1>
-                    <h2>le générateur intelligent de menus équilibrés !</h2>
-                    <hr class="intro-divider">
-                    <div class="temp-out-wrapper clearfix">
-                        <i class="wi wi-day-sunny icon"></i>
-                        <div class="temp-wrapper">
-                            <a style="height: 56px; width: 324px; font-size: 28px; background-color: #FF9900" class="btn btn-warning btn-lg" href="{% url 'generate' %}" role="button">Essayez maintenant </a>
+                        <img src="{% static 'img/logo.png' %}">
+
+                        <h1>MenuGen</h1>
+
+                        <h2>le générateur intelligent de menus équilibrés !</h2>
+                        <hr class="intro-divider">
+                        <div class="temp-out-wrapper clearfix">
+                            <i class="wi wi-day-sunny icon"></i>
+
+                            <div class="temp-wrapper">
+                                <a style="height: 56px; width: 324px; font-size: 28px; background-color: #FF9900"
+                                   class="btn btn-warning btn-lg"
+                                   href="{% url 'generate' %}" role="button">
+                                    {% if user.is_authenticated %} Démarrer
+                                    {% else %}Essayez maintenant
+                                    {% endif %}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
+        <!-- /.container -->
 
     </div>
-    <!-- /.container -->
+    <!-- /.intro-header -->
 
-</div>
-<!-- /.intro-header -->
+    <div class="main-box-body clearfix">
+        <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
+            <div class="pricing-package-inner">
+                <div class="package-header green-bg">
+                    <h3><i class="fa fa-cogs fa-3x"></i></h3>
 
-<div class="main-box-body clearfix">
-    <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
-        <div class="pricing-package-inner">
-            <div class="package-header green-bg">
-                <h3><i class="fa fa-cogs fa-3x"></i></h3>
-                <h3>intelligent</h3>
-            </div>
-            <div class="package-content">
-                <div class="package-price green-bg" style="height: 20px;">
+                    <h3>intelligent</h3>
                 </div>
-                <ul class="package-top-features">
-                    <li>Basé sur des données ouvertes</li>
-                    <li>Construit à l'aide d'algorithmes sophistiqués</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
-        <div class="pricing-package-inner">
-            <div class="package-header green-bg">
-                <h3><i class="fa fa-heartbeat fa-3x"></i></h3>
-                <h3>diététique</h3>
-            </div>
-            <div class="package-content">
-                <div class="package-price green-bg" style="height: 20px;">
+                <div class="package-content">
+                    <div class="package-price green-bg" style="height: 20px;">
+                    </div>
+                    <ul class="package-top-features">
+                        <li>Basé sur des données ouvertes</li>
+                        <li>Construit à l'aide d'algorithmes sophistiqués</li>
+                    </ul>
                 </div>
-                <ul class="package-top-features">
-                    <li>Propose des menus équilibrés</li>
-                    <li>Vous aide à planifier une alimentation variée</li>
-                </ul>
             </div>
         </div>
-    </div>
-    <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
-        <div class="pricing-package-inner">
-            <div class="package-header green-bg">
-                <h3><i class="fa fa-child fa-3x"></i></h3>
-                <h3>qui vous ressemble</h3>
-            </div>
-            <div class="package-content">
-                <div class="package-price green-bg" style="height: 20px;">
-                </div>
-                <ul class="package-top-features">
-                    <li>Apprend vos goûts</li>
-                    <li>Respecte vos valeurs</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
+        <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
+            <div class="pricing-package-inner">
+                <div class="package-header green-bg">
+                    <h3><i class="fa fa-heartbeat fa-3x"></i></h3>
 
-{% include '_common_js.html' %}
-{% block js %}{% endblock %}
+                    <h3>diététique</h3>
+                </div>
+                <div class="package-content">
+                    <div class="package-price green-bg" style="height: 20px;">
+                    </div>
+                    <ul class="package-top-features">
+                        <li>Propose des menus équilibrés</li>
+                        <li>Vous aide à planifier une alimentation variée</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-12 pricing-package">
+            <div class="pricing-package-inner">
+                <div class="package-header green-bg">
+                    <h3><i class="fa fa-child fa-3x"></i></h3>
+
+                    <h3>qui vous ressemble</h3>
+                </div>
+                <div class="package-content">
+                    <div class="package-price green-bg" style="height: 20px;">
+                    </div>
+                    <ul class="package-top-features">
+                        <li>Apprend vos goûts</li>
+                        <li>Respecte vos valeurs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include '_common_js.html' %}
+    {% block js %}{% endblock %}
 </body>
 
 </html>
