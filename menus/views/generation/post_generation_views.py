@@ -123,9 +123,45 @@ def generation(request):
                         shopping_list[i.name]['units'][association.unit] = quantity
     request.session['shopping_list'] = shopping_list
 
+    # stats + pics
+    recipes = []
+    pics = []
+    for meal_time in planning:
+        for meal in meal_time:
+            if meal:
+                starter = meal['starter']
+                recipes.append(starter)
+                if starter.picture:
+                    pics.append(starter.picture)
+                main_course = meal['main_course']
+                recipes.append(main_course)
+                if main_course.picture:
+                    pics.append(main_course.picture)
+                dessert = meal['dessert']
+                recipes.append(dessert)
+                if dessert.picture:
+                    pics.append(dessert.picture)
+
     return render(request, 'menus/generation/generation.html', {
         'planning': planning,
-        'days_range': range(0, nb_days)
+        'days_range': range(0, nb_days),
+        'nb_very_easy': len([r for r in recipes if r.difficulty == 0]),
+        'nb_easy': len([r for r in recipes if r.difficulty == 1]),
+        'nb_medium': len([r for r in recipes if r.difficulty == 2]),
+        'nb_difficult': len([r for r in recipes if r.difficulty == 3]),
+        'cat_amuse_gueule': len([r for r in recipes if r.category == 'Amuse-gueule']),
+        'cat_confiserie': len([r for r in recipes if r.category == 'Confiserie']),
+        'cat_conseil': len([r for r in recipes if r.category == 'Conseil']),
+        'cat_accompagnement': len([r for r in recipes if r.category == 'Accompagnement']),
+        'cat_dessert': len([r for r in recipes if r.category == 'Dessert']),
+        'cat_entree': len([r for r in recipes if r.category == 'Entrée']),
+        'cat_sauce': len([r for r in recipes if r.category == 'Sauce']),
+        'cat_boisson': len([r for r in recipes if r.category == 'Boisson']),
+        'cat_plat_principal': len([r for r in recipes if r.category == 'Plat principal']),
+        'price_0': len([r for r in recipes if r.price == 0]),
+        'price_1': len([r for r in recipes if r.price == 1]),
+        'price_2': len([r for r in recipes if r.price == 2]),
+        'pics' : pics
     })
 
 
