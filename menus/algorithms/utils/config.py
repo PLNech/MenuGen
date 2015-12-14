@@ -209,7 +209,7 @@ class Config:
         "Macaroni",
         "Macaroni",
         "Macaroni & Cheese",
-        ]
+    ]
 
     @staticmethod
     def update_needs(needs, nb_days):
