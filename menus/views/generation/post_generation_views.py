@@ -161,7 +161,7 @@ def generation(request):
         'price_0': len([r for r in recipes if r.price == 0]),
         'price_1': len([r for r in recipes if r.price == 1]),
         'price_2': len([r for r in recipes if r.price == 2]),
-        'pics' : pics
+        'pics': pics
     })
 
 

@@ -3,7 +3,8 @@
 {% load staticfiles %}
 
 {% block content %}
-    <div class="modal fade" id="shoppingListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="shoppingListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
             </div>
@@ -12,7 +13,7 @@
     <div class="col-lg-12">
         <div id="content-header" class="clearfix">
             <div class="pull-left">
-                <ol class="breadcrumb"><p></p></ol>
+                <ol class="breadcrumb"></ol>
                 <h1>Ma génération</h1>
             </div>
             <div class="pull-right hidden-xs">
@@ -21,7 +22,7 @@
                         <i class="fa fa-angle-double-left"></i> Paramètres de la génération
                     </a>
                     <a class="btn btn-warning"
-                       href="{% url 'sign_up'%}"
+                       href="{% url 'sign_up' %}"
                        role="button"
                        data-toggle="modal"
                        data-target="#auth-modal">
@@ -37,7 +38,7 @@
                         Liste de courses
                     </a>
                     <a class="btn btn-warning"
-                       href="{% url 'menu_new'%}"
+                       href="{% url 'menu_new' %}"
                        role="button"
                        data-toggle="modal"
                        data-target="#auth-modal">
@@ -47,8 +48,29 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="mealDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <!-- pie charts -->
+    <div class="row">
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <canvas class="chartCanvas" id="difficultyDoughnutChart" width="200" height="200"></canvas>
+                <div class="caption"><h3>Difficulté des recettes</h3></div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <canvas class="chartCanvas" id="mealTypesDoughnutChart" width="200" height="200"></canvas>
+                <div class="caption"><h3>Catégories des recettes</h3></div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <canvas class="chartCanvas" id="priceDoughnutChart" width="200" height="200"></canvas>
+                <div class="caption"><h3>Fourchettes de prix des recettes</h3></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="mealDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
             </div>
@@ -73,10 +95,12 @@
                                 <th>{{ forloop.counter0|meal_slot_name }}</th>
                                 {% for meal in meal_time %}
                                     <td>
-                                        <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}" class="slot well text-center" draggable="true">
+                                        <div id="slot_{{ forloop.parentloop.counter0 }}_{{ forloop.counter0 }}"
+                                             class="slot well text-center" draggable="true">
                                             {% if meal %}
                                                 {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
-                                                <btn class="btn btn-primary btn-details center-block" data-toggle="modal"
+                                                <btn class="btn btn-primary btn-details center-block"
+                                                     data-toggle="modal"
                                                      href="{% url 'generation_meal_details' starter_id=meal.starter.id main_course_id=meal.main_course.id dessert_id=meal.dessert.id %}"
                                                      data-target="#mealDetailsModal">
                                                     Détails
@@ -85,11 +109,13 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <br>
+
                                                         <p><i>Pas de repas prévu</i></p>
                                                     </div>
                                                 </div>
-                                                <btn class="btn btn-primary btn-details center-block disabled" data-toggle="modal">
-                                                Détails
+                                                <btn class="btn btn-primary btn-details center-block disabled"
+                                                     data-toggle="modal">
+                                                    Détails
                                                 </btn>
                                             {% endif %}
                                         </div>
@@ -110,27 +136,6 @@
             </div>
         </div>
 
-        <!-- pie charts -->
-        <div class="row">
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <canvas id="difficultyDoughnutChart" width="200" height="200"></canvas>
-                    <div class="caption"><h3>Difficulté des recettes</h3></div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <canvas id="mealTypesDoughnutChart" width="200" height="200"></canvas>
-                    <div class="caption"><h3>Catégories des recettes</h3></div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <canvas id="priceDoughnutChart" width="200" height="200"></canvas>
-                    <div class="caption"><h3>Fourchettes de prix des recettes</h3></div>
-                </div>
-            </div>
-        </div>
 
     </div>
 {% endblock %}
@@ -138,7 +143,7 @@
 {% block js %}
     <script src="{% static 'vendor/js/Chart.min.js' %}"></script>
     <script type="text/javascript">
-        $(document).ready( function() {
+        $(document).ready(function () {
             function handleDragStart(e) {
                 this.style.opacity = '0.4';  // this / e.target is the source node.
 
@@ -209,7 +214,7 @@
             }
 
             var cols = document.querySelectorAll('#planning .slot');
-            [].forEach.call(cols, function(col) {
+            [].forEach.call(cols, function (col) {
                 col.addEventListener('dragstart', handleDragStart, false);
                 col.addEventListener('dragenter', handleDragEnter, false);
                 col.addEventListener('dragover', handleDragOver, false);
@@ -226,7 +231,7 @@
         var data_difficulty = [
             {
                 value: {{ nb_very_easy }},
-                color:"#33CC33",
+                color: "#33CC33",
                 highlight: "#70DB70",
                 label: "Très Facile"
             },
@@ -244,7 +249,7 @@
             },
             {
                 value: {{ nb_difficult }},
-                color:"#F7464A",
+                color: "#F7464A",
                 highlight: "#FF5A5E",
                 label: "Difficile"
             }
@@ -255,7 +260,7 @@
         var data_categories = [
             {
                 value: {{ cat_amuse_gueule }},
-                color:"#33CC33",
+                color: "#33CC33",
                 highlight: "#70DB70",
                 label: "Amuse-gueule"
             },
@@ -267,43 +272,43 @@
             },
             {
                 value: {{ cat_accompagnement }},
-                color:"#F7464A",
+                color: "#F7464A",
                 highlight: "#FF5A5E",
                 label: "Accompagnement"
             },
             {
                 value: {{ cat_conseil }},
-                color:"#F7464A",
+                color: "#F7464A",
                 highlight: "#FF5A5E",
                 label: "Conseil"
             },
             {
                 value: {{ cat_dessert }},
-                color:"#99CC00",
+                color: "#99CC00",
                 highlight: "#A3D119",
                 label: "Dessert"
             },
             {
                 value: {{ cat_entree }},
-                color:"#007A7A",
+                color: "#007A7A",
                 highlight: "#008A8A",
                 label: "Entrée"
             },
             {
                 value: {{ cat_sauce }},
-                color:"#9900FF",
+                color: "#9900FF",
                 highlight: "#A319FF",
                 label: "Sauce"
             },
             {
                 value: {{ cat_boisson }},
-                color:"#3333FF",
+                color: "#3333FF",
                 highlight: "#4747FF",
                 label: "Boisson"
             },
             {
                 value: {{ cat_plat_principal }},
-                color:"#FF3300",
+                color: "#FF3300",
                 highlight: "#FF4719",
                 label: "Plat principal"
             }
@@ -314,19 +319,19 @@
         var data_categories = [
             {
                 value: {{ price_0 }},
-                color:"#9900FF",
+                color: "#9900FF",
                 highlight: "#A319FF",
                 label: "Bon marché"
             },
             {
                 value: {{ price_1 }},
-                color:"#F7464A",
+                color: "#F7464A",
                 highlight: "#FF5A5E",
                 label: "Moyen"
             },
             {
                 value: {{ price_2 }},
-                color:"#3333FF",
+                color: "#3333FF",
                 highlight: "#4747FF",
                 label: "Assez cher"
             }
@@ -334,35 +339,36 @@
         var ctxPPC = $("#priceDoughnutChart").get(0).getContext("2d");
         new Chart(ctxPPC).Doughnut(data_categories);
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             PhotoWall.init({
-                el:             '#gallery'               // Gallery element
-                ,zoom:          false                     // Use zoom
-                ,zoomAction:    'mouseenter'             // Zoom on action
-                ,zoomTimeout:   500                      // Timeout before zoom
-                ,zoomDuration:  100                      // Zoom duration time
-                ,showBox:       true                     // Enable fullscreen mode
-                ,padding:       10                       // padding between images in gallery
-                ,lineMaxHeight: 150                      // Max set height of pictures line
-                                                         // (may be little bigger due to resize to fit line)
+                el: '#gallery'               // Gallery element
+                , zoom: false                     // Use zoom
+                , zoomAction: 'mouseenter'             // Zoom on action
+                , zoomTimeout: 500                      // Timeout before zoom
+                , zoomDuration: 100                      // Zoom duration time
+                , showBox: true                     // Enable fullscreen mode
+                , padding: 10                       // padding between images in gallery
+                , lineMaxHeight: 150                      // Max set height of pictures line
+                                                          // (may be little bigger due to resize to fit line)
             });
 
-            var PhotosArray = new Array(
                     {% for pic in pics %}
                         {% if not forloop.last %}
                             {
-                                id:{{ forloop.counter0 }},img:'{{ pic }}',width:500,height:400,
-                                th:{src:'{{ pic }}',width:50,height:40,
-                                    zoom_src:'{{ pic }}',zoom_factor:4
+                                id:{{ forloop.counter0 }}, img: '{{ pic }}', width: 500, height: 400,
+                                th: {
+                                    src: '{{ pic }}', width: 50, height: 40,
+                                    zoom_src: '{{ pic }}', zoom_factor: 4
                                 }
                             },
                         {% endif %}
                     {% endfor %}
                     {% with pics|last as pic %}
                         {
-                            id:200,img:'{{ pic }}',width:500,height:400,
-                            th:{src:'{{ pic }}',width:50,height:40,
-                                zoom_src:'{{ pic }}',zoom_factor:4
+                            id: 200, img: '{{ pic }}', width: 500, height: 400,
+                            th: {
+                                src: '{{ pic }}', width: 50, height: 40,
+                                zoom_src: '{{ pic }}', zoom_factor: 4
                             }
                         }
                     {% endwith %}
