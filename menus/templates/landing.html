@@ -19,14 +19,23 @@
     <div class="col-md-12">
         <div class="main-box weather-box-large">
             <div class="main-box-body main-box-no-header clearfix">
-                <div class="current" style="background: url('{% static 'img/landing.jpg' %}') no-repeat scroll 0 0 / cover padding-box transparent">
+                <div class="current"
+                     style="background: url('{% static 'img/landing.jpg' %}') no-repeat scroll 0 0 / cover padding-box transparent">
                     <div id="hackfix" style="margin-bottom: 20px;"></div>
                     <h4 style="font-size: 2.2em; display: inline;background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);border-radius: 10px; padding: 8px 15px;">
                         MenuGen, le générateur <em>intelligent</em> de menus <em>équilibrés</em> !</h4>
+
                     <div class="temp-out-wrapper clearfix">
                         <i class="wi wi-day-sunny icon"></i>
+
                         <div class="temp-wrapper">
-                            <a style="height: 56px; width: 324px; font-size: 28px; background-color: #FF9900" class="btn btn-warning btn-lg" href="{% url 'physiology' %}" role="button">Essayez maintenant &raquo;</a>
+                            <a style="height: 56px; width: 324px; font-size: 28px; background-color: #FF9900"
+                               class="btn btn-warning btn-lg"
+                               href="{% url 'physiology' %}" role="button">
+                                {% if user.is_authenticated %} Démarrer
+                                {% else %}Essayez maintenant
+                                {% endif %}
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -75,7 +75,7 @@ class Config:
     draw_all = False  # Should we draw all steps of each run?
 
     print_each_run = True  # Should we print results for each run?
-    print_generation = False  # Should we print details of each generation?
+    print_generation = True  # Should we print details of each generation?
     print_population = False  # Should we print the generated population?
     print_selection = False  # Should we print the selection of individuals?
     print_crossover = False  # Should we print the crossover of individuals?
@@ -209,7 +209,7 @@ class Config:
         "Macaroni",
         "Macaroni",
         "Macaroni & Cheese",
-        ]
+    ]
 
     @staticmethod
     def update_needs(needs, nb_days):

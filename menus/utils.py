@@ -9,7 +9,6 @@ def _json_object_hook(d):
 def json2obj(data):
     return json.loads(data, object_hook=_json_object_hook)
 
-
 def list_pk(queryset):
     if queryset is None:
         return "0"

@@ -1,5 +1,10 @@
-from django import template
+import logging
 
+from django import template
+from django.template.defaultfilters import slugify
+from unidecode import unidecode
+
+logger = logging.getLogger("menus")
 register = template.Library()
 
 
@@ -19,33 +24,66 @@ def stepped_range_to(begin, end):
 
 
 @register.filter(name='shopping_unit')
-def shopping_unit(unit):
-    units = {
-        'g': 'grammes',
-        'mg': 'milligrammes',
-        'cg': 'centigrammes',
-        'dg': 'decigrammes',
-        'kg': 'kilogrammes',
-        'l': ';otre',
-        'cuillère à soupe': 'cuillères à soupe',
-        'cuillère à café': 'cuillères à café',
-        'tranche': 'tranches',
-        'gousse': 'gousses',
-        'boîte': 'boîtes',
-        'verre': 'verres'
-    }
-
+def shopping_unit(unit, units):
+    logger.info("sh_U: %s, %s" % (unit, units))
+    amount = units[unit]
+    plural = amount and amount > 1
+    if plural:
+        units = {
+            'g': 'grammes',
+            'dg': 'décigrammes',
+            'cg': 'centigrammes',
+            'mg': 'milligrammes',
+            'kg': 'kilogrammes',
+            'l': 'litres',
+            'dl': 'décilitres',
+            'cl': 'centilitres',
+            'ml': 'millilitres',
+            'cuillère à soupe': 'cuillères à soupe',
+            'cuillère à café': 'cuillères à café',
+            'tranche': 'tranches',
+            'gousse': 'gousses',
+            'boîte': 'boîtes',
+            'verre': 'verres'
+        }
+    else:
+        units = {
+            'g': 'gramme',
+            'dg': 'décigramme',
+            'cg': 'centigramme',
+            'mg': 'milligramme',
+            'kg': 'kilogramme',
+            'l': 'litre',
+            'dl': 'décilitre',
+            'cl': 'centilitre',
+            'ml': 'millilitre',
+            'cuillère à soupe': 'cuillère à soupe',
+            'cuillère à café': 'cuillère à café',
+            'tranche': 'tranche',
+            'gousse': 'gousse',
+            'boîte': 'boîte',
+            'verre': 'verre'
+        }
     if unit in units:
-        return "(%s)" % units[unit]
+        return "%s" % units[unit]
     else:
         return ""
+
 
 @register.filter(name='shopping_amount')
 def shopping_amount(amount):
     if amount is None:
         return "1"
-    return amount
+    if amount % 1 == 0:
+        return '%i' % amount
+    return '%s' % amount
+
 
 @register.filter(name="index")
 def index(array, key):
     return array[key]
+
+
+@register.filter(name="slug")
+def slug(value):
+    return slugify(unidecode(value))

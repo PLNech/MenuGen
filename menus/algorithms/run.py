@@ -1,20 +1,18 @@
-import argparse
 import logging
 import os
 import sys
 
-from menus.algorithms import algorithm
-from menus.algorithms.model.factories import is_better_than
-from menus.algorithms.model.population import Population
-from menus.algorithms.stats import StatKeeper
 from menus.algorithms.utils.config import Config
-from menus.algorithms.utils.printer import Printer
 
-stats = StatKeeper
 logger = logging.getLogger('menus')
 
 
 def run(run_name, init_fittest=None):
+    from menus.algorithms.stats import StatKeeper as stats
+    from menus.algorithms.model.factories import is_better_than
+    from menus.algorithms.model.population import Population
+    from menus.algorithms.utils.printer import Printer
+    from menus.algorithms import algorithm
     """
 
     :type run_name: str
@@ -183,6 +181,8 @@ def init_log(log_filename):
 
 
 def run_standard(init_fittest=None, run_name="run"):
+    from menus.algorithms.stats import StatKeeper as stats
+
     nb_runs = Config.parameters[Config.KEY_RUN_NUMBER]
 
     for run_i in range(0, nb_runs):
@@ -193,35 +193,35 @@ def run_standard(init_fittest=None, run_name="run"):
     logger.info("Simulation ended.")
 
     if nb_runs > 1 and init_fittest is not None:
-        StatKeeper.print_statistics(init_fittest.get_score())
+        stats.print_statistics(init_fittest.get_score())
     return final_fittest
 
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--size', type=int, help='size of the population')
-    parser.add_argument('-r', '--runs', type=int, help='number of runs to execute')
-    parser.add_argument('-t', '--type', type=str, help='type of solution to search')
-
-    args = vars(parser.parse_args())
-
-    if args['size'] is not None:
-        Config.parameters[Config.KEY_POPULATION_SIZE] = args['size']
-    if args['runs'] is not None:
-        Config.parameters[Config.KEY_RUN_NUMBER] = args['runs']
-    if args['type'] is not None:
-        Config.parameters[Config.KEY_SOLUTION_TYPE] = args['type']
-
-    Printer.print_init()
-
-    # First individual for comparison
-    # we use the same one to bench all runs
-    main_pop = Population(1)
-    main_first = main_pop.get_at(0)
-    if not Config.print_each_run:
-        logger.info("Initial %s: %i." % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
-                                         main_first.get_score()))
-
-    algorithm.setup()
-    # run_test("mutation_rate", 0.25, 0.5)
-    run_standard(main_first)
+#
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument('-s', '--size', type=int, help='size of the population')
+#     parser.add_argument('-r', '--runs', type=int, help='number of runs to execute')
+#     parser.add_argument('-t', '--type', type=str, help='type of solution to search')
+#
+#     args = vars(parser.parse_args())
+#
+#     if args['size'] is not None:
+#         Config.parameters[Config.KEY_POPULATION_SIZE] = args['size']
+#     if args['runs'] is not None:
+#         Config.parameters[Config.KEY_RUN_NUMBER] = args['runs']
+#     if args['type'] is not None:
+#         Config.parameters[Config.KEY_SOLUTION_TYPE] = args['type']
+#
+#     Printer.print_init()
+#
+#     # First individual for comparison
+#     # we use the same one to bench all runs
+#     main_pop = Population(1)
+#     main_first = main_pop.get_at(0)
+#     if not Config.print_each_run:
+#         logger.info("Initial %s: %i." % (Config.score_dimensions[Config.parameters[Config.KEY_SOLUTION_TYPE]],
+#                                          main_first.get_score()))
+#
+#     algorithm.setup()
+#     # run_test("mutation_rate", 0.25, 0.5)
+#     run_standard(main_first)

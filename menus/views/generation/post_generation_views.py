@@ -1,4 +1,10 @@
 import datetime
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 import logging
 import time
 from functools import reduce
@@ -33,14 +39,19 @@ def generation(request):
     from menus.algorithms.run import run_standard
     from menus.data.generator import generate_planning_from_list
 
-    """ TODO:
-    Here should be called the algorithm
-    generating the structure containing the meals
-    should be passed to the rendered view """
+    fake_data_filename = 'response_parameters.dat'
+    if Config.fake_run:
+        logger.info("Fake run. Trying to load fake data...")
+        with open(fake_data_filename, 'rb') as f:
+            try:
+                response_parameters = pickle.load(f)
+                logger.info("Got fake data! Returning...")
+                return render(request, 'menus/generation/generation.html',
+                              response_parameters)
+            except Exception as e:
+                logger.info("Got an %s while loading fake data: %s" % (type(e), e))
 
     nb_days = int(request.session.get('nb_days', 7))
-
-    """ Default values """
     nb_dishes = 3
     nb_meals = 2
 
@@ -108,22 +119,63 @@ def generation(request):
                 main_course = meal['main_course']
                 for i in main_course.ingredients.all():
                     association = main_course.recipetoingredient_set.get_queryset().filter(ingredient=i).get()
+                    quantity = association.quantity
                     logger.error("Shopping list: recipe %s contains %s %s of %s." % (
-                        main_course.name, association.quantity, association.unit, i.name))
+                        main_course.name, quantity, association.unit, i.name))
                     if i.name in shopping_list:
                         if association.unit in shopping_list[i.name]:
-                            shopping_list[i.name]['units'][association.unit] += association.quantity
+                            shopping_list[i.name]['units'][association.unit] += quantity
+                            shopping_list[i.name]['total'] += quantity  # TODO: Consider a coeff to account for unit
                         else:
-                            shopping_list[i.name]['units'][association.unit] = association.quantity
+                            shopping_list[i.name]['units'][association.unit] = quantity
+                            shopping_list[i.name]['total'] = quantity
                     else:
-                        shopping_list[i.name] = {'name': i.name, 'units': {}}
-                        shopping_list[i.name]['units'][association.unit] = association.quantity
+                        shopping_list[i.name] = {'name': i.name, 'units': {}, 'plurals': {}, 'total': quantity or 0}
+                        shopping_list[i.name]['units'][association.unit] = quantity
     request.session['shopping_list'] = shopping_list
 
-    return render(request, 'menus/generation/generation.html', {
-        'planning': planning,
-        'days_range': range(0, nb_days)
-    })
+    # stats + pics
+    recipes = []
+    pics = []
+    for meal_time in planning:
+        for meal in meal_time:
+            if meal:
+                starter = meal['starter']
+                recipes.append(starter)
+                if starter.picture:
+                    pics.append(starter.picture)
+                main_course = meal['main_course']
+                recipes.append(main_course)
+                if main_course.picture:
+                    pics.append(main_course.picture)
+                dessert = meal['dessert']
+                recipes.append(dessert)
+                if dessert.picture:
+                    pics.append(dessert.picture)
+
+    response_parameters = {'planning': planning, 'days_range': range(0, nb_days),
+                           'nb_very_easy': len([r for r in recipes if r.difficulty == 0]),
+                           'nb_easy': len([r for r in recipes if r.difficulty == 1]),
+                           'nb_medium': len([r for r in recipes if r.difficulty == 2]),
+                           'nb_difficult': len([r for r in recipes if r.difficulty == 3]),
+                           'cat_amuse_gueule': len([r for r in recipes if r.category == 'Amuse-gueule']),
+                           'cat_confiserie': len([r for r in recipes if r.category == 'Confiserie']),
+                           'cat_conseil': len([r for r in recipes if r.category == 'Conseil']),
+                           'cat_accompagnement': len([r for r in recipes if r.category == 'Accompagnement']),
+                           'cat_dessert': len([r for r in recipes if r.category == 'Dessert']),
+                           'cat_entree': len([r for r in recipes if r.category == 'Entrée']),
+                           'cat_sauce': len([r for r in recipes if r.category == 'Sauce']),
+                           'cat_boisson': len([r for r in recipes if r.category == 'Boisson']),
+                           'cat_plat_principal': len([r for r in recipes if r.category == 'Plat principal']),
+                           'price_0': len([r for r in recipes if r.price == 0]),
+                           'price_1': len([r for r in recipes if r.price == 1]),
+                           'price_2': len([r for r in recipes if r.price == 2]), 'pics': pics}
+    with open(fake_data_filename, 'wb') as f:
+        pickle.dump(response_parameters, f)
+        logger.info("Saved new stored_data.")
+
+    http_response = render(request, 'menus/generation/generation.html', response_parameters)
+    return http_response
 
 
 def replace_if_none(var, default):
