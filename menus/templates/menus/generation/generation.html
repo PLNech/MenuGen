@@ -351,7 +351,7 @@
                 , lineMaxHeight: 150                      // Max set height of pictures line
                                                           // (may be little bigger due to resize to fit line)
             });
-
+            var PhotosArray = new Array(
                     {% for pic in pics %}
                         {% if not forloop.last %}
                             {

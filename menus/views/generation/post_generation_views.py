@@ -130,7 +130,7 @@ def generation(request):
                             shopping_list[i.name]['units'][association.unit] = quantity
                             shopping_list[i.name]['total'] = quantity
                     else:
-                        shopping_list[i.name] = {'name': i.name, 'units': {}, 'plurals': {}, 'total': quantity or 0}
+                        shopping_list[i.name] = {'name': i.name, 'units': {}, 'total': quantity or 0}
                         shopping_list[i.name]['units'][association.unit] = quantity
     request.session['shopping_list'] = shopping_list
 
