@@ -269,6 +269,7 @@ class Menu(Individual):  # TODO Document!
             cache.set('init_dishes', init_dishes, None)
             cache.set('available_dishes', available_dishes, None)
             cache.set('ordered_dishes', ordered_dishes, None)
+            cache.set('did_init_dishes', True)
             logger.info("Initialised dishes lists for menu generation.")
 
         return init_dishes, available_dishes, ordered_dishes
