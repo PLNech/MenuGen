@@ -85,9 +85,9 @@ class Profile(models.Model):
         count_anonymous = 0
         logger.info("Creating key for %d profiles." % len(profiles))
         for profile in profiles:
-            if profile._state.adding:
-                count_anonymous += 1
-                continue
+            # if profile._state.adding:  # FIXME: Find a valid way to differentiate anonymous profiles
+            #     count_anonymous += 1
+            #     continue
             p_diets = profile.diets.all()
             p_family = profile.unlikes_family.all()
             p_recipe = profile.unlikes_recipe.all()
@@ -189,7 +189,7 @@ class Recipe(models.Model):
         :type maximum int
         :return:
         """
-        if profile_list is None or any(p._state.adding for p in profile_list):
+        if profile_list is None:
             recipes = Recipe.objects.order_by('?')
         else:
             profile_list.sort(key=lambda p: p.name)
@@ -213,11 +213,13 @@ class Recipe(models.Model):
             profile_bad_ings_pks = []
 
             for profile in profile_list:
-                if profile._state.adding is False:
+                try:
                     profile_diets_pks.append(profile.diets.values_list('pk'))
                     profile_bad_recipes_pks.append(profile.unlikes_recipe.values_list('pk'))
                     profile_bad_families_pks.append(profile.unlikes_family.values_list('pk'))
                     profile_bad_ings_pks.append(profile.unlikes_ingredient.values_list('pk'))
+                except ValueError:
+                    pass  # This profile has no attributes, we'll pass it
 
             # Flattening lists and de-tupling items
             profile_diets = list(set([item[0] for sublist in profile_diets_pks for item in sublist]))
