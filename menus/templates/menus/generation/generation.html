@@ -107,7 +107,7 @@
                                                         Détails
                                                     </btn>
                                                     <btn class="btn btn-facebook btn-details center-block"
-                                                         onclick="share_meal('{{meal.starter.name}}', '{{meal.main_course.name}}', '{{meal.dessert.name}}', '{{ pics | index:0 }}')">
+                                                         onclick="share_meal('{{meal.starter.name | escapejs}}', '{{meal.main_course.name | escapejs}}', '{{meal.dessert.name | escapejs}}', '{{ pics | index:0 }}')">
                                                         Partager
                                                     </btn>
                                                 </div>
