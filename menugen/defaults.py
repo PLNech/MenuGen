@@ -8,4 +8,4 @@ BIRTHDAY = datetime.datetime.now() - datetime.timedelta(days=365 * AGE)
 NAME = 'Sans nom'
 SEX = Calculator.SEX_H
 EXERCISE = Calculator.EXERCISE_MODERATE
-ACTIVITY = 2
+ACTIVITY = 'low'
