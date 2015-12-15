@@ -13,3 +13,4 @@ application/static/js
 application/static/lib
 images/
 *.log
+.venv2
