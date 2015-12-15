@@ -107,7 +107,16 @@
                                                         Détails
                                                     </btn>
                                                     <btn class="btn btn-facebook btn-details center-block"
-                                                         onclick="share_meal('{{meal.starter.name | escapejs}}', '{{meal.main_course.name | escapejs}}', '{{meal.dessert.name | escapejs}}', '{{ pics | index:0 }}')">
+                                                         onclick="share_meal('{{ meal.starter.name | escapejs }}',
+                                                                 '{{ meal.main_course.name | escapejs }}',
+                                                                 '{{ meal.dessert.name | escapejs }}',
+                                                                 {% if meal.main_course.picture %}
+                                                                     '{{ meal.main_course.picture.url | recipeurl }}'
+                                                                 {% elif meal.dessert.picture %}
+                                                                     '{{ meal.dessert.picture.url | recipeurl }}'
+                                                                 {% elif meal.starter.picture %}
+                                                                        '{{ meal.starter.picture.url | recipeurl }}'
+                                                                 {% else %}'https://plnech.fr/files/menugen_logo.png'{% endif %})">
                                                         Partager
                                                     </btn>
                                                 </div>

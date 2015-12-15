@@ -87,3 +87,7 @@ def index(array, key):
 @register.filter(name="slug")
 def slug(value):
     return slugify(unidecode(value))
+
+@register.filter(name="recipeurl")
+def recipeurl(url):
+    return "http://" + url.split("//")[1]

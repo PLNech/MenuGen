@@ -248,3 +248,9 @@ def unlike_ingredient_message(request, ingredient_id):
     return render(request, 'menus/generation/unlike_ingredient_popup.html', {
         'ingredient_name': ingredient.name
     })
+
+def recipe_pics(request, recipe_id):
+    recipe = Recipe.objects.get(pk=recipe_id)
+    return render(request, 'menus/recipe_pic.html', {
+        'recipe': recipe
+    })

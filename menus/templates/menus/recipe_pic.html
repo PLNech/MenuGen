@@ -1,0 +1,3 @@
+{% load staticfiles %}
+{% load utils_extras %}
+<img src="{% if recipe.picture %}{{ recipe.picture.url | recipeurl }}{% else %}{% static 'img/logo.png' %}{% endif %}"/>
