@@ -25,7 +25,6 @@ def stepped_range_to(begin, end):
 
 @register.filter(name='shopping_unit')
 def shopping_unit(unit, units):
-    logger.info("sh_U: %s, %s" % (unit, units))
     amount = units[unit]
     plural = amount and amount > 1
     if plural:

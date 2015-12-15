@@ -10,7 +10,7 @@
             <ul id="email-list">
                 {% for profile in profiles %}
                     <li class="profile unread clickable-row" data-href="email-detail.html">
-                        <div class="chbox" data-profile-id="{{ profile.pk }}">
+                        <div class="chbox" data-profile-id="{{ profile.pk }}" data-profile-name="{{ profile.name }}">
                             <div class="checkbox-nice">
                                 <input type="checkbox" id="m-checkbox-{{ forloop.counter }}"
                                         {% if user_profile.id == profile.id %} checked
@@ -88,14 +88,33 @@
         var checkbox = $(this).find('input[type=checkbox]');
         var checked = checkbox.prop('checked');
         checkbox.prop('checked', !checked);
+        var profileNames = [];
         profileDivs.each(function () {
             var profileDiv = $(this);
             var id = profileDiv.data('profile-id');
             var checkbox = profileDiv.find('input[type=checkbox]');
             var checked = checkbox.prop('checked');
+            if (checked) {
+                profileNames.push(profileDiv.data('profile-name'));
+            }
             console.log(id, ":", checked);
             profiles.push({id: id, checked: checked})
         });
+        var nbNames = profileNames.length;
+        console.log("profileNames:", profileNames, nbNames);
+        var profileNamesStr = "";
+        for (var i = 0; i < nbNames; i++) {
+            profileNamesStr += profileNames[i];
+            if (i < nbNames - 2) {
+                console.log(i, ", ");
+                profileNamesStr += ", ";
+            } else if (i < nbNames - 1) {
+                console.log(i, "et");
+                profileNamesStr += " et ";
+            }
+        }
+        console.log("profileNamesStr:", profileNamesStr);
+        $('input#maskedSsn').val(nbNames + " profils sélectionnés : " + profileNamesStr);
         profiles = JSON.stringify(profiles);
         var data_dico = {
             'profiles': profiles,

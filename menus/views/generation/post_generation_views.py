@@ -70,7 +70,10 @@ def generation(request):
     user_sex = Calculator.SEX_F if request.session.get('sex') is 1 else Calculator.SEX_H
     user_birthday = datetime.date(year=today.year - user_age, month=today.month, day=today.day)
 
-    if request is not None and hasattr(request, 'user') and hasattr(request.user, 'profile'):
+    if request is not None \
+            and hasattr(request, 'user') \
+            and hasattr(request.user, 'account') \
+            and hasattr(request.user.account, 'profile'):
         # We have a real user, did it specify profiles?
         if 'profiles' in request.session:
             # Using selected profiles
@@ -84,7 +87,7 @@ def generation(request):
         else:
             # Using only user's profile
             logger.info('Crafted profile list from user profile.')
-            profile_list = [request.user.profile]
+            profile_list = [request.user.account.profile]
     else:
         # Using user input or default values
         profile_list = [Profile(weight=user_weight, height=user_height, birthday=user_birthday, sex=user_sex,
@@ -120,7 +123,7 @@ def generation(request):
                 for i in main_course.ingredients.all():
                     association = main_course.recipetoingredient_set.get_queryset().filter(ingredient=i).get()
                     quantity = association.quantity
-                    logger.error("Shopping list: recipe %s contains %s %s of %s." % (
+                    logger.debug("Shopping list: recipe %s contains %s %s of %s." % (
                         main_course.name, quantity, association.unit, i.name))
                     if i.name in shopping_list:
                         if association.unit in shopping_list[i.name]:
