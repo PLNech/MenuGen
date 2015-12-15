@@ -41,11 +41,16 @@ def generation(request):
 
     fake_data_filename = 'response_parameters.dat'
     if Config.fake_run:
+        start = time.time()
         logger.info("Fake run. Trying to load fake data...")
         with open(fake_data_filename, 'rb') as f:
             try:
                 response_parameters = pickle.load(f)
                 logger.info("Got fake data! Returning...")
+                elapsed = time.time() - start
+                while elapsed < 5:
+                    time.sleep(0.5)
+                    elapsed = time.time() - start
                 return render(request, 'menus/generation/generation.html',
                               response_parameters)
             except Exception as e:
