@@ -38,9 +38,9 @@
         // AJAX for posting
         function update_physio(data_dico) {
             $.ajax({
-                url : '{% url 'update_physio' %}', // the endpoint
-                type : "POST", // http method
-                data : data_dico, // data sent with the post request
+                url: '{% url 'update_physio' %}', // the endpoint
+                type: "POST", // http method
+                data: data_dico, // data sent with the post request
                 // handle a successful response
                 success: function (json) {
                     console.log(json); // log the returned json to the console
@@ -60,57 +60,6 @@
 
     {% comment %} SLIDERS {% endcomment %}
     <script src="{% static 'bootstrap-slider/bootstrap-slider.min.js' %}"></script>
-    <script>
-        var activity_slider = $('#activity').slider({
-            min: 0,
-            max: 4,
-            value: {{ physio.activity }},
-            step: 1,
-            focus: true,
-            formatter: function(value) {
-                return 'Activité (' + value + '/4)';
-            }
-        });
-        activity_slider.on('change', function (e) {
-            var data_dico = {activity: activity_slider.slider('getValue') };
-            update_physio(data_dico);
-        });
-
-        var height_slider = $('#height').slider({
-            min: 0.5,
-            max: 2.3,
-            value: {{ physio.height | unlocalize }},
-            step: 0.1,
-            focus: true,
-            orientation: 'vertical',
-            reversed : true,
-            formatter: function(value) {
-                return 'Taille : ' + value + 'm';
-            }
-        });
-        height_slider.on('change', function (e) {
-            var data_dico = {height: height_slider.slider('getValue') };
-            update_physio(data_dico);
-        });
-
-        var weight_slider = $('#weight').slider({
-            min: 40,
-            max: 120,
-            value: {{ physio.weight }},
-            step: 5,
-            focus: true,
-            formatter: function(value) {
-                return 'Poid: ' + value + 'kg';
-            }
-        });
-        weight_slider.on('change', function (e) {
-            var data_dico = {weight: weight_slider.slider('getValue') };
-            update_physio(data_dico);
-        });
-
-    </script>
-
-
     <script>
 
         $('#name').on('change', function (e) {
@@ -140,7 +89,7 @@
     <script src="{% static 'datepicker/js/bootstrap-datepicker.js' %}"></script>
     <script src="{% static 'datepicker/js/bootstrap-datepicker.fr.js' %}" charset="UTF-8"></script>
     <script>
-        $(function(){
+        $(function () {
             $('#birthday').datepicker({
                 language: 'fr',
                 format: 'dd-mm-yyyy',
@@ -153,6 +102,8 @@
             update_physio(data_dico);
         });
     </script>
+
+    {% include 'profiles/physiology.js.html' %}
 {% endblock js %}
 
 {% block css %}

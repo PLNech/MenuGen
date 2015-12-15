@@ -9,31 +9,39 @@
 
             <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">Profil de </label>
+
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Nom du profil" value="{{ physio.name }}">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Nom du profil"
+                           value="{{ physio.name }}">
                 </div>
             </div>
             <br>
 
             <div class="form-group">
                 <label for="sex" class="col-sm-2 control-label">Sexe</label>
+
                 <div class="col-sm-2">
-                    <input type="radio" name="sex" class="sex" value="man" {% if physio.sex == 'man' %}checked{% endif %}> <i class="fa fa-male fa-3x"></i>
-                    <input type="radio" name="sex" class="sex" value="woman" {% if physio.sex == 'woman' %}checked{% endif %}> <i class="fa fa-female fa-3x"></i>
+                    <input type="radio" name="sex" class="sex" value="man"
+                           {% if physio.sex == 'man' %}checked{% endif %}> <i class="fa fa-male fa-3x"></i>
+                    <input type="radio" name="sex" class="sex" value="woman"
+                           {% if physio.sex == 'woman' %}checked{% endif %}> <i class="fa fa-female fa-3x"></i>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="birthday" class="col-sm-2 control-label">Date de naissance</label>
+
                 <div class="col-sm-2">
                     <div class="input-group">
-                        <input type="text" class="form-control" value="{{ physio.birthday }}" id="birthday" name="birthday" >
+                        <input type="text" class="form-control" value="{{ physio.birthday }}" id="birthday"
+                               name="birthday">
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="weight" class="col-sm-2 control-label">Poids</label>
+
                 <div class="col-sm-2">
                     <div class="input-group">
                         <input id="weight" name="weight" type="text"/><br/>
@@ -50,16 +58,83 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-group">
                 <label for="activity" class="col-sm-2 control-label">Activité</label>
+
                 <div class="col-sm-2">
                     <div class="input-group">
                         <input id="activity" name="activity" type="text"/><br/>
                     </div>
                 </div>
             </div>
-
         </form>
     </div>
 </div>
+<script>
+    var low = 0;
+    var light = 1;
+    var moderate = 2;
+    var active = 3;
+    var extreme = 4;
+
+    var activity_values = {
+        0: 'sédentaire',
+        1: 'légèrement actif',
+        2: 'modérément actif',
+        3: 'très actif',
+        4: 'extrèmement actif'
+    };
+    var activity_details = {
+        0: '',
+        1: 'légèrement actif (pas ou peu d\'exercice)',
+        2: 'modérément actif (exercice modéré 3 à 5 fois par semaine)',
+        3: 'très actif (activité ou sport intense 6 à 7 fois par semaine)',
+        4: 'extremement actif (sport extrème ou travail physique ou entrainements 2 fois par jour)'
+    };
+    var activity_slider = $('#activity').slider({
+        min: 0,
+        max: 4,
+        value: {{ physio.activity }},
+        step: 1,
+        focus: true,
+        formatter: function (value) {
+            return activity_values[value];
+        }
+    });
+    activity_slider.on('change', function (e) {
+        var data_dico = {activity: activity_slider.slider('getValue')};
+        update_physio(data_dico);
+    });
+
+    var height_slider = $('#height').slider({
+        min: 0.5,
+        max: 2.3,
+        value: {{ physio.height | unlocalize }},
+        step: 0.1,
+        focus: true,
+        reversed: true,
+        formatter: function (value) {
+            return value + 'm';
+        }
+    });
+    height_slider.on('change', function (e) {
+        var data_dico = {height: height_slider.slider('getValue')};
+        update_physio(data_dico);
+    });
+
+    var weight_slider = $('#weight').slider({
+        min: 40,
+        max: 120,
+        value: {{ physio.weight }},
+        step: 5,
+        focus: true,
+        formatter: function (value) {
+            return value + 'kg';
+        }
+    });
+    weight_slider.on('change', function (e) {
+        var data_dico = {weight: weight_slider.slider('getValue')};
+        update_physio(data_dico);
+    });
+
+</script>

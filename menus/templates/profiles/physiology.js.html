@@ -84,54 +84,73 @@
 {% comment %} SLIDERS {% endcomment %}
 <script src="{% static 'bootstrap-slider/bootstrap-slider.min.js' %}"></script>
 <script>
-    var activity_slider = $('#activity').slider({
-        min: 0,
-        max: 4,
-        value: {{ physio.activity }},
-        step: 1,
-        focus: true,
-        formatter: function (value) {
-            return 'Activité (' + value + '/4)';
-        }
-    });
-    activity_slider.on('change', function (e) {
-        var data_dico = {activity: activity_slider.slider('getValue')};
-        update_physio(data_dico);
-    });
+        var low = 0;
+        var light = 1;
+        var moderate = 2;
+        var active = 3;
+        var extreme = 4;
 
-    var height_slider = $('#height').slider({
-        min: 0.5,
-        max: 2.3,
-        value: {{ physio.height | unlocalize }},
-        step: 0.1,
-        focus: true,
-        //orientation: 'vertical',
-        //reversed : true,
-        formatter: function (value) {
-            return 'Taille : ' + value + 'm';
-        }
-    });
-    height_slider.on('change', function (e) {
-        var data_dico = {height: height_slider.slider('getValue')};
-        update_physio(data_dico);
-    });
+        var activity_values = {
+            0: 'sédentaire',
+            1: 'légèrement actif',
+            2: 'modérément actif',
+            3: 'très actif',
+            4: 'extrèmement actif'
+        };
+        var activity_details = {
+            0: '',
+            1: 'légèrement actif (pas ou peu d\'exercice)',
+            2: 'modérément actif (exercice modéré 3 à 5 fois par semaine)',
+            3: 'très actif (activité ou sport intense 6 à 7 fois par semaine)',
+            4: 'extremement actif (sport extrème ou travail physique ou entrainements 2 fois par jour)'
+        };
+        var activity_slider = $('#activity').slider({
+            min: 0,
+            max: 4,
+            value: {{ physio.activity }},
+            step: 1,
+            focus: true,
+            formatter: function (value) {
+                return activity_values[value];
+            }
+        });
+        activity_slider.on('change', function (e) {
+            var data_dico = {activity: activity_slider.slider('getValue')};
+            update_physio(data_dico);
+        });
 
-    var weight_slider = $('#weight').slider({
-        min: 40,
-        max: 120,
-        value: {{ physio.weight }},
-        step: 5,
-        focus: true,
-        formatter: function (value) {
-            return 'Poid: ' + value + 'kg';
-        }
-    });
-    weight_slider.on('change', function (e) {
-        var data_dico = {weight: weight_slider.slider('getValue')};
-        update_physio(data_dico);
-    });
+        var height_slider = $('#height').slider({
+            min: 0.5,
+            max: 2.3,
+            value: {{ physio.height | unlocalize }},
+            step: 0.1,
+            focus: true,
+            reversed: true,
+            formatter: function (value) {
+                return value + 'm';
+            }
+        });
+        height_slider.on('change', function (e) {
+            var data_dico = {height: height_slider.slider('getValue')};
+            update_physio(data_dico);
+        });
 
-</script>
+        var weight_slider = $('#weight').slider({
+            min: 40,
+            max: 120,
+            value: {{ physio.weight }},
+            step: 5,
+            focus: true,
+            formatter: function (value) {
+                return value + 'kg';
+            }
+        });
+        weight_slider.on('change', function (e) {
+            var data_dico = {weight: weight_slider.slider('getValue')};
+            update_physio(data_dico);
+        });
+
+    </script>
 
 
 <script>

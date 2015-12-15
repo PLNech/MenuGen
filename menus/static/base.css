@@ -1,18 +1,18 @@
 /*body {*/
-    /*padding-top: 70px;*/
+/*padding-top: 70px;*/
 
 /*}*/
 
 /*.input-group > .input-group-btn:last-child > .selectpicker {*/
-    /*border-top-right-radius: 5px;*/
-    /*border-bottom-right-radius: 5px;*/
-    /*border-top-left-radius: 0px;*/
+/*border-top-right-radius: 5px;*/
+/*border-bottom-right-radius: 5px;*/
+/*border-top-left-radius: 0px;*/
 /*}*/
 
 /*.input-group > .input-group-btn:first-child > .selectpicker {*/
-    /*border-top-left-radius: 5px;*/
-    /*border-bottom-left-radius: 5px;*/
-    /*border-top-left-radius: 0px;*/
+/*border-top-left-radius: 5px;*/
+/*border-bottom-left-radius: 5px;*/
+/*border-top-left-radius: 0px;*/
 /*}*/
 
 div.regime {
@@ -38,7 +38,7 @@ h5.recipe-title, .unlike-recipe-form {
     height: 80px;
 }
 
-.unlikes-relike:hover{
+.unlikes-relike:hover {
     text-decoration: underline;
     color: #006611;
 }
@@ -48,4 +48,3 @@ h5.recipe-title, .unlike-recipe-form {
     margin-top: 15px;
     margin-bottom: 15px;
 }
-
