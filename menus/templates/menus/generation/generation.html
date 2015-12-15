@@ -1,7 +1,7 @@
-{% extends '_base.html' %}
+{% extends '_base_fb.html' %}
 {% load planning_extras %}
+{% load utils_extras %}
 {% load staticfiles %}
-
 {% block content %}
     <div class="modal fade" id="shoppingListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
@@ -99,12 +99,18 @@
                                              class="slot well text-center" draggable="true">
                                             {% if meal %}
                                                 {% include 'menus/generation/slot.html' with aMeal=meal i=forloop.parentloop.counter0 j=forloop.counter0 %}
-                                                <btn class="btn btn-primary btn-details center-block"
-                                                     data-toggle="modal"
-                                                     href="{% url 'generation_meal_details' starter_id=meal.starter.id main_course_id=meal.main_course.id dessert_id=meal.dessert.id %}"
-                                                     data-target="#mealDetailsModal">
-                                                    Détails
-                                                </btn>
+                                                <div style="display: block">
+                                                    <btn class="btn btn-primary btn-details center-block"
+                                                         data-toggle="modal"
+                                                         href="{% url 'generation_meal_details' starter_id=meal.starter.id main_course_id=meal.main_course.id dessert_id=meal.dessert.id %}"
+                                                         data-target="#mealDetailsModal">
+                                                        Détails
+                                                    </btn>
+                                                    <btn class="btn btn-facebook btn-details center-block"
+                                                         onclick="share_meal('{{meal.starter.name}}', '{{meal.main_course.name}}', '{{meal.dessert.name}}', '{{ pics | index:0 }}')">
+                                                        Partager
+                                                    </btn>
+                                                </div>
                                             {% else %}
                                                 <div class="row">
                                                     <div class="col-md-12">

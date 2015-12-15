@@ -9,7 +9,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title>MenuGen - Testing</title>
 
-    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/bootstrap/bootstrap.min.css' %}"/>
     <script src="{% static 'vendor/js/jquery.js' %}"></script>
 
     <!--[if lt IE 9]>
@@ -19,14 +18,10 @@
 </head>
 
 <body>
-
-  {% block content %}
-  {% endblock %}
-
-  <script src="{% static 'vendor/js/bootstrap.js' %}"></script>
-
-  {% block js %}
-  {% endblock %}
-
+    {% block content %}
+    {% endblock %}
+    <script src="{% static 'vendor/js/bootstrap.js' %}"></script>
+    {% block js %}
+    {% endblock %}
 </body>
 </html>

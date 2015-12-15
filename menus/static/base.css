@@ -48,3 +48,11 @@ h5.recipe-title, .unlike-recipe-form {
     margin-top: 15px;
     margin-bottom: 15px;
 }
+
+.btn-facebook{
+    color: white; !important;
+}
+
+.btn-facebook:hover{
+    color: white; !important;
+}

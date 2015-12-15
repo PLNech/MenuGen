@@ -17,11 +17,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/libs/jquery-photowall.css' %}"/>
     {% block css %}
-        <link rel="stylesheet" type="text/css" href='{% static 'bootstrap_overrides/tastes.css' %}' />
-        <link rel="stylesheet" type="text/css" href='{% static 'bootstrap_overrides/statistics.css' %}' />
+        <link rel="stylesheet" type="text/css" href='{% static 'bootstrap_overrides/tastes.css' %}'/>
+        <link rel="stylesheet" type="text/css" href='{% static 'bootstrap_overrides/statistics.css' %}'/>
     {% endblock %}
     <link type="image/x-icon" href="{% static 'favicon.png' %}" rel="shortcut icon"/>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400'
+          rel='stylesheet' type='text/css'>
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
@@ -29,29 +30,30 @@
 </head>
 
 <body class="theme-white fixed-footer fixed-header fixed-leftmenu">
-<div id="theme-wrapper">
-    {% include '_header.html' %}
-    <div id="page-wrapper" class="container">
-        <div class="row">
-            {% if user.is_authenticated %}
-                {% include '_menu.html' %}
-                <div id="content-wrapper">
-            {% else %}
-                <div id="content-wrapper" style="margin-left: 0;">
-            {% endif %}
+    {% block body %}{% endblock %}
+    <div id="theme-wrapper">
+        {% include '_header.html' %}
+        <div id="page-wrapper" class="container">
             <div class="row">
-                {% block content %}{% endblock %}
-            </div>
-            </div>
+                {% if user.is_authenticated %}
+                    {% include '_menu.html' %}
+                    <div id="content-wrapper">
+                {% else %}
+                    <div id="content-wrapper" style="margin-left: 0;">
+                {% endif %}
+                <div class="row">
+                    {% block content %}{% endblock %}
+                </div>
+                </div>
 
-            {% include '_footer.html' %}
+                {% include '_footer.html' %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-{% include '_common_js.html' %}
-{% block js %}{% endblock %}
+    {% include '_common_js.html' %}
+    {% block js %}{% endblock %}
 </body>
 
 </html>
