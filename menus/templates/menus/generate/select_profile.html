@@ -80,6 +80,9 @@
     })();
 
     $('li.profile').on('click', delay_after_last(function () {
+        //disable nbPeople select.
+        $('select#nb_people').attr('disabled', 'disabled');
+        $('div#nbDays-input-group').removeClass('has-success');
         var profileDivs = $('div.chbox');
         var profiles = [];
         var checkbox = $(this).find('input[type=checkbox]');
