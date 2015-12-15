@@ -56,3 +56,11 @@ h5.recipe-title, .unlike-recipe-form {
 .btn-facebook:hover{
     color: white; !important;
 }
+
+.chartCanvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}

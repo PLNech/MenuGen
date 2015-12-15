@@ -107,11 +107,3 @@ body {
     /* font: 200 20px/1.5 Helvetica, Verdana, sans-serif; */
     border-bottom: 1px solid #ccc;
 }
-
-#chartCanvas {
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-}
