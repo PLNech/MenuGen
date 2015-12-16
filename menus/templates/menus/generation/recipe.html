@@ -1,3 +1,4 @@
+{% load utils_extras %}
 <div class="recipe-title-container">
     <h5 class="recipe-title">{{ recipe.name }}</h5>
 
@@ -48,6 +49,7 @@
     {% endfor %}
 </p>
 <btn class="btn btn-facebook btn-details center-block"
-     onclick="share_recipe('{{ recipe.name | escapejs }}', '{{ recipe.picture }}')">
+     onclick="share_recipe('{{ recipe.name | escapejs }}', '
+             {% if recipe.picture %}{{ recipe.picture.url | recipeurl }}{% endif %}')">
     Partager
 </btn>
