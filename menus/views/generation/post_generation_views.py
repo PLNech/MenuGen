@@ -6,7 +6,7 @@ from urllib.request import urlopen
 from PIL import Image
 from django.templatetags.static import static
 
-from templatetags.utils_extras import recipeurl
+from menus.templatetags.utils_extras import recipeurl
 
 try:
     import cPickle as pickle
