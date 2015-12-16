@@ -212,6 +212,8 @@ def generation_meal_details(request, starter_id, main_course_id, dessert_id):
 
 def generation_shopping_list(request):
     shopping_list = request.session.get('shopping_list', None)
+    if 'Gin' in shopping_list:
+        shopping_list['Gin'] = {'name': 'Gin', 'units': {'l': 1}, 'total': 1}
     return render(request, 'menus/generation/shopping_list.html', {
         'shopping_list': shopping_list
     })
