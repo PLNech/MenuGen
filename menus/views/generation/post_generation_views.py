@@ -49,8 +49,8 @@ def generation(request):
     if Config.fake_run:
         start = time.time()
         logger.info("Fake run. Trying to load fake data...")
-        with open(fake_data_filename, 'rb') as f:
-            try:
+        try:
+            with open(fake_data_filename, 'rb') as f:
                 response_parameters = pickle.load(f)
                 logger.info("Got fake data! Returning...")
                 elapsed = time.time() - start
@@ -59,8 +59,8 @@ def generation(request):
                     elapsed = time.time() - start
                 return render(request, 'menus/generation/generation.html',
                               response_parameters)
-            except Exception as e:
-                logger.info("Got an %s while loading fake data: %s" % (type(e), e))
+        except Exception as e:
+            logger.info("Got an %s while loading fake data: %s" % (type(e), e))
 
     nb_days = int(request.session.get('nb_days', 7))
     nb_dishes = 3
