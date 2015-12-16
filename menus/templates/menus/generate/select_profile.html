@@ -72,6 +72,7 @@
     }
 
     var delay_after_last = (function () {
+        console.log("Delaying action !");
         var timer = 0;
         return function (callback, ms) {
             clearTimeout(timer);
@@ -79,7 +80,7 @@
         }
     })();
 
-    $('li.profile').on('click', delay_after_last(function () {
+    var update_profiles = function () {
         //disable nbPeople select.
         $('select#nb_people').attr('disabled', 'disabled');
         $('div#nbDays-input-group').removeClass('has-success');
@@ -114,7 +115,8 @@
             }
         }
         console.log("profileNamesStr:", profileNamesStr);
-        $('input#maskedSsn').val(nbNames + " profils sélectionnés : " + profileNamesStr);
+        var strProfils = nbNames > 1 ? "profils sélectionnés" : "profil sélectionné";
+        $('input#maskedSsn').val(nbNames + " " + strProfils + " : " + profileNamesStr);
         profiles = JSON.stringify(profiles);
         var data_dico = {
             'profiles': profiles,
@@ -122,6 +124,9 @@
         };
         console.log('data:', data_dico);
         update_pre_generation(data_dico);
-    }, 3000));
+        $('ul#email-list').on('li', 'click', delay_after_last(update_profiles, 3000));
+    };
+
+    $('ul#email-list').on('li', 'click', delay_after_last(update_profiles, 3000));
 
 </script>

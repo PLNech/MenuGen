@@ -76,7 +76,7 @@ def remove(request, profile_id):
     p = account.guests.filter(id__exact=profile_id).first()
     # TODO : check ownership
     if request.method == 'GET':
-        title = 'Suppression du profile ' + p.name
+        title = 'Suppression du profil ' + p.name
         message = 'Êtes-vous sûr ?'
         action = 'Supprimer'
 
