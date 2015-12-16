@@ -49,7 +49,6 @@
     {% endfor %}
 </p>
 <btn class="btn btn-facebook btn-details center-block"
-     onclick="share_recipe('{{ recipe.name | escapejs }}', '
-             {% if recipe.picture %}{{ recipe.picture.url | recipeurl }}{% endif %}')">
+     onclick="share_recipe('{{ recipe.name | escapejs }}'{% if recipe.picture %}, '{{ recipe.picture.url | recipeurl }}'{% endif %})">
     Partager
 </btn>
