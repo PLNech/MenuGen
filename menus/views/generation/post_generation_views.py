@@ -1,4 +1,12 @@
 import datetime
+import mimetypes
+from io import BytesIO
+from urllib.request import urlopen
+
+from PIL import Image
+from django.templatetags.static import static
+
+from templatetags.utils_extras import recipeurl
 
 try:
     import cPickle as pickle
@@ -8,15 +16,13 @@ except ImportError:
 import logging
 import time
 from functools import reduce
-
 import numpy
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-
 import menugen.defaults as defaults
 from menus.data.generator import generate_planning_from_matrix
 from menus.models import Recipe, Ingredient
@@ -257,8 +263,27 @@ def unlike_ingredient_message(request, ingredient_id):
         'ingredient_name': ingredient.name
     })
 
-def recipe_pics(request, recipe_id):
+
+def recipe_pic(r, recipe_id):
     recipe = Recipe.objects.get(pk=recipe_id)
-    return render(request, 'menus/recipe_pic.html', {
-        'recipe': recipe
-    })
+    try:
+        url = recipeurl(recipe.picture.url)
+        file = BytesIO(urlopen(url).read())
+        image = Image.open(file)
+    except ValueError as e:
+        url = r.build_absolute_uri(static("img/logo.png"))
+        print("No url, loading logo: %r." % url)
+        file = BytesIO(urlopen(url).read())
+        image = Image.open(file)
+    print("Image: %r" % image)
+    response = HttpResponse(content_type=mimetypes.guess_type(url)[0])
+    image.save(response, "PNG")
+    response['Content-Disposition'] = 'attachment; filename=picture.png'
+    return response
+    # except ValueError as e:
+    #     file = File
+    # except Exception as e:
+    #     print("Exception. Returning page... (%r)", e)
+    #     return render(r, 'menus/recipe_pic.html', {
+    #         'recipe': recipe
+    #     })
