@@ -1,50 +1,70 @@
-# Configure the development environment
+# MenuGen | An Intelligent Generator of Balanced meals
 
-## Python
+MenuGen is a school project that solves an eternal issue : *What are we going to eat tonight?*
 
-Install the following packages : `python3 python3-pip`
+To solve this issue, MenuGen asks you a few questions about your morphology, your food tastes and allergies or diets, before generating well-balanced meals for the next week!
 
-Then run from the root of the project
+# How does it work?
+
+First, we setup MenuGen:
+- Scrape recipes on the internet, storing the ingredients along with the steps to cook it
+- Match the ingredients to [OpenFoodFacts](http://fr-en.openfoodfacts.org/) to evaluate the nutritional value of each recipe
+- Store these in a `PostGreSQL` database and wait for users
+
+Then, when you want to generate a meal:
+- Create an account, entering basic morphological informations that let us calculate your [Basal Metabolic Rate](https://en.wikipedia.org/wiki/Basal_metabolic_rate)
+- Match this calorie count to the WHO nutritional recommendations to derive your needs in proteins/carbs/fats
+- Run a Genetical Algorithm that will iterate on potential menus based on your tastes and diet to optimize the nutritional value of your meals
+- Display the result in a nice dashboard where you can remove dishes, reorder meals, print a shopping list, etc.
+
+# How do I use it?
+
+For now there is no hosted instance of MenuGen. If you want to run it on your machine, follow these steps:
+
+## Configure the development environment
+
+### Python
+
+Install the following packages: `python3 python3-pip`
+
+Then run from the root of the project:
 
     sudo pip install virtualenv
     virtualenv -p python3 .venv
     source .venv/bin/activate
     pip install -r requirements.txt
 
-To disable the python virtual environment, run
+To disable the python virtual environment, run `deactivate`
 
-    deactivate
-
-## Front-end
+### Front-end
 
     cd application 
 
-Install Bower + Grunt
+Install Bower + Grunt:
 
     npm install -g grunt-cli bower
 
-Install Assets
+Install Assets:
 
-    npm install
-    bower install
+    npm install && bower install
 
-Compile Assets
+Compile Assets:
 
     grunt
 
 
-## Django
+### Django
 
-Initialize and configure the development database
+Initialize and configure the development database:
 
     ./manage.py makemigrations
     ./manage.py migrate
 
-Create your super user
+Create your super user:
 
     ./manage.py createsuperuser
 
-# Run the development server
+## Run the development server
 
 First check if you're using the virtualenv. If not, run
 
@@ -57,14 +77,14 @@ Then you can run the server with
 * project root - [http://127.0.0.1:8000](http://127.0.0.1:8000)
 * administration interface - [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
 
-# Migrate your local database
+## Migrate your local database
 
 When models are edited, you must compute the necessary migrations from your database state, then migrate with
 
     ./manage.py makemigrations
     ./manage.py migrate
 
-# Manage data in the database
+## Manage data in the database
 
 Load initial data (so far the ingredients):
 
@@ -83,8 +103,3 @@ Load a fixture:
 Fill ingredients directly from the csv:
 
     ./manage.py fill_db
-
-# References
-
-* [Django Documentation](https://docs.djangoproject.com/en/1.7/)
-* [Python Documentation](https://docs.python.org/3.4/)
